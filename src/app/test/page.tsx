@@ -4,7 +4,6 @@ import Link from 'next/link'
 export default function page() {
   return (
     <>
-    <div>page</div> 
     <Link href="/">link to homepage</Link>
     </>
     

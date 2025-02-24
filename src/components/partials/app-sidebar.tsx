@@ -13,7 +13,7 @@ import { sidebarLinks } from "@/constants";
   
 export function AppSidebar() {
     return (
-        <Sidebar>
+        <Sidebar collapsible="icon">
         <SidebarContent>
             <SidebarGroup>
             <SidebarGroupLabel>Application</SidebarGroupLabel>
@@ -23,8 +23,8 @@ export function AppSidebar() {
                     <SidebarMenuItem key={item.label}>
                     <SidebarMenuButton asChild>
                         <a href={item.route}>
-                        <item.imgURL />
-                        <span>{item.label}</span>
+                            <img src={item.imgURL} alt="" width="30px" height="30px"/>
+                            <span>{item.label}</span>
                         </a>
                     </SidebarMenuButton>
                     </SidebarMenuItem>
