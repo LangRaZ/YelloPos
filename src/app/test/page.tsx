@@ -1,3 +1,12 @@
-export default function Page() {
-    return <h1>Hello Next.js!</h1>
-  }
+import React from 'react'
+import Link from 'next/link'
+
+export default function page() {
+  return (
+    <>
+    <div>page</div> 
+    <Link href="/">link to homepage</Link>
+    </>
+    
+  )
+}
