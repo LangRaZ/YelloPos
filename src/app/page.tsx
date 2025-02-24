@@ -1,7 +1,14 @@
-import Image from "next/image";
+"use client"
 
-export default async function Home() {
+import Image from "next/image";
+import { Metadata } from "next";
+
+const metadata: Metadata = {
+  title: 'Home',
+}
+export default function Home() {
+
   return (
-    <h1>helloworld</h1>
+    <div className="">helloworld</div>
   );
 }

@@ -6,7 +6,7 @@ export const sidebarLinks = [
     },
     {
         imgURL: '/icons/file.svg',
-        route: '/test',
-        label: 'Test',
+        route: '/category',
+        label: 'Category',
     },
 ]
