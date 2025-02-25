@@ -22,7 +22,7 @@ export function AppSidebar() {
             <SidebarContent>
                 <SidebarHeader>
                     {open ? (
-                        <div className="flex">
+                        <div className="flex pl-2">
                             <img src="/icons/logo-expanded.svg" alt=""/>
                         </div>
                     ):(
