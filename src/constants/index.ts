@@ -1,12 +1,32 @@
 export const sidebarLinks = [
     {
-        imgURL: '/icons/globe.svg',
+        imgURL: '/icons/DashBoardicon.svg',
         route: '/',
-        label: 'Home',
+        label: 'Dashboard',
     },
     {
-        imgURL: '/icons/file.svg',
+        imgURL: '/icons/Ordericon.svg',
+        route: '/order',
+        label: 'Order',
+    },
+    {
+        imgURL: '/icons/Producticon.svg',
+        route: '/product',
+        label: 'Product',
+    },
+    {
+        imgURL: '/icons/Categoryicon.svg',
         route: '/category',
-        label: 'Category',
+        label: 'Product Category',
+    },
+    {
+        imgURL: '/icons/Transactionicon.svg',
+        route: '/transaction',
+        label: 'Transaction',
+    },
+    {
+        imgURL: '/icons/Taxicon.svg',
+        route: '/tax',
+        label: 'Tax',
     },
 ]

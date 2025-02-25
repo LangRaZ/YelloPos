@@ -1,14 +1,9 @@
-"use client"
-
 import Image from "next/image";
-import { Metadata } from "next";
-
-const metadata: Metadata = {
-  title: 'Home',
-}
+import Link from "next/link";
 export default function Home() {
-
   return (
-    <div className="">helloworld</div>
+    <>
+    <h1>helloworld</h1>
+    </>
   );
 }
