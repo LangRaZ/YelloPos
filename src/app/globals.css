@@ -2,7 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.sidebar-content::-webkit-scrollbar {
+  display: none;
+}
 
+.sidebar-content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
 @layer base {
   :root {

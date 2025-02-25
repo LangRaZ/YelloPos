@@ -19,7 +19,7 @@ export function AppSidebar() {
 
     return (
         <Sidebar collapsible="icon">
-            <SidebarContent>
+            <SidebarContent className="sidebar-content">
                 <SidebarHeader>
                     {open ? (
                         <div className="flex pl-2">
