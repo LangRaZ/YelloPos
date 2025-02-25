@@ -1,30 +1,17 @@
-import { cookies } from "next/headers"
+import './globals.css';
 import { Metadata } from "next";
 
-import Header from "@/components/partials/header";
-import { SidebarProvider} from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/partials/app-sidebar";
-import './globals.css';
 
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
-  
   return (
     <html lang="en">
-      <body>
-    <SidebarProvider defaultOpen = {defaultOpen}>
-        <AppSidebar />
-        <div className="flex flex-col w-full">
-          <Header />
-          {children}
-        </div>
-      </SidebarProvider>
+      <body className="antialiased w-full min-h-screen flex flex-col">
+        {children}
+        {/* <Toaster /> */}
       </body>
     </html>
   );
