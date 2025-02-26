@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import Link from "next/link"
 import Image from "next/image"
 import { Button } from "../ui/button"
 import {
@@ -74,6 +75,46 @@ export default function LoginForm() {
                                     </FormItem>
                                 )}
                             />
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <FormControl>
+                                    <div className="relative">
+                                        <Input
+                                        className="pr-8"
+                                        placeholder="Enter your password"
+                                        {...field}
+                                        type="text"
+                                        />
+                                    </div>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                                )}
+                            />
+                            <div className="flex flex-col gap-3">
+                                <Button
+                                    type="submit"
+                                    className=""
+                                    variant={"outline"}
+                                >
+                                Login
+                                </Button>
+                                <div>
+                                    <span className="text-sm">
+                                        Don&apos;t have any account?&nbsp;
+                                    </span>
+                                    <Link
+                                        className="text-sm text-blue-600 hover:text-blue-800"
+                                        href="/register"
+                                    >
+                                        Register Here!
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>
