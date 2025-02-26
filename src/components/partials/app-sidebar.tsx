@@ -5,6 +5,7 @@ import {
     SidebarHeader,
     SidebarContent,
     SidebarGroup,
+    SidebarFooter,
     SidebarGroupContent,
     SidebarGroupLabel,
     SidebarMenu,
@@ -13,6 +14,16 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar";
 import { sidebarLinks } from "@/constants";
+import { NavSecondary } from "@/components/partials/nav-secondary"
+import { NavUser } from "@/components/partials/nav-user"
+
+const data = {
+    user: {
+      name: "shadcn",
+      email: "m@example.com",
+      avatar: "/avatars/shadcn.jpg",
+    },
+}
 
 export function AppSidebar() {
     const { open } = useSidebar();
@@ -48,8 +59,11 @@ export function AppSidebar() {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
-                
+                <NavSecondary className="mt-auto" />
             </SidebarContent>
+            <SidebarFooter>
+                <NavUser user={data.user} />
+            </SidebarFooter>
         </Sidebar>
     )
 }

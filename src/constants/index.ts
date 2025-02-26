@@ -30,3 +30,16 @@ export const sidebarLinks = [
         label: 'Tax',
     },
 ]
+
+export const secondaryLinks = [
+    {
+        imgURL: '/icons/Usericon.svg',
+        route: '/user',
+        label: 'User',
+    },
+    {
+        imgURL: '/icons/Profileicon.svg',
+        route: '/business',
+        label: 'Business Profile',
+    },
+]
