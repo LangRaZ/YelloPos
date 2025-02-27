@@ -5,18 +5,16 @@ import { Button } from "@/components/ui/button"
 import { Pencil, Trash } from "lucide-react"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Payment = {
-  id: string
-  product_name: string
-  product_category_id : string
-  description : string
-  sell_price : string
-  quantity : number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
+export type Product = {
+  id: number
+  product_name: string | null
+  product_category_id : number | null
+  description : string | null
+  sell_price : number | null
+  quantity : number | null
 }
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "product_name",
     header: "Product",

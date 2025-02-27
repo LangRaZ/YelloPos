@@ -5,7 +5,7 @@ import { createClient } from "./lib/supabase/server_config";
 export async function middleware(request: NextRequest) {
     const supabase = await createClient();
 
-    const { data: user } = await supabase.auth.getUser()
+    const { data: {user} } = await supabase.auth.getUser()
 
     if(
         !user &&
@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
         !request.nextUrl.pathname.startsWith('/register') &&
         !request.nextUrl.pathname.startsWith('/auth')
     ){
-        return NextResponse.redirect('/login')
+        return NextResponse.redirect(new URL('/login', request.url))
     }
 
     const res = NextResponse.next();
@@ -22,13 +22,13 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
-        "/",
-        "/login",
-        "/register",
-        "/category",
-        "/order",
-        "/product",
-        "/tax",
-        "/transaction",
+        // "/",
+        // "/login",
+        // "/register",
+        // "/category",
+        // "/order",
+        // "/product",
+        // "/tax",
+        // "/transaction",
     ],
 };

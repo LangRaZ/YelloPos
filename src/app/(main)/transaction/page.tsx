@@ -1,5 +1,5 @@
 import { Payment, columns } from "./columns"
-import { DataTable } from "@/components/partials/data-table"
+import DataTable from "@/components/helpers/data-table"
 import {SquarePlus} from "lucide-react"
 
 import { Button } from "@/components/ui/button"

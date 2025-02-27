@@ -1,11 +1,13 @@
-"use client"; // Needed for client-side interactivity
+"use client";
 
 import { useState, useEffect } from "react";
-import { createProduct, getCategory } from "@/lib/supabase/api";
+import { createProduct, getCategories } from "@/lib/supabase/api";
 import { useRouter } from "next/navigation";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
-export default function CreateProductPage() {
+export default async function CreateProductPage() {
     const [formData, setFormData] = useState<{
         name: string,
         categoryid: number,
@@ -27,7 +29,7 @@ export default function CreateProductPage() {
 
     useEffect(() => {
       async function fetchCategories() {
-        const { data, error } = await getCategory();
+        const { data, error } = await getCategories();
         if (error) {
             console.error("Error fetching categories:", error);
             return;
@@ -111,7 +113,7 @@ export default function CreateProductPage() {
                     className="border p-2 rounded"
                     required
                 />
-                <input 
+                <Input 
                     type="number" 
                     name="price" 
                     placeholder="Price" 
@@ -120,7 +122,7 @@ export default function CreateProductPage() {
                     className="border p-2 rounded"
                     required 
                 />
-                <input 
+                <Input 
                     type="number" 
                     name="stock" 
                     placeholder="Stock Quantity" 
@@ -129,12 +131,12 @@ export default function CreateProductPage() {
                     className="border p-2 rounded"
                     required 
                 />
-                <button 
+                <Button 
                     type="submit" 
-                    className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+                    className=""
                 >
                     Create Product
-                </button>
+                </Button>
             </form>
         </div>
     );

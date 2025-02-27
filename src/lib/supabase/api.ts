@@ -1,4 +1,3 @@
-import { time } from "console";
 import { createClient } from "./client_config"
 
 const supabase = await createClient()
@@ -18,9 +17,16 @@ interface Product {
 }
 
 export async function getProducts(){
-    const products = await supabase.from('Product').select()
-    console.log(products)
-    return products
+    try {
+        const products = await supabase.from('Product').select().order('created_at', {ascending: false})
+        return products
+        
+    } catch (error) {
+        return { 
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        };
+    }
 }
 
 export async function createProduct(product_name : string, product_category_id : number, description : string, sell_price : number, quantity : number){
@@ -42,8 +48,7 @@ export async function createProduct(product_name : string, product_category_id :
     return data;
 }
 
-export async function getCategory(){
-    const categorys = await supabase.from('Category').select()
-    console.log(categorys)
-    return categorys
+export async function getCategories(){
+    const categories = await supabase.from('Category').select()
+    return categories
 }
