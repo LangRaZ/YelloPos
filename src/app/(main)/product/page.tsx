@@ -14,7 +14,6 @@ async function getData(): Promise<Payment[]> {
       email: "m@example.com",
       price: "Rp.22000",
       stock: 0 ,
-      action : true,
     },
     // ...
   ]
