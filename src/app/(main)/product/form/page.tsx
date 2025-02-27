@@ -6,7 +6,14 @@ import { useRouter } from "next/navigation";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
 export default function CreateProductPage() {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<{
+        name: string,
+        categoryid: number,
+        category: string | null,
+        description: string,
+        price: string,
+        stock: string,
+    }>({
         name: "",
         categoryid: 0,
         category: "",
