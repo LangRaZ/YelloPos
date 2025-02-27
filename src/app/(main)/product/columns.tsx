@@ -13,7 +13,6 @@ export type Payment = {
   stock : number
   status: "pending" | "processing" | "success" | "failed"
   email: string
-  action : boolean
 }
 
 export const columns: ColumnDef<Payment>[] = [

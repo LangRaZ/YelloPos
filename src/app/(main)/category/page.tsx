@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 import { Category, columns } from "./columns"
-import { DataTable } from "./data-table"
+import { DataTable } from "@/components/partials/data-table"
 import { Button } from "@/components/ui/button"
 import { SquarePlus } from "lucide-react"
 
