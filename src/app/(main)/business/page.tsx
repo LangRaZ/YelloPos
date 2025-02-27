@@ -60,7 +60,7 @@ export default function Home() {
                   <i className="fas fa-qrcode text-gray-400 text-4xl"></i>
                 </CardContent>
               </Card>
-              <Button className="bg-blue-600 text-white px-4 py-2 rounded-md">Upload QR</Button>
+              <Button className="text-white px-4 py-2 rounded-md">Upload QR</Button>
             </div>
             <div className="w-full">
               <div className="mb-4">
