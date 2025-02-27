@@ -7,10 +7,11 @@ import { Pencil, Trash } from "lucide-react"
 // You can use a Zod schema here if you want.
 export type Payment = {
   id: string
-  product: string
-  category : string
-  price : string
-  stock : number
+  product_name: string
+  product_category_id : string
+  description : string
+  sell_price : string
+  quantity : number
   status: "pending" | "processing" | "success" | "failed"
   email: string
   action : boolean
@@ -18,19 +19,23 @@ export type Payment = {
 
 export const columns: ColumnDef<Payment>[] = [
   {
-    accessorKey: "product",
+    accessorKey: "product_name",
     header: "Product",
   },
   {
-    accessorKey: "category",
+    accessorKey: "product_category_id",
     header: "Category",
   },
   {
-    accessorKey: "price",
+    accessorKey: "description",
+    header: "Description",
+  },
+  {
+    accessorKey: "sell_price",
     header: "Price",
   },
   {
-    accessorKey: "stock",
+    accessorKey: "quantity",
     header: "Stock",
   },
   {
