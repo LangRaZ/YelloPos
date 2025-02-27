@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { LoginValidation } from "@/validations"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "../ui/button"
@@ -17,24 +18,19 @@ import {
 } from "../ui/form"
 import { Input } from "../ui/input"
 
-const formSchema = z.object({
-    username: z.string().min(5, {
-        message: "Username must be at least 5 characters",
-    }).max(100),
-    password: z.string().min(5).max(100)
-})
-
 export default function LoginForm() {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof LoginValidation>>({
+        resolver: zodResolver(LoginValidation),
         defaultValues: {
           username: "",
           password: "",
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>){
-        console.log(values)
+    async function handleLogin(user: z.infer<typeof LoginValidation>){
+        
+
+        console.log(user)
     }
 
     return (
@@ -47,7 +43,7 @@ export default function LoginForm() {
                 />
             </div>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="bg-white px-4 md:px-16 w-full">
+                <form onSubmit={form.handleSubmit(handleLogin)} className="bg-white px-4 md:px-16 w-full">
                     <div className="p-8 h-full flex flex-col gap-10 justify-center">
                         <div className="flex flex-col gap-3">
                             <div className="flex gap-2 items-center">
