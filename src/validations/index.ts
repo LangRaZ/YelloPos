@@ -27,5 +27,7 @@ export const ProductValidation = z.object({
 export const UserValidation = z.object({
     name: z.string().nonempty("Name must not be empty"),
     email: z.string().nonempty("Email must not be empty"),
-    
+    role_id: z.number({
+        required_error: "Category must not be empty",
+    }).nonnegative(),
 })

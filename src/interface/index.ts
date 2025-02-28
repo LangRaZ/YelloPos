@@ -25,7 +25,7 @@ export interface Product extends ProductMutation{
 }
 
 export interface User extends UserMutation{
-    id : number
+    id : string
 }
 
 export interface CategoryMutation{
