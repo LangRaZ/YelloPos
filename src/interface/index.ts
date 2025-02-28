@@ -1,7 +1,6 @@
 
 
 export interface ProductMutation{
-    id: number
     product_name: string | null
     product_category_id : number | null
     description : string | null
@@ -11,6 +10,7 @@ export interface ProductMutation{
 }
 
 export interface Product extends ProductMutation{
+    id: number
     business_profile_id?: number | null
     need_quantity?: boolean | null
 }

@@ -17,28 +17,11 @@ export async function getProducts(){
     }
 }
 
-export async function createProductz(product_name : string, product_category_id : number, description : string, sell_price : number, quantity : number){
-    const productData : Product = {
-        product_name,
-        product_category_id,
-        description,
-        sell_price,
-        quantity,
-        is_active: true,
-        created_at: new Date().toString()
-    };
 
-    // console.log(productData)
 
-    const data = await supabase.from("Product").insert([productData]);
-
-    // console.log("Product created:", productData);
-    return data;
-}
-
-export async function createProduct({Product} : { Product:  ProductMutation}){
+export async function createProduct(product: ProductMutation){
     try {
-        const res = await supabase.from("Product").insert(Product)
+        const res = await supabase.from("Product").insert(product)
         if (res){
             return { status:true, code: res.status, message: res.statusText };
         }

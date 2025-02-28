@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { ProductValidation } from "@/validations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductMutation, Category } from "@/interface";
+import { createProduct } from "@/lib/supabase/api";
 
 export default function ProductForm(
     { id, data, categories, isOnPage = false, closeDialog } :
@@ -24,13 +25,14 @@ export default function ProductForm(
 ) {
     const [ error, setError ] = useState<string|null>(null);
     const [open, setOpen] = useState(false)
+    const router = useRouter()
 
     //Declare form and form data
     const form = useForm<z.infer<typeof ProductValidation>>({
         resolver: zodResolver(ProductValidation),
         defaultValues:{
             product_name: data?.product_name??"",
-            product_category_id: data?.product_category_id?.toString()??"",
+            product_category_id: data?.product_category_id??-1,
             description: data?.description??"",
             sell_price: data?.sell_price??0,
             quantity: data?.quantity??0,
@@ -46,10 +48,25 @@ export default function ProductForm(
         if(id){
             //If id is not null then its update object
             toast("Updated")
+        }else {
+            //If id is null the its create object
+            createProduct(values).then(res=>{
+                if(res && res.status){
+                    if(!isOnPage && closeDialog){
+                        closeDialog();
+                    }
+                    toast("Product added!", { description:"Product has been added successfully!" })
+                    if(isOnPage){
+                        router.push("/product");
+                    } else {
+                        router.refresh();
+                    }
+                } else {
+                    setError(res?.message??"Unexpected error occurred! Please reload the page!");
+                    form.reset();         
+                }
+            })
         }
-        //If id is null the its create object
-
-        toast("Created");
     }
 
     return (
@@ -93,7 +110,7 @@ export default function ProductForm(
                                             >
                                             {field.value
                                                 ? (categories??[]).find(
-                                                    (category) => category.id.toString() === field.value
+                                                    (category) => category.id === field.value
                                                 )?.category_name
                                                 : "Select category"}
                                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -114,12 +131,12 @@ export default function ProductForm(
                                                             value={category.category_name??""}
                                                             key={category.id}
                                                             onSelect={(currentValue) => {
-                                                                currentValue = form.getValues("product_category_id")
+                                                                currentValue = form.getValues("product_category_id").toString()
                                                                 currentValue === category.id.toString() ?
                                                                 (
-                                                                    form.setValue("product_category_id", "")
+                                                                    form.setValue("product_category_id", -1)
                                                                 ):(
-                                                                    form.setValue("product_category_id", category.id.toString())
+                                                                    form.setValue("product_category_id", category.id)
                                                                 )
                                                                 setOpen(false)
                                                             }}
@@ -128,7 +145,7 @@ export default function ProductForm(
                                                             <CheckIcon
                                                             className={cn(
                                                                 "ml-auto h-4 w-4",
-                                                                category.id.toString() === field.value
+                                                                category.id === field.value
                                                                 ? "opacity-100"
                                                                 : "opacity-0"
                                                             )}
