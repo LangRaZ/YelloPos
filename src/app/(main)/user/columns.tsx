@@ -3,31 +3,28 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { Pencil, Trash } from "lucide-react"
-import { ProductMutation } from "@/interface"
+import { User } from "@/interface"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const columns: ColumnDef<ProductMutation>[] = [
+export const columns: ColumnDef<User>[] = [
   {
-    accessorKey: "product_name",
-    header: "Product",
+    accessorKey: "name",
+    header: "Nama",
   },
   {
-    accessorKey: "product_category_id",
-    header: "Category",
+    accessorKey: "email",
+    header: "Email",
   },
   {
     accessorKey: "description",
-    header: "Description",
+    header: "Phone Number",
   },
   {
-    accessorKey: "sell_price",
-    header: "Price",
+    accessorKey: "role_id",
+    header: "Role",
   },
-  {
-    accessorKey: "quantity",
-    header: "Stock",
-  },
+  
   {
     accessorKey: "action",
     header: "Action",
@@ -39,7 +36,7 @@ export const columns: ColumnDef<ProductMutation>[] = [
             <Button 
               variant="outline"
               size="sm"
-              onClick={() => console.log("Edit", product.id)}
+              onClick={() => console.log("Edit", user.id)}
               className="flex items-center gap-1"
             >
               <Pencil className="w-4 h-4" />

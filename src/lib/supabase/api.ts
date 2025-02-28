@@ -17,24 +17,7 @@ export async function getProducts(){
     }
 }
 
-export async function createProductz(product_name : string, product_category_id : number, description : string, sell_price : number, quantity : number){
-    const productData : Product = {
-        product_name,
-        product_category_id,
-        description,
-        sell_price,
-        quantity,
-        is_active: true,
-        created_at: new Date().toString()
-    };
 
-    // console.log(productData)
-
-    const data = await supabase.from("Product").insert([productData]);
-
-    // console.log("Product created:", productData);
-    return data;
-}
 
 export async function createProduct({Product} : { Product:  ProductMutation}){
     try {
@@ -50,4 +33,9 @@ export async function createProduct({Product} : { Product:  ProductMutation}){
 export async function getCategories(){
     const categories = await supabase.from('Category').select()
     return categories
+}
+
+export async function getRoles(){
+    const Roles = await supabase.from('Roles').select()
+    return Roles
 }

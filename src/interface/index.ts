@@ -10,9 +10,22 @@ export interface ProductMutation{
     is_active: boolean | null
 }
 
+export interface UserMutation{
+    // access_code: string | null
+    // business_profile_id: number | null    
+    email: string | null
+    name: string | null
+    role_id: number | null
+    username: string | null
+}
+
 export interface Product extends ProductMutation{
     business_profile_id?: number | null
     need_quantity?: boolean | null
+}
+
+export interface User extends UserMutation{
+    id : number
 }
 
 export interface CategoryMutation{
