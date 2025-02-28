@@ -1,5 +1,5 @@
 import { createClient } from "./client_config"
-import { Product, ProductMutation } from "@/interface"
+import { Product, ProductMutation,UserMutation } from "@/interface"
 
 const supabase = await createClient()
 
@@ -24,6 +24,31 @@ export async function createProduct(product: ProductMutation){
         const res = await supabase.from("Product").insert(product)
         if (res){
             return { status:true, code: res.status, message: res.statusText };
+        }
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+export async function getUser(){
+    try {
+        const user = await supabase.from('Accounts').select().order('created_at', {ascending: false})
+        return user
+        
+    } catch (error) {
+        return { 
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        };
+    }
+}
+
+
+
+export async function createUser(user: UserMutation){
+    try {
+        const User_res = await supabase.from("Accounts").insert(user)
+        if (User_res){
+            return { status:true, code: User_res.status, message: User_res.statusText };
         }
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
