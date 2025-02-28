@@ -63,7 +63,7 @@ export default function ProductForm(
                     name="product_name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Product name</FormLabel>
+                            <FormLabel>name</FormLabel>
                             <FormControl>
                                 <Input placeholder="Enter product name" {...field} />
                             </FormControl>
