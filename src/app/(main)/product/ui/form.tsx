@@ -23,9 +23,9 @@ export default function ProductForm(
     { id?: string, data?: ProductMutation|null, categories: Category[]|null, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
     const [ error, setError ] = useState<string|null>(null);
-    const [value, setValue] = useState("")
     const [open, setOpen] = useState(false)
 
+    //Declare form and form data
     const form = useForm<z.infer<typeof ProductValidation>>({
         resolver: zodResolver(ProductValidation),
         defaultValues:{
@@ -37,14 +37,24 @@ export default function ProductForm(
         }
     })
     
+    //Declare on submit function for submit handler
     function onSubmit(values: z.infer<typeof ProductValidation>){
-        toast("submitted");
+        setError(null);
+        form.clearErrors();
+        //Handle update or create object decision on form submit handler
+        if(id){
+            toast("Updated")
+        }
+        
+        toast("Created");
     }
 
     return (
         <Form {... form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="bg-white rounded-md space-y-4">
+                {/* Form error message */}
                 { error && <p className="my-4 text-red-800 font-semibold">{error}</p> }
+                {/* Form data field starts here */}
                 <FormField
                     control={form.control}
                     name="name"
@@ -58,6 +68,7 @@ export default function ProductForm(
                         </FormItem>
                     )}
                 />
+                {/* Form data field ends here */}
                 { categories && 
                     <FormField
                         control={form.control}
