@@ -19,9 +19,9 @@ export async function getProducts(){
 
 
 
-export async function createProduct({Product} : { Product:  ProductMutation}){
+export async function createProduct(product: ProductMutation){
     try {
-        const res = await supabase.from("Product").insert(Product)
+        const res = await supabase.from("Product").insert(product)
         if (res){
             return { status:true, code: res.status, message: res.statusText };
         }
