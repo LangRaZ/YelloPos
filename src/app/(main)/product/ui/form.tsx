@@ -138,6 +138,7 @@ export default function ProductForm(
                                                                 ):(
                                                                     form.setValue("product_category_id", category.id)
                                                                 )
+                                                                form.clearErrors('product_category_id')
                                                                 setOpen(false)
                                                             }}
                                                         >

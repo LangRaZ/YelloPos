@@ -13,7 +13,7 @@ export const ProductValidation = z.object({
     product_name: z.string().nonempty("Product name must not be empty"),
     product_category_id: z.number({
         required_error: "Category must not be empty",
-    }).nonnegative(),
+    }).positive("Category must not be empty"),
     description: z.string(),
     sell_price: z.number({
         required_error: "Product price must no be empty",
