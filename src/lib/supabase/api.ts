@@ -1,20 +1,8 @@
 import { createClient } from "./client_config"
+import { Product, ProductMutation } from "@/interface"
 
 const supabase = await createClient()
 
-interface Product {
-    business_profile_id?: number | null
-    buy_price?: number | null
-    created_at?: string
-    description?: string | null
-    id?: number
-    is_active?: boolean | null
-    need_quantity?: boolean | null
-    product_category_id?: number | null
-    product_name?: string | null
-    quantity?: number | null
-    sell_price?: number | null
-}
 
 export async function getProducts(){
     try {
@@ -29,7 +17,7 @@ export async function getProducts(){
     }
 }
 
-export async function createProduct(product_name : string, product_category_id : number, description : string, sell_price : number, quantity : number){
+export async function createProductz(product_name : string, product_category_id : number, description : string, sell_price : number, quantity : number){
     const productData : Product = {
         product_name,
         product_category_id,
@@ -46,6 +34,17 @@ export async function createProduct(product_name : string, product_category_id :
 
     // console.log("Product created:", productData);
     return data;
+}
+
+export async function createProduct({Product} : { Product:  ProductMutation}){
+    try {
+        const res = await supabase.from("Product").insert(Product)
+        if (res){
+            return { status:true, code: res.status, message: res.statusText };
+        }
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
 }
 
 export async function getCategories(){

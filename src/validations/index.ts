@@ -10,13 +10,14 @@ export const LoginValidation = z.object({
 })
 
 export const ProductValidation = z.object({
-    name: z.string().nonempty("Product name must not be empty"),
-    category_id: z.string().nonempty("Category must not be empty"),
+    product_name: z.string().nonempty("Product name must not be empty"),
+    product_category_id: z.string().nonempty("Category must not be empty"),
     description: z.string().optional(),
-    price: z.number().min(1, {
+    sell_price: z.number().min(1, {
         message: "Product price must be greater than 0"
     }),
     quantity: z.number().min(1, {
         message: "Product price must be greater than 0"
-    })
+    }),
+    is_active: z.boolean()
 })

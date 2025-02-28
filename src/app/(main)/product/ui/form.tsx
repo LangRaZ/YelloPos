@@ -29,11 +29,12 @@ export default function ProductForm(
     const form = useForm<z.infer<typeof ProductValidation>>({
         resolver: zodResolver(ProductValidation),
         defaultValues:{
-            name: data?.name??"",
-            category_id: data?.categoryid.toString()??"",
+            product_name: data?.product_name??"",
+            product_category_id: data?.product_category_id?.toString()??"",
             description: data?.description??"",
-            price: data?.price??0,
+            sell_price: data?.sell_price??0,
             quantity: data?.quantity??0,
+            is_active: true,
         }
     })
     
@@ -43,9 +44,11 @@ export default function ProductForm(
         form.clearErrors();
         //Handle update or create object decision on form submit handler
         if(id){
+            //If id is not null then its update object
             toast("Updated")
         }
-        
+        //If id is null the its create object
+
         toast("Created");
     }
 
@@ -57,7 +60,7 @@ export default function ProductForm(
                 {/* Form data field starts here */}
                 <FormField
                     control={form.control}
-                    name="name"
+                    name="product_name"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Product name</FormLabel>
@@ -72,7 +75,7 @@ export default function ProductForm(
                 { categories && 
                     <FormField
                         control={form.control}
-                        name="category_id"
+                        name="product_category_id"
                         render={({ field }) => {
                             return <FormItem>
                                 <div className="flex flex-col space-y-2">
@@ -111,12 +114,12 @@ export default function ProductForm(
                                                             value={category.category_name??""}
                                                             key={category.id}
                                                             onSelect={(currentValue) => {
-                                                                currentValue = form.getValues("category_id")
+                                                                currentValue = form.getValues("product_category_id")
                                                                 currentValue === category.id.toString() ?
                                                                 (
-                                                                    form.setValue("category_id", "")
+                                                                    form.setValue("product_category_id", "")
                                                                 ):(
-                                                                    form.setValue("category_id", category.id.toString())
+                                                                    form.setValue("product_category_id", category.id.toString())
                                                                 )
                                                                 setOpen(false)
                                                             }}
@@ -145,7 +148,7 @@ export default function ProductForm(
                 }
                 <FormField
                     control={form.control}
-                    name="price"
+                    name="sell_price"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Product price</FormLabel>
