@@ -29,7 +29,7 @@ export const columns: ColumnDef<User>[] = [
     accessorKey: "action",
     header: "Action",
     cell: ({ row }) => {
-        const product = row.original;
+        const user = row.original;
 
         return (
           <div className="flex gap-2">
@@ -44,7 +44,7 @@ export const columns: ColumnDef<User>[] = [
             <Button 
               variant="destructive"
               size="sm"
-              onClick={() => console.log("Delete", product.id)}
+              onClick={() => console.log("Delete", user.id)}
               className="flex items-center gap-1"
             >
               <Trash className="w-4 h-4" />
