@@ -1,4 +1,11 @@
-
+export interface Response {
+    /** Is the request successful? */
+    status: boolean,
+    /** HTTP status code */
+    code:number,
+    /** Response message */
+    message:string
+}
 
 export interface ProductMutation{
     product_name: string | null

@@ -17,11 +17,11 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductMutation, Category } from "@/interface";
-import { createProduct } from "@/lib/supabase/api";
+import { createProduct, updateProduct } from "@/lib/supabase/api";
 
 export default function ProductForm(
     { id, data, categories, isOnPage = false, closeDialog } :
-    { id?: string, data?: ProductMutation|null, categories: Category[]|null, isOnPage?: boolean, closeDialog?:()=>void }
+    { id?: number, data?: ProductMutation|null, categories: Category[]|null, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
     const [ error, setError ] = useState<string|null>(null);
     const [open, setOpen] = useState(false)
@@ -46,16 +46,30 @@ export default function ProductForm(
         form.clearErrors();
         //Handle update or create object decision on form submit handler
         if(id){
-            //If id is not null then its update object
-            toast("Updated")
+            updateProduct(id, values).then(res=>{
+                if(res && res.status){
+                    if(!isOnPage && closeDialog){
+                        closeDialog();
+                    }
+                    toast.success("Product updated!", { description:"Product has been updated successfully!" })
+                    if(isOnPage){
+                        router.push("/product");
+                    } else {
+                        router.refresh();
+                    }
+                } else {
+                    setError(res?.message??"Unexpected error occurred! Please reload the page!");
+                    form.reset();         
+                }
+            })
         }else {
-            //If id is null the its create object
+            //If id is null then its create object
             createProduct(values).then(res=>{
                 if(res && res.status){
                     if(!isOnPage && closeDialog){
                         closeDialog();
                     }
-                    toast("Product added!", { description:"Product has been added successfully!" })
+                    toast.success("Product added!", { description:"Product has been added successfully!" })
                     if(isOnPage){
                         router.push("/product");
                     } else {

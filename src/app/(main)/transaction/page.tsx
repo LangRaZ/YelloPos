@@ -25,11 +25,11 @@ export default async function DemoPage() {
 
   return (
     <>
-    <div className="container mx-auto py-5" ><Button>
+    <div className="py-5" ><Button>
       <SquarePlus />Add Product
     </Button></div>
     
-    <div className="container mx-auto">
+    <div className="">
     <DataTable columns={columns} data={data} />
   </div></>
     

@@ -20,7 +20,7 @@ import { Category, UserMutation } from "@/interface";
 
 export default function UserForm(
     { id, data, roles, isOnPage = false, closeDialog } :
-    { id?: string, data?: UserMutation|null, roles: Category[]|null, isOnPage?: boolean, closeDialog?:()=>void }
+    { id?: number, data?: UserMutation|null, roles: Category[]|null, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
     const [ error, setError ] = useState<string|null>(null);
     const [open, setOpen] = useState(false)

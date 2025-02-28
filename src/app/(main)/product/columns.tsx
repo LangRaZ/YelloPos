@@ -2,8 +2,10 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
-import { Pencil, Trash } from "lucide-react"
+import { Pencil } from "lucide-react"
 import { Product } from "@/interface"
+import { deleteProduct } from "@/lib/supabase/api"
+import DeleteAlert from "@/components/helpers/delete-alert"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -30,7 +32,8 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: "action",
-    header: "Action",
+    header: "Actions",
+
     cell: ({ row }) => {
         const product = row.original;
 
@@ -44,14 +47,13 @@ export const columns: ColumnDef<Product>[] = [
             >
               <Pencil className="w-4 h-4" />
             </Button>
-            <Button 
-              variant="destructive"
-              size="sm"
-              onClick={() => console.log("Delete", product.id)}
-              className="flex items-center gap-1"
-            >
-              <Trash className="w-4 h-4" />
-            </Button>
+            <DeleteAlert
+              id={product.id}
+              action={deleteProduct}
+              warningMessage="This action cannot be undone. This product will be deleted permanently"
+              successMessage="Delete success!"
+              successDescription="Product has been deleted"
+            />
           </div>
         );
       },

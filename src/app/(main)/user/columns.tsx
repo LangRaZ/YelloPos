@@ -27,7 +27,7 @@ export const columns: ColumnDef<User>[] = [
   
   {
     accessorKey: "action",
-    header: "Action",
+    header: "Actions",
     cell: ({ row }) => {
         const user = row.original;
 

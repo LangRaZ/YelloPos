@@ -33,7 +33,7 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "action",
-    header: "Action",
+    header: "Actions",
     cell: ({ row }) => {
         const product = row.original;
 

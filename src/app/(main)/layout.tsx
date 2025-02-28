@@ -20,7 +20,9 @@ export default async function RootLayout({
         <AppSidebar />
         <div className="flex flex-col w-full">
           <Header />
-          {children}
+          <main className="py-5 px-10">
+            {children}
+          </main>
         </div>
     </SidebarProvider>
   );
