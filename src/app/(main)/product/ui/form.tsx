@@ -32,7 +32,7 @@ export default function ProductForm(
         resolver: zodResolver(ProductValidation),
         defaultValues:{
             product_name: data?.product_name??"",
-            product_category_id: data?.product_category_id??-1,
+            product_category_id: data?.product_category_id??Number(),
             description: data?.description??"",
             sell_price: data?.sell_price??0,
             quantity: data?.quantity??0,
@@ -134,7 +134,7 @@ export default function ProductForm(
                                                                 currentValue = form.getValues("product_category_id").toString()
                                                                 currentValue === category.id.toString() ?
                                                                 (
-                                                                    form.setValue("product_category_id", -1)
+                                                                    form.setValue("product_category_id", Number())
                                                                 ):(
                                                                     form.setValue("product_category_id", category.id)
                                                                 )
