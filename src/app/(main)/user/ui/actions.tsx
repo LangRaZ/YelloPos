@@ -1,4 +1,4 @@
-import PopupContainer from "@/components/helpers/popup-container"
+import PopupContainer from "@/components/helpers/popup_container"
 import { Button } from "@/components/ui/button"
 import ProductForm from "./form"
 import { Category } from "@/interface"

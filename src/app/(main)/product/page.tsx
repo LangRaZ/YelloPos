@@ -1,5 +1,5 @@
 import { columns } from "./columns"
-import  DataTable  from "@/components/helpers/data-table"
+import  DataTable  from "@/components/helpers/data_table"
 import { getProducts, getCategories } from "@/lib/supabase/api"
 import { CreateProductButton } from "./ui/actions"
 

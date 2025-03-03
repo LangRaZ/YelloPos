@@ -1,7 +1,7 @@
 import { Payment, columns } from "./columns"
-import DataTable from "@/components/helpers/data-table"
+import DataTable from "@/components/helpers/data_table"
 import {SquarePlus} from "lucide-react"
-
+import BackButton from "@/components/helpers/back_button"
 import { Button } from "@/components/ui/button"
 import { time, timeLog } from "console"
 async function getData(): Promise<Payment[]> {
@@ -25,9 +25,11 @@ export default async function DemoPage() {
 
   return (
     <>
-    <div className="py-5" ><Button>
-      <SquarePlus />Add Product
-    </Button></div>
+    <div className="py-5" >
+      <Button>
+        <SquarePlus />Add Product
+      </Button>
+    </div>
     
     <div className="">
     <DataTable columns={columns} data={data} />

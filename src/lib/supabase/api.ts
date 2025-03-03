@@ -1,20 +1,39 @@
 import { createClient } from "./client_config"
 import { ProductMutation, UserMutation } from "@/interface"
-import { Response } from "@/interface"
+import { Response, ProductsResponse, ProductResponse} from "@/interface"
 
 const supabase = createClient()
 
 
-export async function getProducts(){
+export async function getProducts() : Promise<ProductsResponse>{
     try {
-        const products = await supabase.from('Product').select().order('created_at', {ascending: false})
-        return products
+        const products = await supabase.from('Product').select('*, Category:product_category_id(category_name)').order('created_at', {ascending: false})
+        if(!products.data){
+            return {status:false, code:200, message: products.statusText, data: products.data};
+        }
+        return {status:true, code:200, message: products.statusText, data: products.data};
         
     } catch (error) {
         return { 
             status:false, code: 500, message: String(error)??"Unexpected error occurred", 
             data:null
         };
+    }
+}
+
+export async function getProduct(id: number) : Promise<ProductResponse>{
+    try {
+        const product = await supabase.from("Product").select("*, Category:product_category_id(category_name)").eq("id", id).single()
+        if(!product.data){
+            return {status:false, code:200, message: product.statusText, data: product.data};
+        }
+        return {status:true, code:200, message: product.statusText, data: product.data};
+
+    } catch (error) {
+        return {
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        }
     }
 }
 

@@ -1,5 +1,5 @@
 import { columns } from "./columns"
-import  DataTable  from "@/components/helpers/data-table"
+import  DataTable  from "@/components/helpers/data_table"
 import { SquarePlus} from "lucide-react"
 import { getProducts, getCategories, getUser } from "@/lib/supabase/api"
 import { CreateUserButton } from "./ui/actions"

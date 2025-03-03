@@ -3,7 +3,7 @@ import { Metadata } from "next";
 
 import Header from "@/components/partials/header";
 import { SidebarProvider} from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/partials/app-sidebar";
+import { AppSidebar } from "@/components/partials/app_sidebar";
 import '../globals.css';
 
 
