@@ -43,8 +43,8 @@ export default function DeleteAlert ({
   successDescription,
   label="Delete"
 }: {
-  id: number;
-  action: (_id: number) => Promise<Response>;
+  id: number | string;
+  action: (_id: number | string) => Promise<Response>;
   warningMessage: string;
   successMessage: string;
   successDescription: string;

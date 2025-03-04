@@ -1,7 +1,7 @@
 import { columns } from "./columns"
 import  DataTable  from "@/components/helpers/data_table"
 import { SquarePlus} from "lucide-react"
-import {  getUser,getRoles } from "@/lib/supabase/api"
+import { getUser, getRoles } from "@/lib/supabase/api"
 import { CreateUserButton } from "./ui/actions"
 import Link from "next/link";
 
