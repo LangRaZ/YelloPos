@@ -62,9 +62,9 @@ export async function updateProduct(id: number, product: ProductMutation) : Prom
     }
 }
 
-export async function deleteProduct(id: number) : Promise<Response>{
+export async function deleteProduct(id: string) : Promise<Response>{
     try {
-        const res = await supabase.from("Product").delete().eq("id", id)
+        const res = await supabase.from("Product").delete().eq("id", Number(id))
         if(!res){
             return {status: false, code:500, message: "Failed to delete product"};
         }

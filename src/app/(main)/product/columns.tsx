@@ -51,7 +51,7 @@ export const columns: ColumnDef<Product>[] = [
               </Button>
             </Link>
             <DeleteAlert
-              id={product.id}
+              id={product.id.toString()}
               action={deleteProduct}
               warningMessage="This action cannot be undone. This product will be deleted permanently"
               successMessage="Delete success!"
