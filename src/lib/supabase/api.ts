@@ -1,6 +1,6 @@
 import { createClient } from "./client_config"
 import { ProductMutation, UserMutation } from "@/interface"
-import { Response, ProductsResponse, ProductResponse} from "@/interface"
+import { Response, ProductsResponse, ProductResponse,UserResponse} from "@/interface"
 
 const supabase = createClient()
 
@@ -108,4 +108,21 @@ export async function getCategories(){
 export async function getRoles(){
     const Roles = await supabase.from('Roles').select()
     return Roles
+}
+
+//Get User ID Single
+export async function getusers(id: string) : Promise<UserResponse>{
+    try {
+        const user = await supabase.from("Accounts").select("*").eq("id", id).single()
+        if(!user.data){
+            return {status:false, code:200, message: user.statusText, data: user.data};
+        }
+        return {status:true, code:200, message: user.statusText, data: user.data};
+
+    } catch (error) {
+        return {
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        }
+    }
 }

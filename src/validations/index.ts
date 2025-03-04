@@ -30,4 +30,5 @@ export const UserValidation = z.object({
     role_id: z.number({
         required_error: "Category must not be empty",
     }).nonnegative(),
+    phone_number:z.string().nonempty("Phone number must not be empty")
 })

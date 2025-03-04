@@ -41,13 +41,16 @@ export interface UserMutation{
     name: string | null
     role_id: number | null
     username: string | null
+    phone_number : string | null
 }
 
 
 export interface User extends UserMutation{
     id : string
 }
-
+export interface UserResponse extends Response{
+    data: User | null
+}
 
 //Interfaces for Category
 export interface CategoryMutation{
@@ -62,3 +65,12 @@ export interface CategoryDetail{
 export interface Category extends CategoryMutation{
     id: number,
 }
+
+
+//interface for roles
+export interface Role{
+    role_name: string | null,
+    id: number,
+}
+
+

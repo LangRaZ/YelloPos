@@ -16,11 +16,11 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Category, UserMutation } from "@/interface";
+import { Role, UserMutation } from "@/interface";
 
 export default function UserForm(
     { id, data, roles, isOnPage = false, closeDialog } :
-    { id?: number, data?: UserMutation|null, roles: Category[]|null, isOnPage?: boolean, closeDialog?:()=>void }
+    { id?: string, data?: UserMutation|null, roles: Role[]|null, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
     const [ error, setError ] = useState<string|null>(null);
     const [open, setOpen] = useState(false)
@@ -32,6 +32,7 @@ export default function UserForm(
             name: data?.name??"",
             email: data?.email??"",
             role_id: data?.role_id??Number(),
+            phone_number: data?.phone_number??"",
         }
     })
     
@@ -83,19 +84,19 @@ export default function UserForm(
                     )}
                 />
 
-                {/* <FormField
+                <FormField
                     control={form.control}
-                    name="phonenumber"
+                    name="phone_number"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>PhoneNumber</FormLabel>
+                            <FormLabel>Phone Number</FormLabel>
                             <FormControl>
-                                <Input placeholder="Enter product name" {...field} />
+                                <Input placeholder="Enter phone number" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
-                /> */}
+                />
 
                 {/* Form data field ends here */}
                 { roles && 
@@ -120,8 +121,8 @@ export default function UserForm(
                                             {field.value
                                                 ? (roles??[]).find(
                                                     (role) => role.id === field.value
-                                                )?.category_name
-                                                : "Select category"}
+                                                )?.role_name
+                                                : "Select role"}
                                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </FormControl>
@@ -129,15 +130,15 @@ export default function UserForm(
                                         <PopoverContent className="w-[200px] p-0">
                                         <Command>
                                             <CommandInput
-                                                placeholder="Search category..."
+                                                placeholder="Search role..."
                                                 className="h-9"
                                             />
                                             <CommandList>
-                                                <CommandEmpty>No categories found!</CommandEmpty>
+                                                <CommandEmpty>No roles found!</CommandEmpty>
                                                     <CommandGroup>
                                                         {(roles??[]).map((role) => {
                                                         return <CommandItem
-                                                            value={role.category_name??""}
+                                                            value={role.role_name??""}
                                                             key={role.id}
                                                             onSelect={(currentValue) => {
                                                                 currentValue = form.getValues("role_id").toString()
@@ -150,7 +151,7 @@ export default function UserForm(
                                                                 setOpen(false)
                                                             }}
                                                         >
-                                                            {role.category_name}
+                                                            {role.role_name}
                                                             <CheckIcon
                                                             className={cn(
                                                                 "ml-auto h-4 w-4",
