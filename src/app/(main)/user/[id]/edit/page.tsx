@@ -18,11 +18,11 @@ export default async function UserEditPage({ params } : { params:{ id:string } }
         <>
             <div className="flex items-center mb-5">
                 <BackButton />
-                <h2 className="text-2xl font-semibold">Edit Product - {user.data?.name}</h2>
+                <h2 className="text-2xl font-semibold">Edit User - {user.data?.name}</h2>
             </div>
             <Card>
                 <CardHeader>
-                    <CardTitle>Product details</CardTitle>
+                    <CardTitle>User details</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <UserForm 

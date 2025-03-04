@@ -6,7 +6,7 @@ import { Pencil, Trash } from "lucide-react"
 import { User } from "@/interface"
 import Link from "next/link"
 import DeleteAlert from "@/components/helpers/delete_alert"
-import { deleteProduct } from "@/lib/supabase/api"
+import { deleteUser } from "@/lib/supabase/api"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -48,7 +48,7 @@ export const columns: ColumnDef<User>[] = [
           </Link>
           <DeleteAlert
             id={user.id}
-            action={deleteProduct}
+            action={deleteUser}
             warningMessage="This action cannot be undone. This product will be deleted permanently"
             successMessage="Delete success!"
             successDescription="Product has been deleted"

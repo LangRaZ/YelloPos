@@ -100,6 +100,18 @@ export async function createUser(user: UserMutation) : Promise<Response>{
     }
 }
 
+export async function updateUser(id: string, user: UserMutation) : Promise<Response>{
+    try {
+        const res = await supabase.from("Accounts").update(user).eq("id", id)
+        if (!res){
+            return {status: false, code: 500, message: "Failed to update User"};
+        }
+        return { status:true, code: res.status, message: res.statusText };
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
 export async function getCategories(){
     const categories = await supabase.from('Category').select()
     return categories
@@ -124,5 +136,17 @@ export async function getusers(id: string) : Promise<UserResponse>{
             status:false, code: 500, message: String(error)??"Unexpected error occurred", 
             data:null
         }
+    }
+}
+
+export async function deleteUser(id: string) : Promise<Response>{
+    try {
+        const res = await supabase.from("Accounts").delete().eq("id",id)
+        if(!res){
+            return {status: false, code:500, message: "Failed to delete User"};
+        }
+        return { status:true, code: res.status, message: res.statusText };
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
     }
 }

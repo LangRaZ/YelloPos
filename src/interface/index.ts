@@ -40,7 +40,7 @@ export interface UserMutation{
     email: string | null
     name: string | null
     role_id: number | null
-    username: string | null
+    // username: string | null
     phone_number : string | null
 }
 

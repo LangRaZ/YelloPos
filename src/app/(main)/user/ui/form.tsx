@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/router";
 import { UserValidation } from "@/validations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +16,9 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Role, UserMutation } from "@/interface";
+import { createUser, updateUser } from "@/lib/supabase/api";
+import { useRouter } from "next/navigation";
+
 
 export default function UserForm(
     { id, data, roles, isOnPage = false, closeDialog } :
@@ -24,7 +26,7 @@ export default function UserForm(
 ) {
     const [ error, setError ] = useState<string|null>(null);
     const [open, setOpen] = useState(false)
-
+    const router = useRouter()
     //Declare form and form data
     const form = useForm<z.infer<typeof UserValidation>>({
         resolver: zodResolver(UserValidation),
@@ -42,12 +44,41 @@ export default function UserForm(
         form.clearErrors();
         //Handle update or create object decision on form submit handler
         if(id){
-            //If id is not null then its update object
-            toast("Updated")
+            updateUser(id, values).then(res=>{
+                if(res && res.status){
+                    if(!isOnPage && closeDialog){
+                        closeDialog();
+                    }
+                    toast.success("User updated!", { description:"User has been updated successfully!" })
+                    if(isOnPage){
+                        router.push("/user");
+                    } else {
+                        router.refresh();
+                    }
+                } else {
+                    setError(res?.message??"Unexpected error occurred! Please reload the page!");
+                    form.reset();         
+                }
+            })
+        }else {
+            //If id is null then its create object
+            createUser(values).then(res=>{
+                if(res && res.status){
+                    if(!isOnPage && closeDialog){
+                        closeDialog();
+                    }
+                    toast.success("User added!", { description:"User has been added successfully!" })
+                    if(isOnPage){
+                        router.push("/user");
+                    } else {
+                        router.refresh();
+                    }
+                } else {
+                    setError(res?.message??"Unexpected error occurred! Please reload the page!");
+                    form.reset();         
+                }
+            })
         }
-        //If id is null the its create object
-
-        toast("Created");
     }
 
     return (
