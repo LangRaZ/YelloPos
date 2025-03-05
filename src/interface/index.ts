@@ -33,6 +33,8 @@ export interface ProductsResponse extends Response{
 }
 
 
+
+
 //Interfaces for User
 export interface UserMutation{
     // access_code: string | null
@@ -56,6 +58,7 @@ export interface UserResponse extends Response{
 export interface CategoryMutation{
     business_profile_id: number | null,
     category_name: string | null,
+    description: string | null,
 }
 
 export interface CategoryDetail{
@@ -66,7 +69,9 @@ export interface Category extends CategoryMutation{
     id: number,
 }
 
-
+export interface CategoryResponse extends Response{
+    data: Category | null
+}
 //interface for roles
 export interface Role{
     role_name: string | null,

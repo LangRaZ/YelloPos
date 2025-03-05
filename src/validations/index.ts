@@ -32,3 +32,12 @@ export const UserValidation = z.object({
     }).positive("Role must not be empty"),
     phone_number:z.string().nonempty("Phone number must not be empty")
 })
+
+export const CategoryValidation = z.object({
+    business_profile_id: z.number(),
+    category_name: z.string().nonempty("Product name must not be empty"),
+    
+    description: z.string(),
+    
+    is_active: z.boolean()
+})
