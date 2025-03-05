@@ -1,5 +1,7 @@
 "use client"
 
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -17,8 +19,12 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { signInAuthUser } from "@/lib/supabase/api"
 
 export default function LoginForm() {
+    const [error, setError] = useState<string | null>(null);
+    const router = useRouter();
+
     const form = useForm<z.infer<typeof LoginValidation>>({
         resolver: zodResolver(LoginValidation),
         defaultValues: {
@@ -27,10 +33,17 @@ export default function LoginForm() {
         },
     });
 
-    async function handleLogin(user: z.infer<typeof LoginValidation>){
-        
-
-        console.log(user)
+    async function handleLogin(values: z.infer<typeof LoginValidation>){
+        setError(null);
+        form.clearErrors();
+        signInAuthUser(values).then((res) => {
+            if (res.status) {
+                router.push("/");
+            } else{
+                setError(res.message);
+                form.reset();
+            }
+        });
     }
 
     return (
@@ -39,7 +52,9 @@ export default function LoginForm() {
                 <Image 
                     src="/images/HomeWave.png"
                     alt="Yello Logo"
+                    priority={true}
                     fill
+                    sizes="(max-width: 768px): 100vw, 50vw"
                 />
             </div>
             <Form {...form}>
@@ -47,10 +62,17 @@ export default function LoginForm() {
                     <div className="p-8 h-full flex flex-col gap-10 justify-center">
                         <div className="flex flex-col gap-3">
                             <div className="flex gap-2 items-center">
+                                <Image
+                                    src="/icons/logo-collapsed.svg"
+                                    alt="Yello Logo"
+                                    width={45}
+                                    height={45}
+                                    className=""
+                                />
                                 <h5 className="font-semibold text-4xl">Login</h5>
                             </div>
                             <p className="text-[--sidebar-text-color]">
-                                Enter your username to login into your account
+                                Fill the form to login into your account
                             </p>
                             {/* {error && (
                                 <p className="my-4 text-red-800 font-semibold">{error}</p>
@@ -98,6 +120,17 @@ export default function LoginForm() {
                                     variant={"default"}
                                 >
                                 Login
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    className=""
+                                    variant={"default"}
+                                    onClick={()=>{
+                                        form.setValue("email", "devyellopos@gmail.com")
+                                        form.setValue("password", "abc123")
+                                    }}
+                                >
+                                Login Dev
                                 </Button>
                                 <div>
                                     <span className="text-sm">

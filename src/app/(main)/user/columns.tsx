@@ -13,7 +13,7 @@ import { deleteUser } from "@/lib/supabase/api"
 export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
-    header: "Nama",
+    header: "Name",
   },
   {
     accessorKey: "email",
@@ -40,7 +40,6 @@ export const columns: ColumnDef<User>[] = [
             <Button 
               variant="outline"
               size="sm"
-              onClick={() => console.log("Edit", user.id)}
               className="flex items-center gap-1"
             >
               <Pencil className="w-4 h-4" />

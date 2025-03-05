@@ -1,4 +1,4 @@
-import LoginForm from "./forms/login_form"
+import LoginForm from "./ui/login_form"
 
 export default function LoginPage() {
   return (

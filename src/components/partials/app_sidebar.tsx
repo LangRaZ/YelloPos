@@ -43,7 +43,7 @@ export function AppSidebar() {
                     )}
                 </SidebarHeader>
                 <SidebarGroup>
-                    <SidebarGroupLabel>Application</SidebarGroupLabel>
+                    <SidebarGroupLabel>APPLICATION</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {sidebarLinks.map((item) => (

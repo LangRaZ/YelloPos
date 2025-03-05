@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
 
-export default async function CompanyEditPage({ params } : { params:{ id:string } }){
+export default async function ProductEditPage({ params } : { params:{ id:string } }){
     const param = await params;
     const id = Number(param.id)
     const product = await getProduct(id)

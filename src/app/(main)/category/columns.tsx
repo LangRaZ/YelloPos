@@ -32,7 +32,6 @@ export const columns: ColumnDef<Category>[] = [
               <Button 
                 variant="outline"
                 size="sm"
-                onClick={() => console.log("Edit", category.id)}
                 className="flex items-center gap-1"
               >
                 <Pencil className="w-4 h-4" />

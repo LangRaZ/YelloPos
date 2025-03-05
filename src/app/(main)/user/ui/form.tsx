@@ -92,7 +92,7 @@ export default function UserForm(
                     name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>name</FormLabel>
+                            <FormLabel>Name</FormLabel>
                             <FormControl>
                                 <Input placeholder="Enter product name" {...field} />
                             </FormControl>
@@ -120,7 +120,7 @@ export default function UserForm(
                     name="phone_number"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Phone Number</FormLabel>
+                            <FormLabel>Phone number</FormLabel>
                             <FormControl>
                                 <Input placeholder="Enter phone number" {...field} />
                             </FormControl>
@@ -137,7 +137,7 @@ export default function UserForm(
                         render={({ field }) => {
                             return <FormItem>
                                 <div className="flex flex-col space-y-2">
-                                    <FormLabel>Roles</FormLabel>
+                                    <FormLabel>Role</FormLabel>
                                     <Popover open={open} onOpenChange={setOpen}>
                                         <PopoverTrigger asChild>
                                         <FormControl className="grow">

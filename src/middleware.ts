@@ -22,13 +22,19 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
-        // "/",
-        // "/login",
-        // "/register",
-        // "/category",
-        // "/order",
-        // "/product",
-        // "/tax",
-        // "/transaction",
+        "/",
+        "/login",
+        "/register",
+        "/category",
+        "/category/:id*",
+        "/order",
+        "/product",
+        "/product/:id*",
+        "/tax",
+        "/transaction",
+        "/user",
+        "/user/:id*",
+        "/business",
+        "/dashboard",
     ],
 };

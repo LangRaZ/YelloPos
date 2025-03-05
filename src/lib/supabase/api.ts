@@ -1,6 +1,6 @@
 import { createClient } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation} from "@/interface"
-import { Response, ProductsResponse, ProductResponse,UserResponse,CategoryResponse} from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation, Auth } from "@/interface"
+import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
 
 const supabase = createClient()
 
@@ -201,5 +201,53 @@ export async function deleteCategory(id: string) : Promise<Response>{
         return { status:true, code: res.status, message: res.statusText };
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+//Auth
+export async function createAuthUser(user: AuthMutation) : Promise<Response>{
+    const AuthUser: AuthRegister = {
+        email: user.email,
+        password: user.password,
+        options: {
+            data: {
+                name: user.name,
+                phone_number: user.phone_number,
+            }
+        }
+    };
+
+    try {
+        const {error} = await supabase.auth.signUp(AuthUser)
+        if(!error){
+            return { status: true, code: 200, message:"Account registered successfully" }
+        }
+        return { status: false, code: 500, message: error.message }
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" }
+    }
+}
+
+export async function signInAuthUser(authUser: Auth) : Promise<Response>{
+    try {
+        const {error} = await supabase.auth.signInWithPassword(authUser);
+        if(!error){
+            return { status: true, code: 200, message:"Account logged in successfully" }
+        }
+        return { status: false, code: 500, message: error.message }
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" }
+    }
+}
+
+export async function signOutAuthUser() : Promise<Response>{
+    try {
+        const {error} = await supabase.auth.signOut();
+        if(!error){
+            return { status: true, code: 200, message:"Account logged out successfully" }
+        }
+        return { status: false, code: 500, message: error.message } 
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" }
     }
 }

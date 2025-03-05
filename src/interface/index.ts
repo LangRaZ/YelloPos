@@ -72,10 +72,40 @@ export interface Category extends CategoryMutation{
 export interface CategoryResponse extends Response{
     data: Category | null
 }
+
+
 //interface for roles
 export interface Role{
     role_name: string | null,
     id: number,
+}
+
+//Interface for Auths
+export interface AuthOpt{
+    data: AuthOptData
+}
+
+export interface AuthOptData{
+    name: string
+    phone_number: string
+}
+
+export interface Auth {
+    email: string
+    password: string
+}
+
+
+export interface AuthRegister extends Auth{
+    options?: AuthOpt
+}
+
+export interface AuthMutation{
+    name: string
+    email: string
+    phone_number: string
+    password: string
+    confirm_password: string
 }
 
 

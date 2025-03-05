@@ -94,7 +94,7 @@ export default function CategoryForm(
                         <FormItem>
                             <FormLabel>Category name</FormLabel>
                             <FormControl>
-                                <Input placeholder="Enter Category name" {...field} />
+                                <Input placeholder="Enter category name" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

@@ -1,12 +1,8 @@
 "use client"
 
 import {
-  BadgeCheck,
-  Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
-  Sparkles,
 } from "lucide-react"
 
 import {
@@ -29,6 +25,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { signOutAuthUser } from "@/lib/supabase/api"
+import { useRouter } from "next/navigation"
 
 export function NavUser({
   user,
@@ -39,7 +37,14 @@ export function NavUser({
     avatar: string
   }
 }) {
-  const { isMobile } = useSidebar()
+  const { isMobile } = useSidebar();
+  const router = useRouter();
+
+  const logout = () =>{
+    signOutAuthUser().then((res) =>{
+      if(res.status) router.push("/login");
+    })
+  }
 
   return (
     <SidebarMenu>
@@ -67,7 +72,8 @@ export function NavUser({
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuItem>
+            <DropdownMenuItem 
+            onClick={logout}>
               <LogOut />
               Log out
             </DropdownMenuItem>

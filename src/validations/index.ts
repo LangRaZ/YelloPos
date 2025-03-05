@@ -1,12 +1,25 @@
 import { z } from "zod"
 
 export const LoginValidation = z.object({
-    email: z.string().min(5, {
-        message: "Email must be at least 5 characters",
-    }).max(100),
-    password: z.string().min(5, {
-        message: "Password must be at least 5 characters"
-    }).max(100)
+    email: z.string().nonempty("Email must no be empty").email("Invalid email address"),
+    password: z.string().nonempty("Password must not be empty")
+})
+
+export const RegisterValidation = z.object({
+    name: z.string().nonempty("Owner name must not be empty"),
+    email: z.string().nonempty("Email must no be empty").email("Invalid email address"),
+    phone_number: z.string().nonempty("Phone number must not be empty").min(10, {
+        message: "Invalid phone number"
+    }).max(14, {
+        message: "Invalid phone number"
+    }),
+    password: z.string().min(6, {
+        message: "Password must be at least 6 characters"
+    }).regex(RegExp("([0-9]+[A-Za-z]|[A-Za-z]+[0-9])[a-z0-9]*"), "Password must contain at least a number and an alphabet (Alphanumeric)"),
+    confirm_password: z.string(),
+}).refine((data)=> data.password === "" || data.password === null ? true : data.password === data.confirm_password,{
+    message: "Passwords don't match",
+    path: ["confirm_password"]
 })
 
 export const ProductValidation = z.object({

@@ -9,8 +9,8 @@ export function CreateUserButton({ RolesData } : { RolesData:Role[]|null }){
         //Use popup container for popup create update form
         //Add trigger : trigger button, modalTitle: form title, modalDescription: form description
         <PopupContainer
-            trigger={<Button variant={"outline"}>Add User</Button>}
-            modalTitle="Add new User"
+            trigger={<Button variant={"default"}>Add User</Button>}
+            modalTitle="Add new user"
             modalDescription="Fill all the required data fields"
         >
             {/* Insert form component to be put inside popup page */}
