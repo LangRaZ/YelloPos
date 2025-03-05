@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { LoginValidation } from "@/validations"
 import Link from "next/link"
 import Image from "next/image"
-import { Button } from "../ui/button"
+import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
@@ -15,14 +15,14 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "../ui/form"
-import { Input } from "../ui/input"
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 
 export default function LoginForm() {
     const form = useForm<z.infer<typeof LoginValidation>>({
         resolver: zodResolver(LoginValidation),
         defaultValues: {
-          username: "",
+          email: "",
           password: "",
         },
     });
@@ -60,10 +60,10 @@ export default function LoginForm() {
                         <div className="flex flex-col gap-6">
                             <FormField
                                 control={form.control}
-                                name="username"
+                                name="email"
                                 render={({ field })=>(
                                     <FormItem>
-                                        <FormLabel>Username</FormLabel>
+                                        <FormLabel>Email</FormLabel>
                                         <FormControl>
                                             <Input placeholder="name" {...field}/>
                                         </FormControl>
@@ -83,7 +83,7 @@ export default function LoginForm() {
                                         className="pr-8"
                                         placeholder="Enter your password"
                                         {...field}
-                                        type="text"
+                                        type="password"
                                         />
                                     </div>
                                     </FormControl>
@@ -95,7 +95,7 @@ export default function LoginForm() {
                                 <Button
                                     type="submit"
                                     className=""
-                                    variant={"outline"}
+                                    variant={"default"}
                                 >
                                 Login
                                 </Button>
@@ -104,7 +104,7 @@ export default function LoginForm() {
                                         Don&apos;t have any account?&nbsp;
                                     </span>
                                     <Link
-                                        className="text-sm text-blue-600 hover:text-blue-800"
+                                        className="text-sm text-primary hover:text-primary/90"
                                         href="/register"
                                     >
                                         Register Here!
