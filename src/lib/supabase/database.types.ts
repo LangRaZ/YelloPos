@@ -126,6 +126,7 @@ export type Database = {
           business_profile_id: number | null
           category_name: string | null
           created_at: string
+          description: string | null
           id: number
           is_active: boolean | null
         }
@@ -133,6 +134,7 @@ export type Database = {
           business_profile_id?: number | null
           category_name?: string | null
           created_at?: string
+          description?: string | null
           id?: number
           is_active?: boolean | null
         }
@@ -140,6 +142,7 @@ export type Database = {
           business_profile_id?: number | null
           category_name?: string | null
           created_at?: string
+          description?: string | null
           id?: number
           is_active?: boolean | null
         }

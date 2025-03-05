@@ -1,6 +1,6 @@
 import { createClient } from "./client_config"
-import { ProductMutation, UserMutation } from "@/interface"
-import { Response, ProductsResponse, ProductResponse,UserResponse} from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation} from "@/interface"
+import { Response, ProductsResponse, ProductResponse,UserResponse,CategoryResponse} from "@/interface"
 
 const supabase = createClient()
 
@@ -144,6 +144,59 @@ export async function deleteUser(id: string) : Promise<Response>{
         const res = await supabase.from("Accounts").delete().eq("id",id)
         if(!res){
             return {status: false, code:500, message: "Failed to delete User"};
+        }
+        return { status:true, code: res.status, message: res.statusText };
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+//Category
+export async function updateCategory(id: number, Category: CategoryMutation) : Promise<Response>{
+    try {
+        const res = await supabase.from("Category").update(Category).eq("id", id)
+        if (!res){
+            return {status: false, code: 500, message: "Failed to update category"};
+        }
+        return { status:true, code: res.status, message: res.statusText };
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+export async function createCategory(Category: CategoryMutation) : Promise<Response>{
+    try {
+        const res = await supabase.from("Category").insert(Category)
+        if (!res){
+            return {status: false, code: 500, message: "Failed to create Category"};
+        }
+        return { status:true, code: res.status, message: res.statusText };
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+export async function getCategory(id: number) : Promise<CategoryResponse>{
+    try {
+        const category = await supabase.from("Category").select("*").eq("id", id).single()
+        if(!category.data){
+            return {status:false, code:200, message: category.statusText, data: category.data};
+        }
+        return {status:true, code:200, message: category.statusText, data: category.data};
+
+    } catch (error) {
+        return {
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        }
+    }
+}
+
+export async function deleteCategory(id: string) : Promise<Response>{
+    try {
+        const res = await supabase.from("Category").delete().eq("id", Number(id))
+        if(!res){
+            return {status: false, code:500, message: "Failed to delete category"};
         }
         return { status:true, code: res.status, message: res.statusText };
     } catch (error) {
