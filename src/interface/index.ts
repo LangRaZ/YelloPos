@@ -73,6 +73,25 @@ export interface CategoryResponse extends Response{
     data: Category | null
 }
 
+//interface for transaction
+export interface TransactionMutation{
+    business_profile_id: number | null
+    created_at: string
+    total_payment: number | null
+    transaction_status: string | null
+    transaction_id: string 
+}
+export interface TransactionDetail{
+    category_name: string | null
+}
+
+export interface Transaction extends TransactionMutation{
+    id: number,
+}
+
+export interface TransactionsResponse extends Response{
+    data: Transaction[] | null
+}
 
 //interface for roles
 export interface Role{
