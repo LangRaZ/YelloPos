@@ -205,7 +205,7 @@ export async function deleteCategory(id: string) : Promise<Response>{
 }
 
 //Auth
-export async function createAuthUser(user: AuthMutation) : Promise<Response>{
+export async function createAuthUser(user: AuthMutation) : Promise<Response>{   
     const AuthUser: AuthRegister = {
         email: user.email,
         password: user.password,
@@ -213,6 +213,7 @@ export async function createAuthUser(user: AuthMutation) : Promise<Response>{
             data: {
                 name: user.name,
                 phone_number: user.phone_number,
+                first_login: true
             }
         }
     };

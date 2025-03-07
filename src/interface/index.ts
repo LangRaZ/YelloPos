@@ -88,6 +88,7 @@ export interface AuthOpt{
 export interface AuthOptData{
     name: string
     phone_number: string
+    first_login:boolean
 }
 
 export interface Auth {

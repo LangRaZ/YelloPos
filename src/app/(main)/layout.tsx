@@ -7,7 +7,7 @@ import { AppSidebar } from "@/components/partials/app_sidebar";
 import '../globals.css';
 
 
-export default async function RootLayout({
+export default async function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
