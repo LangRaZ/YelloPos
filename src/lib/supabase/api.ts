@@ -1,5 +1,5 @@
 import { createClient } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation, Auth } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation, Auth, TransactionMutation, TransactionsResponse } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
 
 const supabase = createClient()
@@ -203,6 +203,36 @@ export async function deleteCategory(id: string) : Promise<Response>{
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
     }
 }
+
+//Transaction
+export async function updateTransaction(id: number, Transaction: TransactionMutation) : Promise<Response>{
+    try {
+        const res = await supabase.from("Order").update(Transaction).eq("id", id)
+        if (!res){
+            return {status: false, code: 500, message: "Failed to update transaction"};
+        }
+        return { status:true, code: res.status, message: res.statusText };
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+export async function getTransactions() : Promise<TransactionsResponse>{
+    try {
+        const transactions = await supabase.from('Order').select('*').order('created_at', {ascending: false})
+        if(!transactions.data){
+            return {status:false, code:200, message: transactions.statusText, data: transactions.data};
+        }
+        return {status:true, code:200, message: transactions.statusText, data: transactions.data};
+        
+    } catch (error) {
+        return { 
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        };
+    }
+}
+
 
 //Auth
 export async function createAuthUser(user: AuthMutation) : Promise<Response>{
