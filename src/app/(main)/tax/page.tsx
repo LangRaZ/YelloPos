@@ -49,8 +49,8 @@ export default function tax() {
       </div>
       <div className="mt-10">
         <div></div>
-        {/* <div className="">
-          <DataTable columns={columns} data={products ?? []} />
+        <div className="">
+          {/* <DataTable columns={columns} data={products ?? []} /> */}
         </div>
         <Tabs defaultValue="monthly" className="w-[400px]">
           <TabsList className="grid w-full grid-cols-2">
@@ -103,7 +103,7 @@ export default function tax() {
               </CardFooter>
             </Card>
           </TabsContent>
-        </Tabs>*/}
+        </Tabs>
       </div>
     </>
   )
