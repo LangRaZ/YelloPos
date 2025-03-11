@@ -1,52 +1,65 @@
-import { AppSidebar } from "@/components/partials/app_sidebar"
+import { Button } from "@/components/ui/button"
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar"
-
-export default function Page() {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
+import  DataTable  from "@/components/helpers/data_table"
+// import { columns } from "./columns"
+import { Barchart } from "./bar_chart"
+export default function Dashboard() {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+    <>
+      <div>
+          <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+
+          <div className="rounded-sm flex justify-evenly items-center">
+              <Card>
+                <CardHeader className="items-center">
+                  <CardTitle >Penghasilan</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex items-center justify-center relative">
+                      <p className="text-4xl font-bold mb-4">Rp 5000000</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="items-center">
+                  <CardTitle>Order</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex items-center justify-center relative">
+                      <p className="text-4xl font-bold mb-4">300</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="items-center">
+                  <CardTitle>Order terbayar</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex items-center justify-center relative">
+                      <p className="text-4xl font-bold mb-4">280</p>
+                  </div>
+                </CardContent>
+              </Card>
           </div>
-        </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="aspect-video rounded-xl bg-muted/50" />
-            <div className="aspect-video rounded-xl bg-muted/50" />
-            <div className="aspect-video rounded-xl bg-muted/50" />
-          </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+          
+      </div>
+      <Barchart></Barchart>
+    </>
+    
   )
 }
