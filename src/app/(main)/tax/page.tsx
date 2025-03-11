@@ -24,34 +24,43 @@ export default function tax() {
       <div>
           <h1 className="text-2xl font-bold mb-4">Laporan Pajak</h1>
 
-          <div className="bg-gray-300 p-6 rounded-sm flex justify-around items-center">
-              <div className="text-center">
-                  <h2 className="font-semibold text-lg mb-2">Pendapatan Bruto Bulanan</h2>
+          <div className="rounded-sm flex justify-evenly items-center">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Pendapatan Bruto Bulanan</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
                   <div className="flex items-center justify-center relative">
                       <p className="text-4xl font-bold mb-4">0</p>
                   </div>
-              </div>
-
-              <div className="text-center">
-                  <h2 className="font-semibold text-lg mb-2">Akumulasi Pendapatan Bruto</h2>
-                  <div className="items-center justify-center relative">
-                      <p className="text-4xl font-bold mb-4">0</p>
-                  </div>
-              </div>
-
-              <div className="text-center">
-                  <h2 className="font-semibold text-lg mb-2">Akumulasi Pajak</h2>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Akumulasi Pendapatan Bruto</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
                   <div className="flex items-center justify-center relative">
                       <p className="text-4xl font-bold mb-4">0</p>
                   </div>
-              </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Akumulasi Pajak</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="flex items-center justify-center relative">
+                      <p className="text-4xl font-bold mb-4">0</p>
+                  </div>
+                </CardContent>
+              </Card>
           </div>
       </div>
       <div className="mt-10">
-        <div></div>
         {/* <div className="">
           <DataTable columns={columns} data={products ?? []} />
-        </div>
+        </div> */}
         <Tabs defaultValue="monthly" className="w-[400px]">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="monthly">Monthly</TabsTrigger>
@@ -103,7 +112,7 @@ export default function tax() {
               </CardFooter>
             </Card>
           </TabsContent>
-        </Tabs>*/}
+        </Tabs>
       </div>
     </>
   )
