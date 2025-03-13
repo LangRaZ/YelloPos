@@ -51,10 +51,20 @@ export function AppSidebar() {
                             {sidebarLinks.map((item) => (
                                 (pathName.startsWith(item.route))?(
                                     <SidebarMenuItem key={item.label}>
-                                        <SidebarMenuButton className="bg-primary" asChild>
+                                        <SidebarMenuButton className="bg-sidebar-accent text-sidebar-accent-foreground" asChild>
                                             <a href={item.route}>
-                                                <img src={item.imgURL} alt="" width="20px" height="20px" />
-                                                <span>{item.label}</span>
+                                                {open ? (
+                                                    <>
+                                                        <span className="h-full w-[3px] bg-sidebar-accent-foreground rounded-xl"></span>
+                                                        <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                                        <span>{item.label}</span>
+                                                    </>
+                                                ):(
+                                                    <>
+                                                        <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                                        <span>{item.label}</span>
+                                                    </>
+                                                )}
                                             </a>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
