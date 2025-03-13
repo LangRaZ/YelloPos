@@ -16,6 +16,7 @@ import {
 import { sidebarLinks } from "@/constants";
 import { NavSecondary } from "@/components/partials/nav-secondary"
 import { NavUser } from "@/components/partials/nav-user"
+import { usePathname } from "next/navigation";
 
 const data = {
     user: {
@@ -27,6 +28,7 @@ const data = {
 
 export function AppSidebar() {
     const { open } = useSidebar();
+    const pathName = usePathname();
 
     return (
         <Sidebar collapsible="icon">
@@ -47,14 +49,25 @@ export function AppSidebar() {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {sidebarLinks.map((item) => (
-                                <SidebarMenuItem key={item.label}>
-                                    <SidebarMenuButton asChild>
-                                        <a href={item.route}>
-                                            <img src={item.imgURL} alt="" width="20px" height="20px" />
-                                            <span>{item.label}</span>
-                                        </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
+                                (pathName.startsWith(item.route))?(
+                                    <SidebarMenuItem key={item.label}>
+                                        <SidebarMenuButton className="bg-primary" asChild>
+                                            <a href={item.route}>
+                                                <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                                <span>{item.label}</span>
+                                            </a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ):(
+                                    <SidebarMenuItem key={item.label}>
+                                        <SidebarMenuButton asChild>
+                                            <a href={item.route}>
+                                                <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                                <span>{item.label}</span>
+                                            </a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                )
                             ))}
                         </SidebarMenu>
                     </SidebarGroupContent>
