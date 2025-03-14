@@ -13,8 +13,7 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar";
-import { sidebarLinks } from "@/constants";
-import { NavSecondary } from "@/components/partials/nav-secondary"
+import { sidebarLinks, secondaryLinks } from "@/constants";
 import { NavUser } from "@/components/partials/nav-user"
 import { usePathname } from "next/navigation";
 
@@ -51,7 +50,7 @@ export function AppSidebar() {
                             {sidebarLinks.map((item) => (
                                 (pathName.startsWith(item.route))?(
                                     <SidebarMenuItem key={item.label}>
-                                        <SidebarMenuButton className="bg-sidebar-accent text-sidebar-accent-foreground" asChild>
+                                        <SidebarMenuButton isActive asChild>
                                             <a href={item.route}>
                                                 {open ? (
                                                     <>
@@ -82,7 +81,44 @@ export function AppSidebar() {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
-                <NavSecondary className="mt-auto" />
+                <SidebarGroup className="mt-auto">
+                    <SidebarGroupLabel>ACCOUNT MANAGEMENT</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                    <SidebarMenu>
+                        {secondaryLinks.map((item) => (
+                            (pathName.startsWith(item.route))?(
+                                <SidebarMenuItem key={item.label}>
+                                    <SidebarMenuButton isActive asChild>
+                                    <a href={item.route}>
+                                        {open ? (
+                                            <>
+                                                <span className="h-full w-[3px] bg-sidebar-accent-foreground rounded-xl"></span>
+                                                <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                                <span>{item.label}</span>
+                                            </>
+                                        ):(
+                                            <>
+                                                <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                                <span>{item.label}</span>
+                                            </>
+                                        )}
+                                    </a>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ):(
+                                <SidebarMenuItem key={item.label}>
+                                    <SidebarMenuButton asChild>
+                                    <a href={item.route}>
+                                        <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                        <span>{item.label}</span>
+                                    </a>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            )
+                        ))}
+                    </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>
                 <NavUser user={data.user} />
