@@ -1,5 +1,5 @@
 import { createClient } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation, Auth, TransactionMutation, TransactionsResponse } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
 
 const supabase = createClient()
@@ -280,18 +280,5 @@ export async function signOutAuthUser() : Promise<Response>{
         return { status: false, code: 500, message: error.message } 
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" }
-    }
-}
-
-//Auth Business
-export async function createCategory(Category: CategoryMutation) : Promise<Response>{
-    try {
-        const res = await supabase.from("Category").insert(Category)
-        if (!res){
-            return {status: false, code: 500, message: "Failed to create Category"};
-        }
-        return { status:true, code: res.status, message: res.statusText };
-    } catch (error) {
-        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
     }
 }
