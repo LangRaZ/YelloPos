@@ -39,7 +39,7 @@ export const ProductValidation = z.object({
 
 export const UserValidation = z.object({
     name: z.string().nonempty("Name must not be empty"),
-    email: z.string().nonempty("Email must not be empty"),
+    email: z.string().nonempty("Email must not be empty").email("Invalid email address"),
     role_id: z.number({
         required_error: "Role must not be empty",
     }).positive("Role must not be empty"),
@@ -53,4 +53,15 @@ export const CategoryValidation = z.object({
     description: z.string(),
     
     is_active: z.boolean()
+})
+
+export const BusinessValidation = z.object({
+    address: z.string().nonempty("Address must not be empty"),    
+    business_name: z.string().nonempty("Address must not be empty"),
+    phone_number: z.string().nonempty("Phone number must not be empty").min(10, {
+        message: "Invalid phone number"
+    }).max(14, {
+        message: "Invalid phone number"
+    }),
+   
 })
