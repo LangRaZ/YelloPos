@@ -127,5 +127,15 @@ export interface AuthMutation{
     password: string
     confirm_password: string
 }
-
+export interface BusinessMutation{
+    address: string
+    bank_account_name: string | null
+    bank_account_number: string | null
+    business_name: string
+    code: string
+    created_at: string
+    email: string
+    id: number
+    phone_number: string
+}
 

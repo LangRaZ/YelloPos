@@ -77,7 +77,7 @@ export default function ProductForm(
                     }
                 } else {
                     setError(res?.message??"Unexpected error occurred! Please reload the page!");
-                    form.reset();         
+                    // form.reset();         
                 }
             })
         }

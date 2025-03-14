@@ -1,5 +1,5 @@
 import { createClient } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation, Auth, TransactionMutation, TransactionsResponse } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
 
 const supabase = createClient()
@@ -39,6 +39,19 @@ export async function getProduct(id: number) : Promise<ProductResponse>{
 
 
 export async function createProduct(product: ProductMutation) : Promise<Response>{
+    if (!product.product_name || !product.product_category_id) {
+        return { status: false, code: 400, message: "Product name and Product category is required" };
+    }
+
+    // console.log(product)
+
+    const checkUnique = await checkUniqueProduct(product.product_name, product.product_category_id);
+    const getCategoryName = await getCategory(product.product_category_id);
+
+    if (checkUnique.status == true) {
+        return {status: false, code: 500, message: checkUnique.data?.product_name + " with " + getCategoryName.data?.category_name + " already exists"};
+    }
+
     try {
         const res = await supabase.from("Product").insert(product)
         if (!res){
@@ -73,6 +86,25 @@ export async function deleteProduct(id: string) : Promise<Response>{
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
     }
 }
+
+export async function checkUniqueProduct(name: string, categoryId: number) : Promise<ProductResponse>{
+    try {
+        const product = await supabase.from("Product").select("*, Category:product_category_id(category_name)").eq("product_name", name).eq("product_category_id", categoryId).single()
+        console.log(product)
+        if(!product.data){
+            console.log(false)
+            return {status:false, code:200, message: product.statusText, data: product.data};
+        }
+        return {status:true, code:200, message: product.statusText, data: product.data};
+
+    } catch (error) {
+        return {
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        }
+    }
+}
+
 
 export async function getUser(){
     try {
@@ -165,6 +197,16 @@ export async function updateCategory(id: number, Category: CategoryMutation) : P
 }
 
 export async function createCategory(Category: CategoryMutation) : Promise<Response>{
+    if (!Category.category_name) {
+        return { status: false, code: 400, message: "Category name is required" };
+    }
+
+    const check = await checkUniqueCategory(Category.category_name);
+
+    if (check.status == true) {
+        return {status: false, code: 500, message: check.data?.category_name + " already exists"};
+    }
+
     try {
         const res = await supabase.from("Category").insert(Category)
         if (!res){
@@ -179,6 +221,22 @@ export async function createCategory(Category: CategoryMutation) : Promise<Respo
 export async function getCategory(id: number) : Promise<CategoryResponse>{
     try {
         const category = await supabase.from("Category").select("*").eq("id", id).single()
+        if(!category.data){
+            return {status:false, code:200, message: category.statusText, data: category.data};
+        }
+        return {status:true, code:200, message: category.statusText, data: category.data};
+
+    } catch (error) {
+        return {
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        }
+    }
+}
+
+export async function checkUniqueCategory(name: string) : Promise<CategoryResponse>{
+    try {
+        const category = await supabase.from("Category").select("*").eq("category_name", name).single()
         if(!category.data){
             return {status:false, code:200, message: category.statusText, data: category.data};
         }
@@ -280,5 +338,17 @@ export async function signOutAuthUser() : Promise<Response>{
         return { status: false, code: 500, message: error.message } 
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" }
+    }
+}
+
+export async function createBusiness(business: BusinessMutation) : Promise<Response>{
+    try {
+        const business_res = await supabase.from("BusinessProfile").insert(business)
+        if (!business_res){
+            return {status: false, code: 500, message: "Failed to create user"};
+        }
+        return { status:true, code: business_res.status, message: business_res.statusText };
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
     }
 }
