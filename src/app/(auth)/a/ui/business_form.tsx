@@ -10,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { createAuthBusiness } from "@/lib/supabase/api";
+import { createBusiness } from "@/lib/supabase/api";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -24,6 +24,9 @@ export default function BusinessForm() {
         defaultValues: {
             business_name: "",
             address: "",
+            bank_account_name: "",
+            bank_account_number: "",
+  
             phone_number: "",
         },
     });
@@ -31,7 +34,7 @@ export default function BusinessForm() {
     function handleRegister(values: z.infer<typeof BusinessValidation>) {
         setError(null);
         form.clearErrors();
-        createAuthUser(values).then((res) => {
+        createBusiness(values).then((res) => {
           if (res.status) {
             router.push("/");
             toast.success("Register Success!" , { description: "Your account has been successfully created" })
@@ -45,16 +48,6 @@ export default function BusinessForm() {
 
 
     return (
-        <div className="grid min-h-svh w-full sm:grid-cols-2">
-            <div className="relative hidden sm:flex">
-                <Image 
-                    src="/images/HomeWave.png"
-                    alt="Yello Logo"
-                    priority={true}
-                    fill
-                    sizes="(max-width: 768px): 100vw, 50vw"
-                />
-            </div>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(handleRegister)} className="bg-white px-4 md:px-16 w-full">
                     <div className="p-8 h-full flex flex-col gap-10 justify-center">
@@ -67,10 +60,10 @@ export default function BusinessForm() {
                                     height={45}
                                     className=""
                                 />
-                                <h5 className="font-semibold text-4xl">Register</h5>
+                                <h5 className="font-semibold text-4xl">Business profile</h5>
                             </div>
                             <p className="text-[--sidebar-text-color]">
-                                Fill the form to register your account
+                                Fill the form to complete your business account
                             </p>
                             {/* {error && (
                                 <p className="my-4 text-red-800 font-semibold">{error}</p>
@@ -80,25 +73,12 @@ export default function BusinessForm() {
                         <div className="flex flex-col gap-6">
                             <FormField
                                 control={form.control}
-                                name="name"
+                                name="business_name"
                                 render={({ field })=>(
                                     <FormItem>
-                                        <FormLabel>Owner name</FormLabel>
+                                        <FormLabel>business name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Enter your name" {...field}/>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field })=>(
-                                    <FormItem>
-                                        <FormLabel>Email</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="Enter your email" {...field}/>
+                                            <Input placeholder="Enter your  business name" {...field}/>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -109,7 +89,7 @@ export default function BusinessForm() {
                                 name="phone_number"
                                 render={({ field })=>(
                                     <FormItem>
-                                        <FormLabel>Phone number</FormLabel>
+                                        <FormLabel>phone number</FormLabel>
                                         <FormControl>
                                             <Input placeholder="Enter your phone number" {...field}/>
                                         </FormControl>
@@ -119,68 +99,33 @@ export default function BusinessForm() {
                             />
                             <FormField
                                 control={form.control}
-                                name="password"
-                                render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Password</FormLabel>
-                                    <FormControl>
-                                    <div className="relative">
-                                        <Input
-                                        className="pr-8"
-                                        placeholder="Enter your password"
-                                        {...field}
-                                        type="password"
-                                        />
-                                    </div>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
+                                name="address"
+                                render={({ field })=>(
+                                    <FormItem>
+                                        <FormLabel>Address</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter your business address" {...field}/>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
                                 )}
                             />
-                            <FormField
-                                control={form.control}
-                                name="confirm_password"
-                                render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Confirm Password</FormLabel>
-                                    <FormControl>
-                                    <div className="relative">
-                                        <Input
-                                        className="pr-8"
-                                        placeholder="Confirm your password"
-                                        {...field}
-                                        type="password"
-                                        />
-                                    </div>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                                )}
-                            />
+                            
+                            
                             <div className="flex flex-col gap-3">
                                 <Button
                                     type="submit"
                                     className=""
                                     variant={"default"}
                                 >
-                                Register
+                                Submit
                                 </Button>
-                                <div>
-                                    <span className="text-sm">
-                                        Already have an account?&nbsp;
-                                    </span>
-                                    <Link
-                                        className="text-sm text-primary hover:text-primary/90"
-                                        href="/login"
-                                    >
-                                        Login Here!
-                                    </Link>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
                 </form>
             </Form>
-        </div>
+        
     )
 }
