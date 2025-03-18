@@ -68,6 +68,11 @@ export default function OrderMenuPage() {
     total_price: ((product.sell_price??0) * productQuantities[product.id]),
   }));
 
+  const totalAmount = orderDetails.reduce(
+    (sum, item) => sum + ((item.product.sell_price??0) * item.quantity), 
+    0
+  );
+
   if (loading){
     return <div>Loading...</div>
   }
@@ -156,7 +161,7 @@ export default function OrderMenuPage() {
                     <p className="font-medium">{product.product_name}</p>
                     <p className="text-sm text-gray-500">{quantity}</p>
                   </div>
-                  <p className="font-medium">{total_price}</p>
+                  <p className="font-medium">{total_price.toFixed(2)}</p>
                 </div>
               ))}
             </div>
@@ -168,6 +173,10 @@ export default function OrderMenuPage() {
           {/* Footer */}
           <div className="mt-auto">
             <Separator className="my-4"/>
+            <div className="flex justify-between mb-4">
+              <p className="font-semibold">Total:</p>
+              <p className="font-bold">{totalAmount.toFixed(2)}</p>
+            </div>
             <Button className="w-full">Confirm Order</Button>
           </div>
         </div>
