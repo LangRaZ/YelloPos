@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Carousel,
   CarouselContent,
@@ -15,11 +17,60 @@ import { getCategories, getProducts } from "@/lib/supabase/api"
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { useEffect, useState } from "react";
+import { Category, OrderDetailTemporary, Product } from "@/interface";
 
 
-export default async function OrderMenuPage() {
-  const { data: categories } = await getCategories();
-  const { data: products } = await getProducts();
+export default function OrderMenuPage() {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [productQuantities, setProductQuantities] = useState<{[key: number]: number}>({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(()=>{
+    const init = async () =>{
+      const { data: categories } = await getCategories();
+      const { data: products } = await getProducts();
+
+      setProducts(products ?? [])
+      setCategories(categories ?? [])
+
+      const initialQuantities: {[key: number]: number} = {};
+      products?.forEach((product)=>{
+        initialQuantities[product.id] = 0;
+      })
+      setProductQuantities(initialQuantities);
+      setLoading(false);
+    }
+
+    init();
+  },[]);
+
+  const increaseQuantity = (productId: number) => {
+    setProductQuantities(prev => ({
+      ...prev,
+      [productId]: (prev[productId] || 0) + 1
+    }));
+  };
+
+  const decreaseQuantity = (productId: number) => {
+    setProductQuantities(prev => ({
+      ...prev,
+      [productId]: Math.max(0, (prev[productId] || 0) - 1)
+    }));
+  };
+
+  const orderDetails: OrderDetailTemporary[] = products
+  .filter(product => productQuantities[product.id] > 0)
+  .map(product => ({
+    product,
+    quantity: productQuantities[product.id],
+    total_price: ((product.sell_price??0) * productQuantities[product.id]),
+  }));
+
+  if (loading){
+    return <div>Loading...</div>
+  }
 
   return (
     <div className="flex flex-row w-full">
@@ -65,9 +116,18 @@ export default async function OrderMenuPage() {
                           <p className="mt-2 text-start text-sm text-slate-500 truncate">{product.description === "" ? "Product has no description" : product.description}</p>
                         </CardContent>
                         <CardFooter className="flex">
-                          <Button className="flex-none rounded-full" size={"icon"}><Minus /></Button>
-                          <span className="grow text-center">0</span>
-                          <Button className="flex-none rounded-full" size={"icon"}><Plus /></Button>
+                          <Button 
+                            className="flex-none rounded-full" 
+                            size={"icon"}
+                            onClick={()=> decreaseQuantity(product.id)}
+                            disabled={productQuantities[product.id] <= 0}
+                          ><Minus /></Button>
+                          <span className="grow text-center">{productQuantities[product.id] || 0}</span>
+                          <Button 
+                            className="flex-none rounded-full" 
+                            size={"icon"}
+                            onClick={()=> increaseQuantity(product.id)}
+                          ><Plus /></Button>
                         </CardFooter>
                       </Card>
                   ):""
@@ -88,11 +148,23 @@ export default async function OrderMenuPage() {
           <Separator className="mt-4 mb-2"/>
           <p className="text-center font-semibold">ORDER</p>
           <Separator className="mt-2 mb-4"/>
-          <div className="flex flex-col">
-            <p>Order content1</p>
-            <p>Order content2</p>
-            <p>Order content3</p>
-          </div>
+          {orderDetails.length > 0 ? (
+            <div className="flex flex-col space-y-2 overflow-y-auto">
+              {orderDetails.map(({product, quantity, total_price})=>(
+                <div key={product.id} className="flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">{product.product_name}</p>
+                    <p className="text-sm text-gray-500">{quantity}</p>
+                  </div>
+                  <p className="font-medium">{total_price}</p>
+                </div>
+              ))}
+            </div>
+          ):(
+            <div className="text-center text-gray-500 py-8">
+              Your order is empty
+            </div>
+          )}
           {/* Footer */}
           <div className="mt-auto">
             <Separator className="my-4"/>

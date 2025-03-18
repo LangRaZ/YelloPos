@@ -139,3 +139,12 @@ export interface BusinessMutation{
     phone_number: string
 }
 
+//Order detail
+export interface OrderDetailTemporary{
+    product: Product
+    quantity: number
+    total_price: number
+}
+
+
+
