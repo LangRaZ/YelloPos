@@ -22,6 +22,9 @@ export const RegisterValidation = z.object({
     path: ["confirm_password"]
 })
 
+const MAX_FILE_SIZE = 5242880;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+
 export const ProductValidation = z.object({
     product_name: z.string().nonempty("Product name must not be empty"),
     product_category_id: z.number({
@@ -34,6 +37,12 @@ export const ProductValidation = z.object({
     quantity: z.number({
         required_error: "Product quantity must not be empty",
     }).int(),
+    product_image: z
+    .custom<File>()
+    .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      "Only .jpg, .jpeg, and .png formats are supported."),
     is_active: z.boolean()
 })
 

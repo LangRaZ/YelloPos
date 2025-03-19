@@ -18,6 +18,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductMutation, Category } from "@/interface";
 import { createProduct, updateProduct } from "@/lib/supabase/api";
+import { InputPicture } from "./inputpicture";
 
 export default function ProductForm(
     { id, data, categories, isOnPage = false, closeDialog } :
@@ -36,7 +37,9 @@ export default function ProductForm(
             description: data?.description??"",
             sell_price: data?.sell_price??0,
             quantity: data?.quantity??0,
+            product_image: undefined,
             is_active: true,
+
         }
     })
     
@@ -225,6 +228,21 @@ export default function ProductForm(
                         </FormItem>
                     )}
                 />
+                <FormField
+                    control={form.control}
+                    name="picture_image"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Input Picture</FormLabel>
+                            <FormControl>
+                                <InputPicture/>
+                                
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
                 <div className="flex justify-end">
                     <Button type="submit" className="mt-5">Submit</Button>
                 </div>

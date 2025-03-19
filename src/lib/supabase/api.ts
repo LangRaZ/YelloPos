@@ -37,6 +37,21 @@ export async function getProduct(id: number) : Promise<ProductResponse>{
     }
 }
 
+async function UploadFileSupabase(File:File,product_name:string){
+    try {
+        
+        const { data, error } = await supabase
+        .storage
+        .from('product-image')
+        .upload(`public/${product_name}.${File.type.split("/").pop()}`, File, {
+            cacheControl: '3600',
+            upsert: false
+        })
+    } catch (error) {
+        
+    }
+}
+
 
 export async function createProduct(product: ProductMutation) : Promise<Response>{
     if (!product.product_name || !product.product_category_id) {
@@ -51,12 +66,15 @@ export async function createProduct(product: ProductMutation) : Promise<Response
     if (checkUnique.status == true) {
         return {status: false, code: 500, message: checkUnique.data?.product_name + " with " + getCategoryName.data?.category_name + " already exists"};
     }
+    
 
     try {
-        const res = await supabase.from("Product").insert(product)
+        const res = await supabase.from("Product").insert(product).select().single()
         if (!res){
             return {status: false, code: 500, message: "Failed to create product"};
         }
+        const product_image_name = `product-id${res.data?.id}`
+        const uploadedfile = await UploadFileSupabase(product.product_image,product_image_name)
         return { status:true, code: res.status, message: res.statusText };
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
