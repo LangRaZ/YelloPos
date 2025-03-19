@@ -1,5 +1,5 @@
 import { createClient } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
 
 const supabase = createClient()
@@ -39,21 +39,21 @@ export async function getProduct(id: number) : Promise<ProductResponse>{
 
 async function UploadFileSupabase(File:File,product_name:string){
     try {
-        
-        const { data, error } = await supabase
+        const res = await supabase
         .storage
         .from('product-image')
-        .upload(`public/${product_name}.${File.type.split("/").pop()}`, File, {
+        .upload(`${product_name}.${File.type.split("/").pop()}`, File, {
             cacheControl: '3600',
             upsert: false
         })
+        return res;
     } catch (error) {
-        
+        return null;
     }
 }
 
 
-export async function createProduct(product: ProductMutation) : Promise<Response>{
+export async function createProduct(product: ProductMutationImage) : Promise<Response>{
     if (!product.product_name || !product.product_category_id) {
         return { status: false, code: 400, message: "Product name and Product category is required" };
     }
@@ -67,14 +67,37 @@ export async function createProduct(product: ProductMutation) : Promise<Response
         return {status: false, code: 500, message: checkUnique.data?.product_name + " with " + getCategoryName.data?.category_name + " already exists"};
     }
     
+    const productSup:ProductMutation = {
+        product_name: product.product_name,
+        product_category_id : product.product_category_id,
+        product_image : "",
+        description : product.description,
+        sell_price : product.sell_price,
+        quantity : product.quantity,
+        is_active: product.is_active,
+    }
 
     try {
-        const res = await supabase.from("Product").insert(product).select().single()
+        const res = await supabase.from("Product").insert(productSup).select().single()
         if (!res){
             return {status: false, code: 500, message: "Failed to create product"};
         }
-        const product_image_name = `product-id${res.data?.id}`
-        const uploadedfile = await UploadFileSupabase(product.product_image,product_image_name)
+        if(res.data){
+            const product_image_name = `product-id${res.data.id}`
+            const uploadedFile = await UploadFileSupabase(product.product_image, product_image_name)
+            if(!uploadedFile){
+                return {status: true, code: 202, message: "Product has been added successfully but failed to upload product image"}
+            }
+            const supabaseImagePath = `${product_image_name}.${product.product_image.type.split("/").pop()}`
+            const fileSupabaseURL = supabase.storage.from('product-image').getPublicUrl(supabaseImagePath)
+            if(!fileSupabaseURL){
+                return {status: true, code: 202, message: "Product has been added successfully but failed to save product image"}
+            }
+            const resUpdate = await supabase.from('Product').update({product_image: `${fileSupabaseURL.data.publicUrl}`}).eq("id", res.data.id)
+            if (!resUpdate){
+                return {status: true, code: 202, message: "Product has been added successfully but failed to save product image"}
+            }
+        }
         return { status:true, code: res.status, message: res.statusText };
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };

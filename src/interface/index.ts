@@ -19,8 +19,13 @@ export interface ProductMutation{
 }
 
 export interface ProductMutationImage{
-    product : ProductMutation 
-    product_image : File | null
+    product_name: string | null
+    product_category_id : number | null
+    product_image : File
+    description : string | null
+    sell_price : number | null
+    quantity : number | null
+    is_active: boolean | null
 }
 
 export interface Product extends ProductMutation{

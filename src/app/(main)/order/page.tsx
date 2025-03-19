@@ -113,7 +113,11 @@ export default function OrderMenuPage() {
                         <CardContent className="p-6">
                           <div className="w-full flex justify-center">
                             <AspectRatio ratio={16/9} className="flex justify-center">
-                              <img src={"https://uezxmezenszyrorynpyl.supabase.co/storage/v1/object/public/product-image//Intel%20CPU.png"} alt="Image" className="rounded-md object-cover" />
+                              {product.product_image ? (
+                                <img src={`${product.product_image}`} alt="Image" className="rounded-md object-cover" />
+                              ):(
+                                <img src={"https://uezxmezenszyrorynpyl.supabase.co/storage/v1/object/public/product-image//Intel%20CPU.png"} alt="Image" className="rounded-md object-cover" />
+                              )}
                             </AspectRatio>
                           </div>
                           <Separator className="mt-4" />

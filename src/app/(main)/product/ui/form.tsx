@@ -18,7 +18,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductMutation, Category } from "@/interface";
 import { createProduct, updateProduct } from "@/lib/supabase/api";
-import { InputPicture } from "./inputpicture";
 
 export default function ProductForm(
     { id, data, categories, isOnPage = false, closeDialog } :
@@ -26,6 +25,7 @@ export default function ProductForm(
 ) {
     const [ error, setError ] = useState<string|null>(null);
     const [open, setOpen] = useState(false)
+    const [file, setFile] = useState<File>()
     const router = useRouter()
 
     //Declare form and form data
@@ -35,11 +35,10 @@ export default function ProductForm(
             product_name: data?.product_name??"",
             product_category_id: data?.product_category_id??Number(),
             description: data?.description??"",
+            product_image: undefined,
             sell_price: data?.sell_price??0,
             quantity: data?.quantity??0,
-            product_image: undefined,
             is_active: true,
-
         }
     })
     
@@ -49,28 +48,31 @@ export default function ProductForm(
         form.clearErrors();
         //Handle update or create object decision on form submit handler
         if(id){
-            updateProduct(id, values).then(res=>{
-                if(res && res.status){
-                    if(!isOnPage && closeDialog){
-                        closeDialog();
-                    }
-                    toast.success("Product updated!", { description:"Product has been updated successfully!" })
-                    if(isOnPage){
-                        router.push("/product");
-                    } else {
-                        router.refresh();
-                    }
-                } else {
-                    setError(res?.message??"Unexpected error occurred! Please reload the page!");
-                    form.reset();         
-                }
-            })
+            // updateProduct(id, values).then(res=>{
+            //     if(res && res.status){
+            //         if(!isOnPage && closeDialog){
+            //             closeDialog();
+            //         }
+            //         toast.success("Product updated!", { description:"Product has been updated successfully!" })
+            //         if(isOnPage){
+            //             router.push("/product");
+            //         } else {
+            //             router.refresh();
+            //         }
+            //     } else {
+            //         setError(res?.message??"Unexpected error occurred! Please reload the page!");
+            //         form.reset();         
+            //     }
+            // })
         }else {
             //If id is null then its create object
             createProduct(values).then(res=>{
                 if(res && res.status){
                     if(!isOnPage && closeDialog){
                         closeDialog();
+                    }
+                    if(res.code === 202){
+                        toast.success("Product added!", { description: res.message })
                     }
                     toast.success("Product added!", { description:"Product has been added successfully!" })
                     if(isOnPage){
@@ -230,19 +232,23 @@ export default function ProductForm(
                 />
                 <FormField
                     control={form.control}
-                    name="picture_image"
+                    name="product_image"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Input Picture</FormLabel>
+                            <FormLabel>Product image</FormLabel>
                             <FormControl>
-                                <InputPicture/>
-                                
+                                <Input type="file" placeholder="Choose a file" 
+                                onChange={(e)=>{
+                                    const files = e.target.files
+                                    if(files && files.length > 0){
+                                        form.setValue("product_image", files[0])
+                                    }
+                                }}/>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-
                 <div className="flex justify-end">
                     <Button type="submit" className="mt-5">Submit</Button>
                 </div>
