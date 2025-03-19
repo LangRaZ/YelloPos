@@ -8,23 +8,25 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { ButtonLoading } from "@/components/helpers/button_loading";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CheckIcon } from "lucide-react";
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { number, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ProductMutation, Category, CategoryMutation } from "@/interface";
-import { createCategory, createProduct, updateCategory } from "@/lib/supabase/api";
+import { CategoryMutation } from "@/interface";
+import { createCategory, updateCategory } from "@/lib/supabase/api";
 
 export default function CategoryForm(
     { id, data, isOnPage = false, closeDialog } :
     { id?: number, data?: CategoryMutation|null, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
     const [ error, setError ] = useState<string|null>(null);
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
 
     //Declare form and form data
@@ -42,6 +44,7 @@ export default function CategoryForm(
     function onSubmit(values: z.infer<typeof CategoryValidation>){
         setError(null);
         form.clearErrors();
+        setIsLoading(true);
         //Handle update or create object decision on form submit handler
         if(id){
             updateCategory(id, values).then(res=>{
@@ -57,7 +60,8 @@ export default function CategoryForm(
                     }
                 } else {
                     setError(res?.message??"Unexpected error occurred! Please reload the page!");
-                    form.reset();         
+                    form.reset();
+                    setIsLoading(false);
                 }
             })
         }else {
@@ -75,7 +79,8 @@ export default function CategoryForm(
                     }
                 } else {
                     setError(res?.message??"Unexpected error occurred! Please reload the page!");
-                    // form.reset();         
+                    form.reset();
+                    setIsLoading(false);       
                 }
             })
         }
@@ -116,7 +121,11 @@ export default function CategoryForm(
                     )}
                 />
                 <div className="flex justify-end">
-                    <Button type="submit" className="mt-5">Submit</Button>
+                    {isLoading ? (
+                        <ButtonLoading />
+                    ):(
+                        <Button type="submit" className="mt-5">Submit</Button>
+                    )}
                 </div>
             </form>
         </Form>

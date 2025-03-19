@@ -145,7 +145,7 @@ export async function updateUser(id: string, user: UserMutation) : Promise<Respo
 }
 
 export async function getCategories(){
-    const categories = await supabase.from('Category').select()
+    const categories = await supabase.from('Category').select().order('created_at', {ascending: false})
     return categories
 }
 
