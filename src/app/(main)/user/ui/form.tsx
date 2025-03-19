@@ -18,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Role, UserMutation } from "@/interface";
 import { createUser, updateUser } from "@/lib/supabase/api";
 import { useRouter } from "next/navigation";
+import { ButtonLoading } from "@/components/helpers/button_loading";
 
 
 export default function UserForm(
@@ -26,6 +27,7 @@ export default function UserForm(
 ) {
     const [ error, setError ] = useState<string|null>(null);
     const [open, setOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
     //Declare form and form data
     const form = useForm<z.infer<typeof UserValidation>>({
@@ -42,6 +44,7 @@ export default function UserForm(
     function onSubmit(values: z.infer<typeof UserValidation>){
         setError(null);
         form.clearErrors();
+        setIsLoading(true);
         //Handle update or create object decision on form submit handler
         if(id){
             updateUser(id, values).then(res=>{
@@ -57,7 +60,8 @@ export default function UserForm(
                     }
                 } else {
                     setError(res?.message??"Unexpected error occurred! Please reload the page!");
-                    form.reset();         
+                    form.reset();
+                    setIsLoading(false);      
                 }
             })
         }else {
@@ -75,7 +79,8 @@ export default function UserForm(
                     }
                 } else {
                     setError(res?.message??"Unexpected error occurred! Please reload the page!");
-                    form.reset();         
+                    form.reset();
+                    setIsLoading(false);       
                 }
             })
         }
@@ -206,7 +211,11 @@ export default function UserForm(
                 }
                 
                 <div className="flex justify-end">
-                    <Button type="submit" className="mt-5">Submit</Button>
+                    {isLoading ? (
+                        <ButtonLoading />
+                    ):(
+                        <Button type="submit" className="mt-5">Submit</Button>
+                    )}
                 </div>
             </form>
         </Form>
