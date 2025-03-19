@@ -243,6 +243,7 @@ export type Database = {
           is_active: boolean | null
           need_quantity: boolean | null
           product_category_id: number | null
+          product_image: string | null
           product_name: string | null
           quantity: number | null
           sell_price: number | null
@@ -256,6 +257,7 @@ export type Database = {
           is_active?: boolean | null
           need_quantity?: boolean | null
           product_category_id?: number | null
+          product_image?: string | null
           product_name?: string | null
           quantity?: number | null
           sell_price?: number | null
@@ -269,6 +271,7 @@ export type Database = {
           is_active?: boolean | null
           need_quantity?: boolean | null
           product_category_id?: number | null
+          product_image?: string | null
           product_name?: string | null
           quantity?: number | null
           sell_price?: number | null

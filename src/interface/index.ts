@@ -11,10 +11,16 @@ export interface Response {
 export interface ProductMutation{
     product_name: string | null
     product_category_id : number | null
+    product_image : string | null
     description : string | null
     sell_price : number | null
     quantity : number | null
     is_active: boolean | null
+}
+
+export interface ProductMutationImage{
+    product : ProductMutation 
+    product_image : File | null
 }
 
 export interface Product extends ProductMutation{
