@@ -123,7 +123,6 @@ export async function updateProduct(id: number, product: ProductMutationImage, o
 
     try {
         const fileRes = await UploadFileSupabase(product.product_image, supabaseImagePath)
-        console.log(fileRes)
         if(fileRes && isDiffExt){
             const fileSupabaseURL = supabase.storage.from('product-image').getPublicUrl(supabaseImagePath)
             productSup.product_image = fileSupabaseURL.data.publicUrl
