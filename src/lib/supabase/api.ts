@@ -37,15 +37,16 @@ export async function getProduct(id: number) : Promise<ProductResponse>{
     }
 }
 
-async function UploadFileSupabase(File:File,product_name:string){
+async function UploadFileSupabase(File: File, imagePath: string){
     try {
         const res = await supabase
         .storage
         .from('product-image')
-        .upload(`${product_name}.${File.type.split("/").pop()}`, File, {
+        .upload(imagePath, File, {
             cacheControl: '3600',
-            upsert: false
+            upsert: true
         })
+        console.log(imagePath)
         return res;
     } catch (error) {
         return null;
@@ -84,11 +85,12 @@ export async function createProduct(product: ProductMutationImage) : Promise<Res
         }
         if(res.data){
             const product_image_name = `product-id${res.data.id}`
-            const uploadedFile = await UploadFileSupabase(product.product_image, product_image_name)
+            const supabaseImagePath = `${product_image_name}.${product.product_image.type.split("/").pop()}`
+
+            const uploadedFile = await UploadFileSupabase(product.product_image, supabaseImagePath)
             if(!uploadedFile){
                 return {status: true, code: 202, message: "Product has been added successfully but failed to upload product image"}
             }
-            const supabaseImagePath = `${product_image_name}.${product.product_image.type.split("/").pop()}`
             const fileSupabaseURL = supabase.storage.from('product-image').getPublicUrl(supabaseImagePath)
             if(!fileSupabaseURL){
                 return {status: true, code: 202, message: "Product has been added successfully but failed to save product image"}
@@ -104,12 +106,38 @@ export async function createProduct(product: ProductMutationImage) : Promise<Res
     }
 }
 
-export async function updateProduct(id: number, product: ProductMutation) : Promise<Response>{
+export async function updateProduct(id: number, product: ProductMutationImage, oldProductImageURL: string , oldProductImageExt: string, isDiffExt: boolean) : Promise<Response>{
+
+    const productSup:ProductMutation = {
+        product_name: product.product_name,
+        product_category_id : product.product_category_id,
+        product_image : oldProductImageURL,
+        description : product.description,
+        sell_price : product.sell_price,
+        quantity : product.quantity,
+        is_active: product.is_active,
+    }
+
+    const supabaseImagePath = `product-id${id}.${product.product_image.type.split("/").pop()}`
+    const supabaseOldImagePath = `product-id${id}.${oldProductImageExt}`
+
     try {
-        const res = await supabase.from("Product").update(product).eq("id", id)
+        const fileRes = await UploadFileSupabase(product.product_image, supabaseImagePath)
+        console.log(fileRes)
+        if(fileRes && isDiffExt){
+            const fileSupabaseURL = supabase.storage.from('product-image').getPublicUrl(supabaseImagePath)
+            productSup.product_image = fileSupabaseURL.data.publicUrl
+        }
+
+        const res = await supabase.from("Product").update(productSup).eq("id", id)
         if (!res){
             return {status: false, code: 500, message: "Failed to update product"};
         }
+
+        if(isDiffExt){
+            const {data, error} = await supabase.storage.from('product-image').remove([supabaseOldImagePath])
+        }
+
         return { status:true, code: res.status, message: res.statusText };
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };

@@ -25,7 +25,6 @@ export default function ProductForm(
 ) {
     const [ error, setError ] = useState<string|null>(null);
     const [open, setOpen] = useState(false)
-    const [file, setFile] = useState<File>()
     const router = useRouter()
 
     //Declare form and form data
@@ -42,28 +41,43 @@ export default function ProductForm(
         }
     })
     
+    function checkDiffFileExtension(imageExt: string): boolean{
+        if(!imageExt || imageExt === ""){
+            return false
+        }
+
+        const extOld = data?.product_image?.split(".").pop() ?? ""
+        if(imageExt !== extOld){
+            return true
+        }
+
+        return false
+    }
+
     //Declare on submit function for submit handler
     function onSubmit(values: z.infer<typeof ProductValidation>){
         setError(null);
         form.clearErrors();
         //Handle update or create object decision on form submit handler
         if(id){
-            // updateProduct(id, values).then(res=>{
-            //     if(res && res.status){
-            //         if(!isOnPage && closeDialog){
-            //             closeDialog();
-            //         }
-            //         toast.success("Product updated!", { description:"Product has been updated successfully!" })
-            //         if(isOnPage){
-            //             router.push("/product");
-            //         } else {
-            //             router.refresh();
-            //         }
-            //     } else {
-            //         setError(res?.message??"Unexpected error occurred! Please reload the page!");
-            //         form.reset();         
-            //     }
-            // })
+            const imageExt = values.product_image.type.split("/").pop() ?? "";
+            const isDiff = checkDiffFileExtension(imageExt)
+            updateProduct(id, values, (data?.product_image ?? ""), imageExt, isDiff).then(res=>{
+                if(res && res.status){
+                    if(!isOnPage && closeDialog){
+                        closeDialog();
+                    }
+                    toast.success("Product updated!", { description:"Product has been updated successfully!" })
+                    if(isOnPage){
+                        router.push("/product");
+                    } else {
+                        router.refresh();
+                    }
+                } else {
+                    setError(res?.message??"Unexpected error occurred! Please reload the page!");
+                    form.reset();         
+                }
+            })
         }else {
             //If id is null then its create object
             createProduct(values).then(res=>{
@@ -82,11 +96,12 @@ export default function ProductForm(
                     }
                 } else {
                     setError(res?.message??"Unexpected error occurred! Please reload the page!");
-                    // form.reset();         
+                    form.reset();         
                 }
             })
         }
     }
+
 
     return (
         <Form {... form}>
@@ -238,10 +253,12 @@ export default function ProductForm(
                             <FormLabel>Product image</FormLabel>
                             <FormControl>
                                 <Input type="file" placeholder="Choose a file" 
-                                onChange={(e)=>{
+                                onChange={(e)=>{ 
                                     const files = e.target.files
                                     if(files && files.length > 0){
                                         form.setValue("product_image", files[0])
+                                    }else{
+                                        form.resetField("product_image", {keepError: false})
                                     }
                                 }}/>
                             </FormControl>
