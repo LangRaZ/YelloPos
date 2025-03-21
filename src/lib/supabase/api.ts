@@ -43,10 +43,19 @@ async function UploadFileSupabase(File: File, imagePath: string){
         .storage
         .from('product-image')
         .upload(imagePath, File, {
-            cacheControl: '3600',
-            upsert: true
+            cacheControl: '0',
+            upsert: false
         })
-        console.log(imagePath)
+        return res;
+    } catch (error) {
+        return null;
+    }
+}
+
+async function deleteFileSupabase(path: string){
+    try {
+        const res = await supabase.storage.from('product-image').remove([path])
+        console.log(`sukses delete ${path}`)
         return res;
     } catch (error) {
         return null;
@@ -59,14 +68,15 @@ export async function createProduct(product: ProductMutationImage) : Promise<Res
         return { status: false, code: 400, message: "Product name and Product category is required" };
     }
 
-    // console.log(product)
-
     const checkUnique = await checkUniqueProduct(product.product_name, product.product_category_id);
     const getCategoryName = await getCategory(product.product_category_id);
 
     if (checkUnique.status == true) {
         return {status: false, code: 500, message: checkUnique.data?.product_name + " with " + getCategoryName.data?.category_name + " already exists"};
     }
+    
+    const unixTimestamp = Math.floor(Date.now() / 1000);
+    console.log(unixTimestamp)
     
     const productSup:ProductMutation = {
         product_name: product.product_name,
@@ -76,7 +86,9 @@ export async function createProduct(product: ProductMutationImage) : Promise<Res
         sell_price : product.sell_price,
         quantity : product.quantity,
         is_active: product.is_active,
+        last_image_update: `${unixTimestamp}`,
     }
+
 
     try {
         const res = await supabase.from("Product").insert(productSup).select().single()
@@ -84,7 +96,7 @@ export async function createProduct(product: ProductMutationImage) : Promise<Res
             return {status: false, code: 500, message: "Failed to create product"};
         }
         if(res.data){
-            const product_image_name = `product-id${res.data.id}`
+            const product_image_name = `product-id${res.data.id}${unixTimestamp}`
             const supabaseImagePath = `${product_image_name}.${product.product_image.type.split("/").pop()}`
 
             const uploadedFile = await UploadFileSupabase(product.product_image, supabaseImagePath)
@@ -108,6 +120,8 @@ export async function createProduct(product: ProductMutationImage) : Promise<Res
 
 export async function updateProduct(id: number, product: ProductMutationImage, oldProductImageURL: string , oldProductImageExt: string, isDiffExt: boolean) : Promise<Response>{
 
+    const unixTimestamp = Math.floor(Date.now() / 1000);
+    
     const productSup:ProductMutation = {
         product_name: product.product_name,
         product_category_id : product.product_category_id,
@@ -116,28 +130,24 @@ export async function updateProduct(id: number, product: ProductMutationImage, o
         sell_price : product.sell_price,
         quantity : product.quantity,
         is_active: product.is_active,
+        last_image_update: `${unixTimestamp}`,
     }
 
-    const supabaseImagePath = `product-id${id}.${product.product_image.type.split("/").pop()}`
-    const supabaseOldImagePath = `product-id${id}.${oldProductImageExt}`
+    const supabaseImagePath = `product-id${id}${unixTimestamp}.${product.product_image.type.split("/").pop()}`
+    const supabaseOldImagePath = `product-id${id}${product.last_image_update}.${oldProductImageExt}`
 
     try {
+        const delRes = await deleteFileSupabase(supabaseOldImagePath)
         const fileRes = await UploadFileSupabase(product.product_image, supabaseImagePath)
-        if(fileRes && isDiffExt){
-            const fileSupabaseURL = supabase.storage.from('product-image').getPublicUrl(supabaseImagePath)
-            productSup.product_image = fileSupabaseURL.data.publicUrl
-        }
+        const fileSupabaseURL = supabase.storage.from('product-image').getPublicUrl(supabaseImagePath)
+        productSup.product_image = fileSupabaseURL.data.publicUrl
 
         const res = await supabase.from("Product").update(productSup).eq("id", id)
         if (!res){
             return {status: false, code: 500, message: "Failed to update product"};
         }
 
-        if(isDiffExt){
-            const {data, error} = await supabase.storage.from('product-image').remove([supabaseOldImagePath])
-        }
-
-        return { status:true, code: res.status, message: res.statusText };
+        return { status:true, code: res.status, message: "Product has been updated successfully!" };
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
     }
