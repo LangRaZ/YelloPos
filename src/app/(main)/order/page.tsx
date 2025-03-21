@@ -171,7 +171,7 @@ export default function OrderMenuPage() {
             </div>
           ):(
             <div className="text-center text-gray-500 py-8">
-              Your order is empty
+              Your Order is empty
             </div>
           )}
           {/* Footer */}

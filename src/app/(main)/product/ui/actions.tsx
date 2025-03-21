@@ -12,7 +12,7 @@ export function CreateProductButton({ categoriesData } : { categoriesData: Categ
         //Add trigger : trigger button, modalTitle: form title, modalDescription: form description
         <PopupContainer
             trigger={<Button variant={"default"}><SquarePlus />Add Product</Button>}
-            modalTitle="Add new product"
+            modalTitle="Add new Product"
             modalDescription="Fill all the required data fields"
         >
             {/* Insert form component to be put inside popup page */}

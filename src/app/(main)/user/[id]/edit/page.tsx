@@ -22,7 +22,7 @@ export default async function UserEditPage({ params } : { params:{ id:string } }
             </div>
             <Card>
                 <CardHeader>
-                    <CardTitle>User details</CardTitle>
+                    <CardTitle>User Details</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <UserForm 

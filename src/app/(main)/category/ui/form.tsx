@@ -97,9 +97,9 @@ export default function CategoryForm(
                     name="category_name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Category name</FormLabel>
+                            <FormLabel>Category Name</FormLabel>
                             <FormControl>
-                                <Input placeholder="Enter category name" {...field} />
+                                <Input placeholder="Enter Category Name" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -112,9 +112,9 @@ export default function CategoryForm(
                     name="description"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Category description</FormLabel>
+                            <FormLabel>Category Description</FormLabel>
                             <FormControl>
-                                <Textarea placeholder="Enter category description" {...field}/>
+                                <Textarea placeholder="Enter Category Description" {...field}/>
                             </FormControl>
                             <FormMessage />
                         </FormItem>

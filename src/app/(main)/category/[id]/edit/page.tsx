@@ -23,7 +23,7 @@ export default async function CompanyEditPage({ params } : { params:{ id:string 
             </div>
             <Card>
                 <CardHeader>
-                    <CardTitle>Category details</CardTitle>
+                    <CardTitle>Category Details</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <CategoryForm 

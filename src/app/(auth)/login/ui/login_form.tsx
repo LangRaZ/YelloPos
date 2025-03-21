@@ -20,10 +20,12 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { signInAuthUser } from "@/lib/supabase/api"
+import { useAuth } from "@/app/(auth)/context/authcontext"
 
 export default function LoginForm() {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
+    const auth = useAuth();
 
     const form = useForm<z.infer<typeof LoginValidation>>({
         resolver: zodResolver(LoginValidation),
@@ -38,6 +40,9 @@ export default function LoginForm() {
         form.clearErrors();
         signInAuthUser(values).then((res) => {
             if (res.status) {
+                auth.setEmail(values.email);
+                // console.log(auth.email);
+                // return;
                 router.push("/");
             } else{
                 setError(res.message);
@@ -87,7 +92,7 @@ export default function LoginForm() {
                                     <FormItem>
                                         <FormLabel>Email</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="name" {...field}/>
+                                            <Input placeholder="Enter your email" {...field}/>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

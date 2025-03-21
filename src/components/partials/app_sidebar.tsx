@@ -16,19 +16,20 @@ import {
 import { sidebarLinks, secondaryLinks } from "@/constants";
 import { NavUser } from "@/components/partials/nav-user"
 import { usePathname } from "next/navigation";
-
-const data = {
-    user: {
-      name: "shadcn",
-      email: "m@example.com",
-      avatar: "/avatars/shadcn.jpg",
-    },
-}
+import { useAuth } from "@/app/(auth)/context/authcontext"
 
 export function AppSidebar() {
     const { open } = useSidebar();
     const pathName = usePathname();
+    const { email } = useAuth()
 
+    const data = {
+        user: {
+        name: "shadecn",
+        email: email,
+        avatar: "/avatars/shadcn.jpg",
+        },
+    }
     return (
         <Sidebar collapsible="icon">
             <SidebarContent className="sidebar-content">

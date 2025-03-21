@@ -99,7 +99,7 @@ export default function UserForm(
                         <FormItem>
                             <FormLabel>Name</FormLabel>
                             <FormControl>
-                                <Input placeholder="Enter product name" {...field} />
+                                <Input placeholder="Enter Name" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -127,7 +127,7 @@ export default function UserForm(
                         <FormItem>
                             <FormLabel>Phone number</FormLabel>
                             <FormControl>
-                                <Input placeholder="Enter phone number" {...field} />
+                                <Input placeholder="Enter Phone Number" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -158,7 +158,7 @@ export default function UserForm(
                                                 ? (roles??[]).find(
                                                     (role) => role.id === field.value
                                                 )?.role_name
-                                                : "Select role"}
+                                                : "Select Role"}
                                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </FormControl>
@@ -166,7 +166,7 @@ export default function UserForm(
                                         <PopoverContent className="w-[200px] p-0">
                                         <Command>
                                             <CommandInput
-                                                placeholder="Search role..."
+                                                placeholder="Search Role..."
                                                 className="h-9"
                                             />
                                             <CommandList>

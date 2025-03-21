@@ -22,7 +22,7 @@ export default async function TransactionEditPage({ params } : { params:{ id:str
             </div>
             <Card>
                 <CardHeader>
-                    <CardTitle>Product details</CardTitle>
+                    <CardTitle>Product Details</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <ProductForm 

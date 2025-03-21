@@ -87,7 +87,7 @@ export default function RegisterForm() {
                                     <FormItem>
                                         <FormLabel>Owner name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Enter your name" {...field}/>
+                                            <Input placeholder="Enter your Name" {...field}/>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -100,7 +100,7 @@ export default function RegisterForm() {
                                     <FormItem>
                                         <FormLabel>Email</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Enter your email" {...field}/>
+                                            <Input placeholder="Enter your Email" {...field}/>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -113,7 +113,7 @@ export default function RegisterForm() {
                                     <FormItem>
                                         <FormLabel>Phone number</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Enter your phone number" {...field}/>
+                                            <Input placeholder="Enter your Phone Number" {...field}/>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -129,7 +129,7 @@ export default function RegisterForm() {
                                     <div className="relative">
                                         <Input
                                         className="pr-8"
-                                        placeholder="Enter your password"
+                                        placeholder="Enter your Password"
                                         {...field}
                                         type="password"
                                         />
@@ -149,7 +149,7 @@ export default function RegisterForm() {
                                     <div className="relative">
                                         <Input
                                         className="pr-8"
-                                        placeholder="Confirm your password"
+                                        placeholder="Confirm your Password"
                                         {...field}
                                         type="password"
                                         />

@@ -102,6 +102,9 @@ export default function ProductForm(
         }
     }
 
+    const [preview, setPreview] = useState<string>(
+        data?.product_image?? ""
+    );
 
     return (
         <Form {... form}>
@@ -114,9 +117,9 @@ export default function ProductForm(
                     name="product_name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Product name</FormLabel>
+                            <FormLabel>Product Name</FormLabel>
                             <FormControl>
-                                <Input placeholder="Enter product name" {...field} />
+                                <Input placeholder="Enter Product Name" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -130,7 +133,7 @@ export default function ProductForm(
                         render={({ field }) => {
                             return <FormItem>
                                 <div className="flex flex-col space-y-2">
-                                    <FormLabel>Product category</FormLabel>
+                                    <FormLabel>Product Category</FormLabel>
                                     <Popover open={open} onOpenChange={setOpen}>
                                         <PopoverTrigger asChild>
                                         <FormControl className="grow">
@@ -146,7 +149,7 @@ export default function ProductForm(
                                                 ? (categories??[]).find(
                                                     (category) => category.id === field.value
                                                 )?.category_name
-                                                : "Select category"}
+                                                : "Select Category"}
                                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </FormControl>
@@ -154,11 +157,11 @@ export default function ProductForm(
                                         <PopoverContent className="w-[200px] p-0">
                                         <Command>
                                             <CommandInput
-                                                placeholder="Search category..."
+                                                placeholder="Search Category..."
                                                 className="h-9"
                                             />
                                             <CommandList>
-                                                <CommandEmpty>No categories found!</CommandEmpty>
+                                                <CommandEmpty>No Categories found!</CommandEmpty>
                                                     <CommandGroup>
                                                         {(categories??[]).map((category) => {
                                                         return <CommandItem
@@ -203,10 +206,10 @@ export default function ProductForm(
                     name="sell_price"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Product price</FormLabel>
+                            <FormLabel>Product Price</FormLabel>
                             <FormControl>
                                 <Input 
-                                placeholder="Enter product price" {...field} 
+                                placeholder="Enter Product Price" {...field} 
                                 value={field.value || 0}
                                 onChange={(e)=> field.onChange(parseFloat(e.target.value) || 0)}
                                 />
@@ -220,10 +223,10 @@ export default function ProductForm(
                     name="quantity"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Product quantity</FormLabel>
+                            <FormLabel>Product Quantity</FormLabel>
                             <FormControl>
                                 <Input
-                                placeholder="Enter product quantity" {...field}
+                                placeholder="Enter Product Quantity" {...field}
                                 value={field.value || 0}
                                 onChange={(e)=> field.onChange(parseFloat(e.target.value) || 0)}
                                 />
@@ -237,9 +240,9 @@ export default function ProductForm(
                     name="description"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Product description</FormLabel>
+                            <FormLabel>Product Description</FormLabel>
                             <FormControl>
-                                <Textarea placeholder="Enter product description" {...field}/>
+                                <Textarea placeholder="Enter Product Description" {...field}/>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -250,18 +253,30 @@ export default function ProductForm(
                     name="product_image"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Product image</FormLabel>
+                            <FormLabel>Product Image</FormLabel>
                             <FormControl>
                                 <Input type="file" placeholder="Choose a file" 
                                 onChange={(e)=>{ 
                                     const files = e.target.files
                                     if(files && files.length > 0){
                                         form.setValue("product_image", files[0])
+                                        setPreview(URL.createObjectURL(files[0]));
                                     }else{
                                         form.resetField("product_image", {keepError: false})
                                     }
                                 }}/>
                             </FormControl>
+                            {preview && (
+                                <div className="mt-2">
+                                    <img
+                                    src={preview}
+                                    alt="Product Preview"
+                                    width={150}
+                                    height={150}
+                                    className="rounded-lg border"
+                                    />
+                                </div>
+                            )}
                             <FormMessage />
                         </FormItem>
                     )}
