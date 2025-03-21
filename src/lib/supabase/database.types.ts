@@ -241,6 +241,7 @@ export type Database = {
           description: string | null
           id: number
           is_active: boolean | null
+          last_image_update: string
           need_quantity: boolean | null
           product_category_id: number | null
           product_image: string | null
@@ -255,6 +256,7 @@ export type Database = {
           description?: string | null
           id?: number
           is_active?: boolean | null
+          last_image_update?: string
           need_quantity?: boolean | null
           product_category_id?: number | null
           product_image?: string | null
@@ -269,6 +271,7 @@ export type Database = {
           description?: string | null
           id?: number
           is_active?: boolean | null
+          last_image_update?: string
           need_quantity?: boolean | null
           product_category_id?: number | null
           product_image?: string | null

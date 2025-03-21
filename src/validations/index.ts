@@ -43,7 +43,8 @@ export const ProductValidation = z.object({
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
       "Only .jpg, .jpeg, and .png formats are supported."),
-    is_active: z.boolean()
+    is_active: z.boolean(),
+    last_image_update: z.string()
 })
 
 export const UserValidation = z.object({

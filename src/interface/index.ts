@@ -16,6 +16,7 @@ export interface ProductMutation{
     sell_price : number | null
     quantity : number | null
     is_active: boolean | null
+    last_image_update: string
 }
 
 export interface ProductMutationImage{
@@ -26,6 +27,7 @@ export interface ProductMutationImage{
     sell_price : number | null
     quantity : number | null
     is_active: boolean | null
+    last_image_update: string
 }
 
 export interface Product extends ProductMutation{

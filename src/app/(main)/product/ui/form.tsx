@@ -38,6 +38,7 @@ export default function ProductForm(
             sell_price: data?.sell_price??0,
             quantity: data?.quantity??0,
             is_active: true,
+            last_image_update: data?.last_image_update?? "",
         }
     })
     
@@ -58,6 +59,7 @@ export default function ProductForm(
     function onSubmit(values: z.infer<typeof ProductValidation>){
         setError(null);
         form.clearErrors();
+        console.log("submit")
         //Handle update or create object decision on form submit handler
         if(id){
             const imageExt = values.product_image.type.split("/").pop() ?? "";
@@ -67,7 +69,7 @@ export default function ProductForm(
                     if(!isOnPage && closeDialog){
                         closeDialog();
                     }
-                    toast.success("Product updated!", { description:"Product has been updated successfully!" })
+                    toast.success("Product updated!", { description:res.message })
                     if(isOnPage){
                         router.push("/product");
                     } else {
@@ -80,6 +82,7 @@ export default function ProductForm(
             })
         }else {
             //If id is null then its create object
+            console.log('submit')
             createProduct(values).then(res=>{
                 if(res && res.status){
                     if(!isOnPage && closeDialog){
