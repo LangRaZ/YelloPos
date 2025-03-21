@@ -76,7 +76,6 @@ export async function createProduct(product: ProductMutationImage) : Promise<Res
     }
     
     const unixTimestamp = Math.floor(Date.now() / 1000);
-    console.log(unixTimestamp)
     
     const productSup:ProductMutation = {
         product_name: product.product_name,
