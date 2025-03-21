@@ -59,7 +59,6 @@ export default function ProductForm(
     function onSubmit(values: z.infer<typeof ProductValidation>){
         setError(null);
         form.clearErrors();
-        console.log("submit")
         //Handle update or create object decision on form submit handler
         if(id){
             const imageExt = values.product_image.type.split("/").pop() ?? "";
@@ -82,7 +81,6 @@ export default function ProductForm(
             })
         }else {
             //If id is null then its create object
-            console.log('submit')
             createProduct(values).then(res=>{
                 if(res && res.status){
                     if(!isOnPage && closeDialog){
