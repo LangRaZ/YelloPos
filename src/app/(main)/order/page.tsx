@@ -12,13 +12,14 @@ import {
 } from "@/components/ui/card"
 import { Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ConfirmationAlert from "@/components/helpers/confirmation_alert";
 import Link from "next/link";
-import { getCategories, getProducts } from "@/lib/supabase/api"
+import { getCategories, getProducts, createOrder } from "@/lib/supabase/api"
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useEffect, useState } from "react";
-import { Category, OrderDetailTemporary, Product } from "@/interface";
+import { Category, OrderDetailTemporary, OrderMutation, Product } from "@/interface";
 
 
 export default function OrderMenuPage() {
@@ -26,6 +27,11 @@ export default function OrderMenuPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [productQuantities, setProductQuantities] = useState<{[key: number]: number}>({});
   const [loading, setLoading] = useState(true);
+  const Order: OrderMutation = {
+    OrderDetail: [],
+    total_price: 0,
+    business_profile_id: 2
+  }
 
   useEffect(()=>{
     const init = async () =>{
@@ -40,6 +46,7 @@ export default function OrderMenuPage() {
         initialQuantities[product.id] = 0;
       })
       setProductQuantities(initialQuantities);
+
       setLoading(false);
     }
 
@@ -171,7 +178,7 @@ export default function OrderMenuPage() {
             </div>
           ):(
             <div className="text-center text-gray-500 py-8">
-              Your Order is empty
+              Your order is empty
             </div>
           )}
           {/* Footer */}
@@ -181,7 +188,14 @@ export default function OrderMenuPage() {
               <p className="font-semibold">Total:</p>
               <p className="font-bold">{totalAmount.toFixed(2)}</p>
             </div>
-            <Button className="w-full">Confirm Order</Button>
+            <ConfirmationAlert 
+              order={Order}
+              OrderAction={createOrder}
+              warningMessage="Order will be confirmed. You cannot change order items after confirming"
+              successMessage="Order confirmed!"
+              successDescription="Order has been submitted"
+              variant="Confirm"
+            />
           </div>
         </div>
       </div>

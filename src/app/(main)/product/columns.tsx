@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Pencil } from "lucide-react"
 import { Product } from "@/interface"
 import { deleteProduct } from "@/lib/supabase/api"
-import DeleteAlert from "@/components/helpers/delete_alert"
+import ConfirmationAlert from "@/components/helpers/confirmation_alert"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -49,12 +49,13 @@ export const columns: ColumnDef<Product>[] = [
                 <Pencil className="w-4 h-4" />
               </Button>
             </Link>
-            <DeleteAlert
+            <ConfirmationAlert
               id={product.id.toString()}
-              action={deleteProduct}
+              EditAction={deleteProduct}
               warningMessage="This action cannot be undone. This product will be deleted permanently"
               successMessage="Delete success!"
               successDescription="Product has been deleted"
+              variant="Delete"
             />
           </div>
         );

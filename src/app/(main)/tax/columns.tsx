@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Pencil } from "lucide-react"
 import { Product } from "@/interface"
 import { deleteProduct } from "@/lib/supabase/api"
-import DeleteAlert from "@/components/helpers/delete_alert"
+import DeleteAlert from "@/components/helpers/confirmation_alert"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 

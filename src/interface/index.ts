@@ -91,7 +91,7 @@ export interface TransactionMutation{
     business_profile_id: number | null
     created_at: string
     total_payment: number | null
-    transaction_status: string | null
+    transaction_status: string
     transaction_id: string 
 }
 export interface TransactionDetail{
@@ -152,12 +152,15 @@ export interface BusinessMutation{
     phone_number: string
 }
 
-//Order detail
+//interface for order
 export interface OrderDetailTemporary{
     product: Product
     quantity: number
     total_price: number
 }
 
-
-
+export interface OrderMutation{
+    OrderDetail: OrderDetailTemporary[]
+    total_price: number
+    business_profile_id: number
+}

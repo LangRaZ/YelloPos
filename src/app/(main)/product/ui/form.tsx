@@ -18,12 +18,14 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductMutation, Category } from "@/interface";
 import { createProduct, updateProduct } from "@/lib/supabase/api";
+import { ButtonLoading } from "@/components/helpers/button_loading";
 
 export default function ProductForm(
     { id, data, categories, isOnPage = false, closeDialog } :
     { id?: number, data?: ProductMutation|null, categories: Category[]|null, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
     const [ error, setError ] = useState<string|null>(null);
+    const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false)
     const router = useRouter()
 
@@ -59,6 +61,7 @@ export default function ProductForm(
     function onSubmit(values: z.infer<typeof ProductValidation>){
         setError(null);
         form.clearErrors();
+        setIsLoading(true);
         //Handle update or create object decision on form submit handler
         if(id){
             const imageExt = values.product_image.type.split("/").pop() ?? "";
@@ -76,7 +79,8 @@ export default function ProductForm(
                     }
                 } else {
                     setError(res?.message??"Unexpected error occurred! Please reload the page!");
-                    form.reset();         
+                    form.reset();
+                    setIsLoading(false);        
                 }
             })
         }else {
@@ -97,7 +101,8 @@ export default function ProductForm(
                     }
                 } else {
                     setError(res?.message??"Unexpected error occurred! Please reload the page!");
-                    form.reset();         
+                    form.reset();
+                    setIsLoading(false);    
                 }
             })
         }
@@ -283,7 +288,11 @@ export default function ProductForm(
                     )}
                 />
                 <div className="flex justify-end">
-                    <Button type="submit" className="mt-5">Submit</Button>
+                    {isLoading ? (
+                        <ButtonLoading />
+                    ):(
+                        <Button type="submit" className="mt-5">Submit</Button>
+                    )}
                 </div>
             </form>
         </Form>

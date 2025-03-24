@@ -163,7 +163,7 @@ export type Database = {
           id: number
           total_payment: number | null
           transaction_id: string 
-          transaction_status: string | null  
+          transaction_status: string
         }
         Insert: {
           business_profile_id?: number | null
@@ -171,7 +171,7 @@ export type Database = {
           id?: number
           total_payment?: number | null
           transaction_id: string 
-          transaction_status?: string | null
+          transaction_status?: string
         }
         Update: {
           business_profile_id?: number | null
@@ -179,7 +179,7 @@ export type Database = {
           id?: number
           total_payment?: number | null
           transaction_id: string 
-          transaction_status?: string | null
+          transaction_status?: string
         }
         Relationships: [
           {
