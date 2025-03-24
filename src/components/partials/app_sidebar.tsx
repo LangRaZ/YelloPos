@@ -25,7 +25,7 @@ export function AppSidebar() {
 
     const data = {
         user: {
-        name: "shadecn",
+        name: "",
         email: email,
         avatar: "/avatars/shadcn.jpg",
         },

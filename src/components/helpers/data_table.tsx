@@ -90,6 +90,7 @@ export default function DataTable<TData, TValue>({
             >
             Previous
             </Button>
+            <p>{table.getState().pagination.pageIndex + 1}</p>
             <Button
             variant="outline"
             size="sm"

@@ -256,7 +256,7 @@ export default function ProductForm(
                         <FormItem>
                             <FormLabel>Product Image</FormLabel>
                             <FormControl>
-                                <Input type="file" placeholder="Choose a file" 
+                                <Input type="file" placeholder="Choose a file"
                                 onChange={(e)=>{ 
                                     const files = e.target.files
                                     if(files && files.length > 0){
@@ -269,6 +269,7 @@ export default function ProductForm(
                             </FormControl>
                             {preview && (
                                 <div className="mt-2">
+                                    <FormLabel>Preview</FormLabel>
                                     <img
                                     src={preview}
                                     alt="Product Preview"
