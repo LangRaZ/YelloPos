@@ -164,3 +164,22 @@ export interface OrderMutation{
     total_price: number
     business_profile_id: number
 }
+
+//Business Profile
+export interface BusinessProfileMutation{
+    business_profile_id: number | null,
+    address: string
+    bank_account_name: string | null
+    bank_account_number: string | null
+    business_name: string
+    code: string
+    created_at: string
+    email: string
+    phone_number: string
+}
+
+export interface BusinessProfile extends BusinessProfileMutation{
+    id: number,
+}
+
+
