@@ -65,6 +65,23 @@ export const CategoryValidation = z.object({
     is_active: z.boolean()
 })
 
+export const BusinessProfileValidation = z.object({
+    business_profile_id: z.number(),
+    business_name: z.string().nonempty("Business name must not be empty"),
+    address:  z.string().nonempty("Business address must not be empty"),
+    email: z.string(),
+    bank_account_name: z.string().nonempty("Bank account must not be empty"),
+    bank_account_number: z.string().nonempty("Bank account must not be empty"),
+    code: z.string(),
+    created_at: z.string(),
+    phone_number: z.string().nonempty("Phone number must not be empty").min(10, {
+        message: "Invalid phone number"
+    }).max(14, {
+        message: "Invalid phone number"
+    }),
+    is_active: z.boolean()
+})
+
 export const BusinessValidation = z.object({
     address: z.string().nonempty("Address must not be empty"),    
     business_name: z.string().nonempty("Address must not be empty"),

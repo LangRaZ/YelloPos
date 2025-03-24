@@ -1,5 +1,5 @@
 import { createClient } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
 
 const supabase = createClient()
@@ -425,6 +425,19 @@ export async function createBusiness(business: BusinessMutation) : Promise<Respo
             return {status: false, code: 500, message: "Failed to create user"};
         }
         return { status:true, code: business_res.status, message: business_res.statusText };
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+//Business Profile
+export async function updateBusinessProfile(id: number, BusinessProfile: BusinessProfileMutation) : Promise<Response>{
+    try {
+        const res = await supabase.from("BusinessProfile").update(BusinessProfile).eq("id", id)
+        if (!res){
+            return {status: false, code: 500, message: "Failed to update Business Profile"};
+        }
+        return { status:true, code: res.status, message: res.statusText };
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
     }
