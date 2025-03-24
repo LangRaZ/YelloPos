@@ -4,16 +4,13 @@ import { createContext, useContext, useState, ReactNode, useEffect } from "react
 
 interface AuthContextType {
     email: string;
-    username: string;
     setEmail: (email: string) => void;
-    setUsername: (username: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [email, setEmailState] = useState<string>("");
-    const [username, setUsernameState] = useState<string>("");
 
     useEffect(() => {
         const storedEmail = localStorage.getItem("userEmail");
@@ -29,15 +26,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     }
 
-    const setUsername = (username: string) => {
-        setUsernameState(username);
-        if(username){
-            localStorage.setItem("username", username);
-        }
-    }
-
     return (
-        <AuthContext.Provider value={{ email, username, setEmail, setUsername }}>
+        <AuthContext.Provider value={{ email, setEmail }}>
             {children}
         </AuthContext.Provider>
     );

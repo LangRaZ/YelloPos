@@ -248,6 +248,22 @@ export async function getusers(id: string) : Promise<UserResponse>{
     }
 }
 
+export async function getUserByEmail(email: string) : Promise<UserResponse>{
+    try {
+        const user = await supabase.from("Accounts").select("*").eq("email", email).single()
+        if(!user.data){
+            return {status:false, code:200, message: user.statusText, data: user.data};
+        }
+        return {status:true, code:200, message: user.statusText, data: user.data};
+
+    } catch (error) {
+        return {
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        }
+    }
+}
+
 export async function deleteUser(id: string) : Promise<Response>{
     try {
         const res = await supabase.from("Accounts").delete().eq("id",id)
