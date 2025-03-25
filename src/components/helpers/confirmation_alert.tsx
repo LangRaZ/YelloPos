@@ -14,7 +14,7 @@ import {
 import { Trash } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Response, OrderMutation } from "@/interface";
+import { Response } from "@/interface";
 import { useState } from "react";
 
 /**
@@ -28,7 +28,6 @@ import { useState } from "react";
  *
  * @param {Object} props - Props object for the component.
  * @param {string} props.id - object id
- * @param {string} props.order - order object to be confirmed
  * @param {Function} props.EditAction - function to execute on click for objects with _id params
  * @param {Function} props.DefaultAction - function to execute on click default function
  * @param {string} props.warningMessage - confirmation message
@@ -40,9 +39,7 @@ import { useState } from "react";
  */
 export default function ConfirmationAlert ({
   id,
-  order,
   EditAction,
-  OrderAction,
   DefaultAction,
   warningMessage,
   successMessage,
@@ -50,10 +47,8 @@ export default function ConfirmationAlert ({
   variant
 }: {
   id?: string;
-  order?: OrderMutation,
   EditAction?: (_id: string) => Promise<Response>;
-  OrderAction?: (order: OrderMutation) => Promise<Response>
-  DefaultAction?: () => Promise<Response>;
+  DefaultAction?: ()=> void;
   warningMessage: string;
   successMessage: string;
   successDescription: string;
@@ -97,32 +92,7 @@ export default function ConfirmationAlert ({
                   });
               }
               if(DefaultAction){
-                DefaultAction()
-                  .then((res: Response) => {
-                    if (res.status) {
-                      toast.success(successMessage,{ description: successDescription });
-                      router.refresh();
-                    } else {
-                      toast.warning(res.message);
-                    }
-                  })
-                  .catch((error) => {
-                    toast.error(error.message ?? "Unexpected error occurred!",{ description: "Please reload the page!"});
-                  });
-              }
-              if(OrderAction && order){
-                OrderAction(order)
-                  .then((res: Response) => {
-                    if (res.status) {
-                      toast.success(successMessage,{ description: successDescription });
-                      router.refresh();
-                    } else {
-                      toast.warning(res.message);
-                    }
-                  })
-                  .catch((error) => {
-                    toast.error(error.message ?? "Unexpected error occurred!",{ description: "Please reload the page!"});
-                  });
+                DefaultAction();
               }
             }}
           >

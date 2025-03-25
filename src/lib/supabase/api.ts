@@ -1,5 +1,5 @@
 import { createClient } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
 
 const supabase = createClient()
@@ -460,9 +460,42 @@ export async function updateBusinessProfile(id: number, BusinessProfile: Busines
 }
 
 //Order
+export async function createOrderDetails(orderDetails: OrderDetailMutation[]): Promise<Response>{
+    try {
+        const res = await supabase.from('OrderDetail').insert(orderDetails)
+        if(!res){
+            return {status: false, code: 500, message:"Failed to create order details"}
+        }
+
+        return {status: true, code: 200, message: res.statusText}
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
 export async function createOrder(order: OrderMutation) : Promise<Response>{
     try {
-        return {status: true, code: 200, message:""}
+        const {data, error} = await supabase.from('Order').insert({
+            total_payment: order.total_price,
+            business_profile_id: 2,
+        }).select().single()
+
+        if(data && !error){
+            const orderDetails: OrderDetailMutation[] = order.OrderDetail.map(items => ({
+                product_id: items.product.id,
+                order_id: data.id,
+                quantity: items.quantity,
+                total_price: items.total_price
+            }))
+            
+            const resDetails = await createOrderDetails(orderDetails)
+            if(resDetails.status){
+                return {status: true, code: 200, message: "Order has been confirmed!"}
+            }
+            return {status: false, code: 500, message: "Failed to create order details"}
+        }
+
+        return {status: false, code: 400, message:"Failed to confirm order"}
     }
     catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };

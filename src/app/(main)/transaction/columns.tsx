@@ -5,19 +5,20 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Pencil } from "lucide-react"
 import { Transaction } from "@/interface"
-import { deleteProduct } from "@/lib/supabase/api"
-import DeleteAlert from "@/components/helpers/confirmation_alert"
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+import { format } from "date-fns"
+
+
 
 export const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "transaction_id",
+    accessorKey: "id",
     header: "Transaction Id",
+    cell: ({row}) => `TR${row.original.id}`,
   },
   {
     accessorKey: "created_at",
     header: "Date",
+    cell: ({row})=> format(new Date(row.original.created_at), "dd-MM-yyyy")
   },
   {
     accessorKey: "total_payment",

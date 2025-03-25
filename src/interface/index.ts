@@ -92,7 +92,6 @@ export interface TransactionMutation{
     created_at: string
     total_payment: number | null
     transaction_status: string
-    transaction_id: string 
 }
 export interface TransactionDetail{
     category_name: string | null
@@ -155,6 +154,13 @@ export interface BusinessMutation{
 //interface for order
 export interface OrderDetailTemporary{
     product: Product
+    quantity: number
+    total_price: number
+}
+
+export interface OrderDetailMutation{
+    product_id: number
+    order_id: number
     quantity: number
     total_price: number
 }

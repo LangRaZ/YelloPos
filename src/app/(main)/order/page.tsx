@@ -19,7 +19,9 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useEffect, useState } from "react";
-import { Category, OrderDetailTemporary, OrderMutation, Product } from "@/interface";
+import { Category, OrderDetailTemporary, Product, Response } from "@/interface";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 export default function OrderMenuPage() {
@@ -27,11 +29,7 @@ export default function OrderMenuPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [productQuantities, setProductQuantities] = useState<{[key: number]: number}>({});
   const [loading, setLoading] = useState(true);
-  const Order: OrderMutation = {
-    OrderDetail: [],
-    total_price: 0,
-    business_profile_id: 2
-  }
+  const router = useRouter()
 
   useEffect(()=>{
     const init = async () =>{
@@ -79,6 +77,25 @@ export default function OrderMenuPage() {
     (sum, item) => sum + ((item.product.sell_price??0) * item.quantity), 
     0
   );
+
+  function handleConfirmOrder(){
+    createOrder({
+      OrderDetail: orderDetails,
+      business_profile_id: 2,
+      total_price: totalAmount
+    }).then((res: Response) => {
+      if (res.status) {
+        toast.success("Order confirmed!",{ description: "Order has been submitted" });
+        router.refresh();
+      } else {
+        toast.warning(res.message);
+      }
+    })
+    .catch((error) => {
+      toast.error(error.message ?? "Unexpected error occurred!",{ description: "Please reload the page!"});
+    });
+  }
+
 
   if (loading){
     return <div>Loading...</div>
@@ -189,8 +206,7 @@ export default function OrderMenuPage() {
               <p className="font-bold">{totalAmount.toFixed(2)}</p>
             </div>
             <ConfirmationAlert 
-              order={Order}
-              OrderAction={createOrder}
+              DefaultAction={handleConfirmOrder}
               warningMessage="Order will be confirmed. You cannot change order items after confirming"
               successMessage="Order confirmed!"
               successDescription="Order has been submitted"

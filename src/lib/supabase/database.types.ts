@@ -162,7 +162,6 @@ export type Database = {
           created_at: string
           id: number
           total_payment: number | null
-          transaction_id: string 
           transaction_status: string
         }
         Insert: {
@@ -170,7 +169,6 @@ export type Database = {
           created_at?: string
           id?: number
           total_payment?: number | null
-          transaction_id: string 
           transaction_status?: string
         }
         Update: {
@@ -178,7 +176,6 @@ export type Database = {
           created_at?: string
           id?: number
           total_payment?: number | null
-          transaction_id: string 
           transaction_status?: string
         }
         Relationships: [
