@@ -40,11 +40,16 @@ export default function BusinessProfileForm(
             bank_account_name: data?.bank_account_name??"",
             bank_account_number: data?.bank_account_number??"",
             code: data?.code??"",
-
+            profile_image_url : undefined,
+            qr_image_url : undefined,
+            last_profile_update : data?.last_profile_update??"",
+            last_qr_update : data?.last_qr_update??"",
             is_active: true,
         }
     })
+
     
+
     //Declare on submit function for submit handler
     function onSubmit(values: z.infer<typeof BusinessProfileValidation>){
         setError(null);
@@ -52,7 +57,9 @@ export default function BusinessProfileForm(
         setIsLoading(true);
         //Handle update or create object decision on form submit handler
         if(id){
-            updateBusinessProfile(id, values).then(res=>{
+            const profileimageExt = values.profile_image_url.type.split("/").pop()??"";
+            const qrImageExt = values.qr_image_url.type.split("/").pop()??"";
+            updateBusinessProfile(id, values,(data?.profile_image_url??""),profileimageExt,(data?.qr_image_url??""),qrImageExt).then(res=>{
                 if(res && res.status){
                     if(!isOnPage && closeDialog){
                         closeDialog();
@@ -72,29 +79,34 @@ export default function BusinessProfileForm(
         }
     }
 
+    const [preview, setPreviewBusinessImage] = useState<string>(
+            data?.profile_image_url??"",
+        );
+
+
     return (
         <Form {... form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="bg-white rounded-md space-y-4">
                 {/* Form error message */}
                 { error && <p className="my-4 text-red-800 font-semibold">{error}</p> }
                 {/* Form data field starts here */}
-                <h1 className="max-w-xl mx-auto text-5xl">Business Profile</h1>
+                <h1 className="max-w-xl mx-auto text-5xl text-center">Business Profile</h1>
                 <div>
                 <FormField
                     control={form.control}
-                    name="product_image"
+                    name="profile_image_url"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Product Image</FormLabel>
+                            <FormLabel>Business Profile Image</FormLabel>
                             <FormControl>
                                 <Input type="file" placeholder="Choose a file" 
                                 onChange={(e)=>{ 
                                     const files = e.target.files
                                     if(files && files.length > 0){
-                                        form.setValue("product_image", files[0])
-                                        setPreview(URL.createObjectURL(files[0]));
+                                        form.setValue("profile_image_url", files[0])
+                                        setPreviewBusinessImage(URL.createObjectURL(files[0]));
                                     }else{
-                                        form.resetField("product_image", {keepError: false})
+                                        form.resetField("profile_image_url", {keepError: false})
                                     }
                                 }}/>
                             </FormControl>
@@ -103,8 +115,8 @@ export default function BusinessProfileForm(
                                     <img
                                     src={preview}
                                     alt="Product Preview"
-                                    width={150}
-                                    height={150}
+                                    width={300}
+                                    height={300}
                                     className="rounded-lg border"
                                     />
                                 </div>
@@ -156,8 +168,38 @@ export default function BusinessProfileForm(
                         </FormItem>
                     )}
                 />    
-
-                <div className="flex justify-end">
+                <div>
+                    <div>
+                        <h1 className="max-w-xl mx-auto text-5xl text-center">Payment Information</h1>
+                    </div>
+                <FormField
+                    control={form.control}
+                    name="bank_account_number"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Bank account number</FormLabel>
+                            <FormControl>
+                            <Input placeholder="Enter bank account number" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                /> 
+                <FormField
+                    control={form.control}
+                    name="bank_account_name"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Bank account name</FormLabel>
+                            <FormControl>
+                            <Input placeholder="Enter bank account name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />   
+                </div>
+                <div className="flex justify-center">
                     {isLoading ? (
                         <ButtonLoading />
                     ):(

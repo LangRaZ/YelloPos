@@ -1,5 +1,5 @@
 import { createClient } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, BusinessProfileImage } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
 
 const supabase = createClient()
@@ -447,9 +447,35 @@ export async function createBusiness(business: BusinessMutation) : Promise<Respo
 }
 
 //Business Profile
-export async function updateBusinessProfile(id: number, BusinessProfile: BusinessProfileMutation) : Promise<Response>{
+export async function updateBusinessProfile(id: number, BusinessProfile: BusinessProfileImage,OldBusinessImageURL:string,oldBusinessImageExt:string,OldQRImageURL:string,OldQRImageExt:string) : Promise<Response>{
+    const unixTimestamp = Math.floor(Date.now()/1000);
+
+    const businessSup:BusinessProfileMutation={
+        business_profile_id: BusinessProfile.business_profile_id,
+        address: BusinessProfile.address,
+        bank_account_name: BusinessProfile.bank_account_name,
+        bank_account_number: BusinessProfile.bank_account_number,
+        business_name: BusinessProfile.business_name,
+        code: BusinessProfile.code,
+        created_at: BusinessProfile.created_at,
+        email: BusinessProfile.email,
+        phone_number: BusinessProfile.phone_number,
+        profile_image_url : OldBusinessImageURL,
+        last_profile_update : `${unixTimestamp}`,
+        qr_image_url : OldQRImageURL,
+        last_qr_update:`${unixTimestamp}`,
+    }
+
+    const supabaseProfileImagePath = `business_profile_id${id}${unixTimestamp}.${BusinessProfile.profile_image_url.type.split("/").pop()}`
+    const supabaseOldprofileImagePath = `business_profile_id${id}${BusinessProfile.last_profile_update}.${oldBusinessImageExt}`
+
     try {
-        const res = await supabase.from("BusinessProfile").update(BusinessProfile).eq("id", id)
+        const delRes = await deleteFileSupabase(supabaseOldprofileImagePath)
+        const fileRes = await UploadFileSupabase(BusinessProfile.profile_image_url,supabaseProfileImagePath)
+        const fileSupabaseURL = supabase.storage.from('profile_image_url').getPublicUrl(supabaseProfileImagePath)    
+
+
+        const res = await supabase.from("BusinessProfile").update(businessSup).eq("id", id)
         if (!res){
             return {status: false, code: 500, message: "Failed to update Business Profile"};
         }
