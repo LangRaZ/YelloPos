@@ -95,7 +95,11 @@ export type Database = {
           created_at: string
           email: string
           id: number
+          last_profile_update : string
+          last_qr_update : string
           phone_number: string
+          profile_image_url : string
+          qr_image_url : string
         }
         Insert: {
           address: string
@@ -106,7 +110,11 @@ export type Database = {
           created_at?: string
           email: string
           id?: number
+          last_profile_update? : string
+          last_qr_update? : string
           phone_number: string
+          profile_image_url? : string
+          qr_image_url : string
         }
         Update: {
           address?: string
@@ -117,7 +125,11 @@ export type Database = {
           created_at?: string
           email?: string
           id?: number
+          last_profile_update? : string
+          last_qr_update? : string
           phone_number?: string
+          profile_image_url? : string
+          qr_image_url : string
         }
         Relationships: []
       }

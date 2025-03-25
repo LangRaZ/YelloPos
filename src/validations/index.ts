@@ -70,8 +70,8 @@ export const BusinessProfileValidation = z.object({
     business_name: z.string().nonempty("Business name must not be empty"),
     address:  z.string().nonempty("Business address must not be empty"),
     email: z.string(),
-    bank_account_name: z.string().nonempty("Bank account must not be empty"),
-    bank_account_number: z.string().nonempty("Bank account must not be empty"),
+    bank_account_name: z.string().nonempty("Bank account name must not be empty"),
+    bank_account_number: z.string().nonempty("Bank account number must not be empty"),
     code: z.string(),
     created_at: z.string(),
     phone_number: z.string().nonempty("Phone number must not be empty").min(10, {
@@ -79,6 +79,20 @@ export const BusinessProfileValidation = z.object({
     }).max(14, {
         message: "Invalid phone number"
     }),
+    profile_image_url: z
+    .instanceof(File)
+    .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      "Only .jpg, .jpeg, and .png formats are supported."),
+    qr_image_url: z
+    .instanceof(File)
+    .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
+    .refine(
+      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+      "Only .jpg, .jpeg, and .png formats are supported."),
+    last_profile_update : z.string(),
+    last_qr_update: z.string(),
     is_active: z.boolean()
 })
 
@@ -96,5 +110,5 @@ export const BusinessValidation = z.object({
     }).max(14, {
         message: "Invalid phone number"
     }),
-   
+    
 })

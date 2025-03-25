@@ -149,6 +149,10 @@ export interface BusinessMutation{
     email: string
     id: number
     phone_number: string
+    profile_image_url : string
+    qr_image_url : string
+    last_profile_update : string
+    last_qr_update : string
 }
 
 //interface for order
@@ -182,6 +186,26 @@ export interface BusinessProfileMutation{
     created_at: string
     email: string
     phone_number: string
+    profile_image_url : string
+    qr_image_url : string
+    last_profile_update : string
+    last_qr_update : string
+}
+
+export interface BusinessProfileImage{
+    business_profile_id: number | null,
+    address: string
+    bank_account_name: string | null
+    bank_account_number: string | null
+    business_name: string
+    code: string
+    created_at: string
+    email: string
+    phone_number: string
+    profile_image_url : File
+    qr_image_url : File
+    last_profile_update : string
+    last_qr_update : string
 }
 
 export interface BusinessProfile extends BusinessProfileMutation{
