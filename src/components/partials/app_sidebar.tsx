@@ -16,17 +16,16 @@ import {
 import { sidebarLinks, secondaryLinks } from "@/constants";
 import { NavUser } from "@/components/partials/nav-user"
 import { usePathname } from "next/navigation";
-import { useAuth } from "@/app/(auth)/context/authcontext"
+import { SidebarParam } from "@/interface";
 
-export function AppSidebar() {
+export function AppSidebar({ Params } : { Params:SidebarParam | null }) {
     const { open } = useSidebar();
     const pathName = usePathname();
-    const { email } = useAuth()
 
     const data = {
         user: {
-        name: "",
-        email: email,
+        name: Params?.name?? "",
+        email: Params?.email?? "",
         avatar: "/avatars/shadcn.jpg",
         },
     }

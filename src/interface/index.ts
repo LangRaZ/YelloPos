@@ -182,4 +182,7 @@ export interface BusinessProfile extends BusinessProfileMutation{
     id: number,
 }
 
-
+export interface SidebarParam {
+    email:string
+    name:string
+}

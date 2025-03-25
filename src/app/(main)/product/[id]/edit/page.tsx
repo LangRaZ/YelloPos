@@ -22,7 +22,7 @@ export default async function ProductEditPage({ params } : { params:{ id:string 
             </div>
             <Card>
                 <CardHeader>
-                    <CardTitle>Product details</CardTitle>
+                    <CardTitle>Product Details</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <ProductForm 
