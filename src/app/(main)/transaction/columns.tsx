@@ -36,7 +36,7 @@ export const columns: ColumnDef<Transaction>[] = [
         const transaction = row.original;
 
         return (
-          <div className="flex gap-2">
+          <div className="flex gap-2 justify-center">
             <Link href={`/transaction/${transaction.id}/edit`}>
               <Button 
                 variant="outline"

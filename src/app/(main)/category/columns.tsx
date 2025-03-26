@@ -27,7 +27,7 @@ export const columns: ColumnDef<Category>[] = [
         const category = row.original;
 
         return (
-          <div className="flex gap-2">
+          <div className="flex gap-2 justify-center">
             <Link href={`/category/${category.id}/edit`}>
               <Button 
                 variant="outline"

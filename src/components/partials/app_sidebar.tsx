@@ -26,7 +26,7 @@ export function AppSidebar({ Params } : { Params:SidebarParam | null }) {
         user: {
         name: Params?.name?? "",
         email: Params?.email?? "",
-        avatar: "/avatars/shadcn.jpg",
+        avatar: "/icons/logo-collapsed.svg",
         },
     }
     return (

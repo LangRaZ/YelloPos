@@ -39,7 +39,7 @@ export const columns: ColumnDef<Product>[] = [
         const product = row.original;
 
         return (
-          <div className="flex gap-2">
+          <div className="flex gap-2 justify-center">
             <Link href={`/product/${product.id}/edit`}>
               <Button 
                 variant="outline"
