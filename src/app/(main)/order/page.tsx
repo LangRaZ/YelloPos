@@ -14,7 +14,7 @@ import { Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ConfirmationAlert from "@/components/helpers/confirmation_alert";
 import Link from "next/link";
-import { getCategories, getProducts, createOrder } from "@/lib/supabase/api"
+import { getProducts, createOrder, getCategoriesWithProductsCount } from "@/lib/supabase/api"
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
@@ -33,7 +33,7 @@ export default function OrderMenuPage() {
 
   useEffect(()=>{
     const init = async () =>{
-      const { data: categories } = await getCategories();
+      const { data: categories } = await getCategoriesWithProductsCount();
       const { data: products } = await getProducts();
 
       setProducts(products ?? [])
@@ -86,7 +86,7 @@ export default function OrderMenuPage() {
     }).then((res: Response) => {
       if (res.status) {
         toast.success("Order confirmed!",{ description: "Order has been submitted" });
-        router.refresh();
+        window.location.reload();
       } else {
         toast.warning(res.message);
       }
@@ -113,27 +113,25 @@ export default function OrderMenuPage() {
                     </Button>
               </CarouselItem>
               {(categories??[]).map((category, idx)=>(
-                <>
-                  <CarouselItem key={idx} className="basis-1/10 flex flex-row pl-0">
-                    <Button variant={"outline"} className="px-4 py-2" asChild>
-                      <Link href={`#${category.category_name}`} className="font-medium">{category.category_name?.toUpperCase()}</Link>
-                    </Button>
-                    
-                  </CarouselItem>
-                </>
+                <CarouselItem key={idx} className="basis-1/10 flex flex-row pl-0">
+                  <Button variant={"outline"} className="px-4 py-2" asChild>
+                    <Link href={`#${category.category_name}`} className="font-medium">{category.category_name?.toUpperCase()}</Link>
+                  </Button>
+                  
+                </CarouselItem>
               ))}
             </CarouselContent>
           </Carousel>
           <Separator orientation="horizontal" className="mt-2"/>
         </div>
         <div className="mt-2 flex flex-col gap-5">
-          {(categories??[]).map((category)=>(
-            <>
-              <span id={`${category.category_name}`} className="mt-2 font-medium text-xl">{category.category_name?.toUpperCase()}</span>
-              <div className="grid 2xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10 px-1">
-                {(products??[]).map((product)=>(
+          {(categories??[]).map((category, idx)=>(
+            <div key={idx} className="mt-2">
+              <span id={`${category.category_name}`} className="font-medium text-xl mb-10">{category.category_name?.toUpperCase()}</span>
+              <div className="grid 2xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10 px-1 mt-4">
+                {(products??[]).map((product, idx)=>(
                   (product.Category?.category_name === category.category_name) ? (
-                      <Card className="">
+                      <Card className="" key={idx}>
                         <CardContent className="p-6">
                           <div className="w-full flex justify-center">
                             <AspectRatio ratio={16/9} className="flex justify-center">
@@ -164,9 +162,9 @@ export default function OrderMenuPage() {
                         </CardFooter>
                       </Card>
                   ):""
-                  ))}
+                ))}
               </div>
-            </>
+            </div>
           ))}
         </div>
       </div>

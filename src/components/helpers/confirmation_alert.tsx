@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Response } from "@/interface";
 import { useState } from "react";
+import { ButtonLoading } from "./button_loading";
 
 /**
  * ConfirmationAlert - A component that asks for confirmation before executing a
@@ -75,29 +76,39 @@ export default function ConfirmationAlert ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={() => {
-              if(EditAction && id){
-                EditAction(id)
-                  .then((res: Response) => {
-                    if (res.status) {
-                      toast.success(successMessage,{ description: successDescription });
-                      router.refresh();
-                    } else {
-                      toast.warning(res.message);
-                    }
-                  })
-                  .catch((error) => {
-                    toast.error(error.message ?? "Unexpected error occurred!",{ description: "Please reload the page!"});
-                  });
-              }
-              if(DefaultAction){
-                DefaultAction();
-              }
-            }}
-          >
-            Continue
-          </AlertDialogAction>
+          {isLoading ? (
+            <ButtonLoading />
+          ):(
+            <AlertDialogAction
+              onClick={() => {
+                if(EditAction && id){
+                  setIsLoading(true)
+                  EditAction(id)
+                    .then((res: Response) => {
+                      if (res.status) {
+                        toast.success(successMessage,{ description: successDescription });
+                        router.refresh();
+                        setIsLoading(false)
+                      } else {
+                        toast.warning(res.message);
+                        setIsLoading(false)
+                      }
+                    })
+                    .catch((error) => {
+                      toast.error(error.message ?? "Unexpected error occurred!",{ description: "Please reload the page!"});
+                      setIsLoading(false)
+                    });
+                }
+                if(DefaultAction){
+                  setIsLoading(true)
+                  DefaultAction();
+                  setIsLoading(false)
+                }
+              }}
+            >
+              Continue
+            </AlertDialogAction>
+          )}
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

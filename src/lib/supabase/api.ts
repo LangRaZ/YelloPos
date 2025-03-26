@@ -226,6 +226,11 @@ export async function getCategories(){
     return categories
 }
 
+export async function getCategoriesWithProductsCount(){
+    const categories = await supabase.rpc("get_categories_with_product_count")
+    return categories
+}
+
 export async function getRoles(){
     const Roles = await supabase.from('Roles').select()
     return Roles
