@@ -78,25 +78,6 @@ export default function OrderMenuPage() {
     0
   );
 
-  function handleConfirmOrder(){
-    createOrder({
-      OrderDetail: orderDetails,
-      business_profile_id: 2,
-      total_price: totalAmount
-    }).then((res: Response) => {
-      if (res.status) {
-        toast.success("Order confirmed!",{ description: "Order has been submitted" });
-        window.location.reload();
-      } else {
-        toast.warning(res.message);
-      }
-    })
-    .catch((error) => {
-      toast.error(error.message ?? "Unexpected error occurred!",{ description: "Please reload the page!"});
-    });
-  }
-
-
   if (loading){
     return <div>Loading...</div>
   }
@@ -204,7 +185,12 @@ export default function OrderMenuPage() {
               <p className="font-bold">{totalAmount.toFixed(2)}</p>
             </div>
             <ConfirmationAlert 
-              DefaultAction={handleConfirmOrder}
+              order={{
+                OrderDetail: orderDetails,
+                business_profile_id: 2,
+                total_price: totalAmount
+              }}
+              OrderAction={createOrder}
               warningMessage="Order will be confirmed. You cannot change order items after confirming"
               successMessage="Order confirmed!"
               successDescription="Order has been submitted"

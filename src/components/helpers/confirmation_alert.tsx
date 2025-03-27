@@ -14,7 +14,7 @@ import {
 import { Trash } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Response } from "@/interface";
+import { OrderMutation, Response } from "@/interface";
 import { useState } from "react";
 import { ButtonLoading } from "./button_loading";
 
@@ -40,16 +40,20 @@ import { ButtonLoading } from "./button_loading";
  */
 export default function ConfirmationAlert ({
   id,
+  order,
   EditAction,
   DefaultAction,
+  OrderAction,
   warningMessage,
   successMessage,
   successDescription,
   variant
 }: {
   id?: string;
+  order?: OrderMutation;
   EditAction?: (_id: string) => Promise<Response>;
   DefaultAction?: ()=> void;
+  OrderAction?: (order: OrderMutation) => Promise<Response>;
   warningMessage: string;
   successMessage: string;
   successDescription: string;
@@ -89,6 +93,23 @@ export default function ConfirmationAlert ({
                         toast.success(successMessage,{ description: successDescription });
                         router.refresh();
                         setIsLoading(false)
+                      } else {
+                        toast.warning(res.message);
+                        setIsLoading(false)
+                      }
+                    })
+                    .catch((error) => {
+                      toast.error(error.message ?? "Unexpected error occurred!",{ description: "Please reload the page!"});
+                      setIsLoading(false)
+                    });
+                }
+                if(order && OrderAction){
+                  setIsLoading(true)
+                  OrderAction(order)
+                    .then((res: Response) => {
+                      if (res.status) {
+                        toast.success(successMessage,{ description: successDescription });
+                        window.location.reload();
                       } else {
                         toast.warning(res.message);
                         setIsLoading(false)
