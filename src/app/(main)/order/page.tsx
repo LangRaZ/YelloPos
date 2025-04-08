@@ -184,18 +184,37 @@ export default function OrderMenuPage() {
               <p className="font-semibold">Total:</p>
               <p className="font-bold">{totalAmount.toFixed(2)}</p>
             </div>
-            <ConfirmationAlert 
-              order={{
-                OrderDetail: orderDetails,
-                business_profile_id: 2,
-                total_price: totalAmount
-              }}
-              OrderAction={createOrder}
-              warningMessage="Order will be confirmed. You cannot change order items after confirming"
-              successMessage="Order confirmed!"
-              successDescription="Order has been submitted"
-              variant="Confirm"
-            />
+
+            {orderDetails.length > 0 ? (
+              <ConfirmationAlert 
+                order={{
+                  OrderDetail: orderDetails,
+                  business_profile_id: 2,
+                  total_price: totalAmount
+                }}
+                OrderAction={createOrder}
+                warningMessage="Order will be confirmed. You cannot change order items after confirming"
+                successMessage="Order confirmed!"
+                successDescription="Order has been submitted"
+                variant="Confirm"
+              />
+            ):(
+              <ConfirmationAlert 
+                order={{
+                  OrderDetail: orderDetails,
+                  business_profile_id: 2,
+                  total_price: totalAmount
+                }}
+                OrderAction={createOrder}
+                warningMessage="Order will be confirmed. You cannot change order items after confirming"
+                successMessage="Order confirmed!"
+                successDescription="Order has been submitted"
+                variant="Confirm"
+                disabled={true}
+              />
+            )}
+
+            
           </div>
         </div>
       </div>
