@@ -1,8 +1,10 @@
-import { createClient } from "./client_config"
+import { createClientBrowser } from "./client_config"
 import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
+import { generateCode } from "../utils"
+import { updateAuthUser } from "./api_server"
 
-const supabase = createClient()
+const supabase = createClientBrowser()
 
 
 export async function getProducts() : Promise<ProductsResponse>{
@@ -415,6 +417,7 @@ export async function createAuthUser(user: AuthMutation) : Promise<Response>{
     }
 }
 
+
 export async function signInAuthUser(authUser: Auth) : Promise<Response>{
     try {
         const {error} = await supabase.auth.signInWithPassword(authUser);
@@ -441,11 +444,24 @@ export async function signOutAuthUser() : Promise<Response>{
 
 export async function createBusiness(business: BusinessMutation) : Promise<Response>{
     try {
-        const business_res = await supabase.from("BusinessProfile").insert(business)
-        if (!business_res){
-            return {status: false, code: 500, message: "Failed to create user"};
+        const res = await supabase.from("BusinessProfile").insert(business).select().single()
+        
+        if (res.error){
+            return {status: false, code: 500, message: "Failed to create business profile"};
         }
-        return { status:true, code: business_res.status, message: business_res.statusText };
+
+        if(res.data){
+            const id = res.data.id
+            const code = generateCode("B", res.data.id)
+            const business_res = await supabase.from("BusinessProfile").update({code: code}).eq('id', id)
+
+            const updateAccount_res = await updateAuthUser(false, id)
+            if(!updateAccount_res){
+                return {status: false, code: 500, message: "Failed to update account business profile"};
+            }
+        }
+        
+        return { status:true, code: res.status, message: "Business profile has been completed!" };
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
     }

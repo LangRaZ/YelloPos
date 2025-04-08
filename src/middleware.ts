@@ -15,6 +15,16 @@ export async function middleware(request: NextRequest) {
     ){
         return NextResponse.redirect(new URL('/login', request.url))
     }
+    
+    if(user){
+        if(user.user_metadata.first_login && !request.nextUrl.pathname.startsWith('/first-login')){
+            return NextResponse.redirect(new URL('/first-login', request.url))
+        }else{
+            if(request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register')){
+                return NextResponse.redirect(new URL('/', request.url))
+            }
+        }
+    }
 
     const res = NextResponse.next();
     return res;
@@ -25,6 +35,7 @@ export const config = {
         "/",
         "/login",
         "/register",
+        "/first-login",
         "/category",
         "/category/:id*",
         "/order",

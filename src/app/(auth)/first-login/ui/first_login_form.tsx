@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { BusinessValidation } from "@/validations";
+import { FirstLoginValidation } from "@/validations";
 import z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -9,7 +9,6 @@ import Image from "next/image";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { createBusiness } from "@/lib/supabase/api";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -19,37 +18,41 @@ export default function FirstLoginForm() {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter()
 
-    const form = useForm<z.infer<typeof BusinessValidation>>({
-        resolver: zodResolver(BusinessValidation),
+    const form = useForm<z.infer<typeof FirstLoginValidation>>({
+        resolver: zodResolver(FirstLoginValidation),
         defaultValues: {
             business_name: "",
             address: "",
             bank_account_name: "",
             bank_account_number: "",
-  
             phone_number: "",
+            profile_image_url: "",
+            qr_image_url: "",
+            last_profile_update: "",
+            last_qr_update: "",
+            code: "XXXXX",
+            email: "",
         },
     });
 
-    function handleRegister(values: z.infer<typeof BusinessValidation>) {
+    function handleFirstLogin(values: z.infer<typeof FirstLoginValidation>) {
         setError(null);
         form.clearErrors();
         createBusiness(values).then((res) => {
           if (res.status) {
             router.push("/");
-            toast.success("Register Success!" , { description: "Your account has been successfully created" })
+            toast.success("Business Profile Completed!" , { description: "Your business profile has been completed" })
           } else {
             setError(res.message);
-            form.reset();
+            console.log(error)
+            // form.reset();
           }
         });
     }
 
-
-
     return (
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleRegister)} className="bg-white px-4 md:px-16 w-full">
+                <form onSubmit={form.handleSubmit(handleFirstLogin)} className="bg-white px-4 md:px-16 w-full">
                     <div className="p-8 h-full flex flex-col gap-10 justify-center">
                         <div className="flex flex-col gap-3">
                             <div className="flex gap-2 items-center">
@@ -71,14 +74,17 @@ export default function FirstLoginForm() {
 
                         </div>
                         <div className="flex flex-col gap-6">
+                            <p className="font-semibold text-lg">
+                                Business General Information
+                            </p>
                             <FormField
                                 control={form.control}
                                 name="business_name"
                                 render={({ field })=>(
                                     <FormItem>
-                                        <FormLabel>business name</FormLabel>
+                                        <FormLabel>Business Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Enter your  business name" {...field}/>
+                                            <Input placeholder="Enter your business name" {...field}/>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -89,7 +95,7 @@ export default function FirstLoginForm() {
                                 name="phone_number"
                                 render={({ field })=>(
                                     <FormItem>
-                                        <FormLabel>phone number</FormLabel>
+                                        <FormLabel>Business Phone Number</FormLabel>
                                         <FormControl>
                                             <Input placeholder="Enter your phone number" {...field}/>
                                         </FormControl>
@@ -102,7 +108,7 @@ export default function FirstLoginForm() {
                                 name="address"
                                 render={({ field })=>(
                                     <FormItem>
-                                        <FormLabel>Address</FormLabel>
+                                        <FormLabel>Business Address</FormLabel>
                                         <FormControl>
                                             <Input placeholder="Enter your business address" {...field}/>
                                         </FormControl>
@@ -111,16 +117,52 @@ export default function FirstLoginForm() {
                                 )}
                             />
                             
+                            <div className="font-semibold text-lg flex">
+                                <p>Business Payment Information*</p>
+                                <span className="font-normal">
+                                    &nbsp;&#40;Optional&#41;
+                                </span>
+                            </div>
+
+                            <FormField
+                                control={form.control}
+                                name="bank_account_number"
+                                render={({ field })=>(
+                                    <FormItem>
+                                        <FormLabel>Business Bank Account Number</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter your business bank account number" {...field}/>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="bank_account_name"
+                                render={({ field })=>(
+                                    <FormItem>
+                                        <FormLabel>Business Bank Account Name</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Enter your business bank account name" {...field}/>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             
-                            <div className="flex flex-col gap-3">
+                            <span className="font-light">
+                                *Optional fields can be completed later
+                            </span>
+
+                            <div className="flex justify-end">
                                 <Button
                                     type="submit"
                                     className=""
-                                    variant={"default"}
                                 >
-                                Submit
+                                Complete
                                 </Button>
-                                
                             </div>
                         </div>
                     </div>

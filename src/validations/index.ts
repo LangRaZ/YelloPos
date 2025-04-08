@@ -96,19 +96,20 @@ export const BusinessProfileValidation = z.object({
     is_active: z.boolean()
 })
 
-export const BusinessValidation = z.object({
+export const FirstLoginValidation = z.object({
     address: z.string().nonempty("Address must not be empty"),    
     business_name: z.string().nonempty("Address must not be empty"),
-    bank_account_name: z.string().nonempty("Bank account must not be empty"),
-    bank_account_number: z.string().nonempty("Bank account must not be empty"),
+    bank_account_name: z.string(),
+    bank_account_number: z.string(),
     code: z.string(),
-    created_at: z.string(),
     email: z.string(),
-    id: z.number(),
     phone_number: z.string().nonempty("Phone number must not be empty").min(10, {
         message: "Invalid phone number"
     }).max(14, {
         message: "Invalid phone number"
     }),
-    
+    profile_image_url: z.string(),
+    qr_image_url: z.string(),
+    last_profile_update: z.string(),
+    last_qr_update: z.string()
 })

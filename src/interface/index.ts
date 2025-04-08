@@ -141,13 +141,11 @@ export interface AuthMutation{
 }
 export interface BusinessMutation{
     address: string
-    bank_account_name: string | null
-    bank_account_number: string | null
+    bank_account_name: string
+    bank_account_number: string
     business_name: string
     code: string
-    created_at: string
     email: string
-    id: number
     phone_number: string
     profile_image_url : string
     qr_image_url : string
@@ -179,8 +177,8 @@ export interface OrderMutation{
 export interface BusinessProfileMutation{
     business_profile_id: number | null,
     address: string
-    bank_account_name: string | null
-    bank_account_number: string | null
+    bank_account_name: string
+    bank_account_number: string
     business_name: string
     code: string
     created_at: string
@@ -195,8 +193,8 @@ export interface BusinessProfileMutation{
 export interface BusinessProfileImage{
     business_profile_id: number | null,
     address: string
-    bank_account_name: string | null
-    bank_account_number: string | null
+    bank_account_name: string
+    bank_account_number: string
     business_name: string
     code: string
     created_at: string
