@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 
-export default function BusinessForm() {
+export default function FirstLoginForm() {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter()
 
