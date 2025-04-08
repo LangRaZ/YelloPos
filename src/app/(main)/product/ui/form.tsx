@@ -41,6 +41,7 @@ export default function ProductForm(
             quantity: data?.quantity??0,
             is_active: true,
             last_image_update: data?.last_image_update?? "",
+            business_profile_id: data?.business_profile_id??0
         }
     })
     

@@ -86,6 +86,7 @@ export async function createProduct(product: ProductMutationImage) : Promise<Res
         quantity : product.quantity,
         is_active: product.is_active,
         last_image_update: `${unixTimestamp}`,
+        business_profile_id: (await supabase.auth.getUser()).data.user?.user_metadata.business_profile_id
     }
 
 
@@ -130,6 +131,7 @@ export async function updateProduct(id: number, product: ProductMutationImage, o
         quantity : product.quantity,
         is_active: product.is_active,
         last_image_update: `${unixTimestamp}`,
+        business_profile_id: (await supabase.auth.getUser()).data.user?.user_metadata.business_profile_id
     }
 
     const supabaseImagePath = `product-id${id}${unixTimestamp}.${product.product_image.type.split("/").pop()}`
@@ -283,6 +285,18 @@ export async function deleteUser(id: string) : Promise<Response>{
 
 //Category
 export async function updateCategory(id: number, Category: CategoryMutation) : Promise<Response>{
+    if (!Category.category_name) {
+        return { status: false, code: 400, message: "Category name is required" };
+    }
+
+    const check = await checkUniqueCategory(Category.category_name);
+
+    if (check.status == true) {
+        return {status: false, code: 500, message: check.data?.category_name + " already exists"};
+    }
+
+    Category.business_profile_id = (await supabase.auth.getUser()).data.user?.user_metadata.business_profile_id
+
     try {
         const res = await supabase.from("Category").update(Category).eq("id", id)
         if (!res){
@@ -304,6 +318,8 @@ export async function createCategory(Category: CategoryMutation) : Promise<Respo
     if (check.status == true) {
         return {status: false, code: 500, message: check.data?.category_name + " already exists"};
     }
+
+    Category.business_profile_id = (await supabase.auth.getUser()).data.user?.user_metadata.business_profile_id
 
     try {
         const res = await supabase.from("Category").insert(Category)
