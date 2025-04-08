@@ -17,6 +17,7 @@ export interface ProductMutation{
     quantity : number | null
     is_active: boolean | null
     last_image_update: string
+    business_profile_id?: number | null
 }
 
 export interface ProductMutationImage{
@@ -28,12 +29,12 @@ export interface ProductMutationImage{
     quantity : number | null
     is_active: boolean | null
     last_image_update: string
+    business_profile_id?: number | null
 }
 
 export interface Product extends ProductMutation{
     id: number
     Category: CategoryDetail | null
-    business_profile_id?: number | null
     need_quantity?: boolean | null
 }
 

@@ -33,7 +33,7 @@ export default function CategoryForm(
     const form = useForm<z.infer<typeof CategoryValidation>>({
         resolver: zodResolver(CategoryValidation),
         defaultValues:{
-            business_profile_id: data?.business_profile_id??2,
+            business_profile_id: data?.business_profile_id??0,
             category_name: data?.category_name??"",           
             description: data?.description??"",
             is_active: true,
