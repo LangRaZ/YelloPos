@@ -47,7 +47,8 @@ export default function ConfirmationAlert ({
   warningMessage,
   successMessage,
   successDescription,
-  variant
+  variant,
+  disabled,
 }: {
   id?: string;
   order?: OrderMutation;
@@ -57,7 +58,9 @@ export default function ConfirmationAlert ({
   warningMessage: string;
   successMessage: string;
   successDescription: string;
-  variant: "Delete" | "Confirm"
+  variant: "Delete" | "Confirm";
+  disabled?: boolean
+  
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false)
@@ -69,7 +72,7 @@ export default function ConfirmationAlert ({
       </AlertDialogTrigger>
       )}
       {variant === "Confirm" && (
-      <AlertDialogTrigger className="w-full bg-primary hover:bg-primary/90 rounded-md h-9 text-primary-foreground px-2 py-4 text-sm font-medium inline-flex justify-center items-center" role="button">
+      <AlertDialogTrigger className="w-full bg-primary hover:bg-primary/90 rounded-md h-9 text-primary-foreground px-2 py-4 text-sm font-medium inline-flex justify-center items-center" role="button" disabled={disabled??false}>
         <p>Confirm Order</p>
       </AlertDialogTrigger>
       )}
