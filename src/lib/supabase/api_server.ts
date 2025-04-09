@@ -24,7 +24,7 @@ export async function updateAuthUser(firstLoginState: boolean, businessProfileId
 export async function getUserBusinessProfileId(){
     const supabaseServer = await createClient()
     try {
-        const temp = await (await supabaseServer.auth.getUser()).data.user?.user_metadata.business_profile_id
+        const temp = (await supabaseServer.auth.getUser()).data.user?.user_metadata.business_profile_id
         // console.log(temp)
         if(temp){
             return temp
