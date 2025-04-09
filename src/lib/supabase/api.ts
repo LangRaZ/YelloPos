@@ -394,11 +394,10 @@ export async function updateTransaction(id: number, Transaction: TransactionMuta
 
 export async function getTransactions() : Promise<TransactionsResponse>{
     try {
-        const {data: res} = await supabase.auth.getUser()
-        const bp_id = res.user?.user_metadata.business_profile_id
+        const bp_id = await getUserBusinessProfileId()
+        console.log(bp_id)
 
-
-        const transactions = await supabase.from('Order').select('*, Business:business_profile_id(id)').eq('Business.id', bp_id).order('created_at', {ascending: false})
+        const transactions = await supabase.from('Order').select('*').eq('business_profile_id', bp_id).order('created_at', {ascending: false})
         if(!transactions.data){
             return {status:false, code:200, message: transactions.statusText, data: transactions.data};
         }
