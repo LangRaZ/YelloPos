@@ -176,13 +176,12 @@ export interface OrderMutation{
 
 //Business Profile
 export interface BusinessProfileMutation{
-    business_profile_id: number | null,
+    id: number ,
     address: string
     bank_account_name: string
     bank_account_number: string
     business_name: string
     code: string
-    created_at: string
     email: string
     phone_number: string
     profile_image_url : string
@@ -192,13 +191,12 @@ export interface BusinessProfileMutation{
 }
 
 export interface BusinessProfileImage{
-    business_profile_id: number | null,
+    id: number ,
     address: string
     bank_account_name: string
     bank_account_number: string
     business_name: string
     code: string
-    created_at: string
     email: string
     phone_number: string
     profile_image_url : File
@@ -207,8 +205,13 @@ export interface BusinessProfileImage{
     last_qr_update : string
 }
 
-export interface BusinessProfile extends BusinessProfileMutation{
-    id: number,
+
+
+
+
+export interface BusinessProfileResponse extends Response{
+    data: BusinessProfileMutation | null
+    
 }
 
 export interface SidebarParam {
