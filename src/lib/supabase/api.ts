@@ -2,14 +2,15 @@ import { createClientBrowser } from "./client_config"
 import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
 import { generateCode } from "../utils"
-import { updateAuthUser } from "./api_server"
+import { updateAuthUser, getUserBusinessProfileId } from "./api_server"
 
 const supabase = createClientBrowser()
 
-
 export async function getProducts() : Promise<ProductsResponse>{
     try {
-        const products = await supabase.from('Product').select('*, Category:product_category_id(category_name)').order('created_at', {ascending: false})
+        // const userClient = await getUserBusinessProfileId()
+        // console.log(userClient)
+        const products = await supabase.from('Product').select('*, Category:product_category_id(category_name)').eq('business_profile_id', await getUserBusinessProfileId()).order('created_at', {ascending: false})
         if(!products.data){
             return {status:false, code:200, message: products.statusText, data: products.data};
         }

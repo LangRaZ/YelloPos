@@ -20,3 +20,19 @@ export async function updateAuthUser(firstLoginState: boolean, businessProfileId
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" }
     }
 }
+
+export async function getUserBusinessProfileId(){
+    const supabaseServer = await createClient()
+    try {
+        const temp = await (await supabaseServer.auth.getUser()).data.user?.user_metadata.business_profile_id
+        // console.log(temp)
+        if(temp){
+            return temp
+        }
+        else {
+            return { status: false, code: 500, message:"Business Profile Id not get" }
+        }
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" }
+    }
+}
