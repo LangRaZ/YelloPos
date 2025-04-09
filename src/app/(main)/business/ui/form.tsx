@@ -33,7 +33,7 @@ export default function BusinessProfileForm(
     const form = useForm<z.infer<typeof BusinessProfileValidation>>({
         resolver: zodResolver(BusinessProfileValidation),
         defaultValues:{
-            business_profile_id: data?.business_profile_id??2,
+            id: data?.id??Number(),
             business_name: data?.business_name??"",
             address:  data?.address??"",
             email: data?.email??"",
@@ -44,7 +44,8 @@ export default function BusinessProfileForm(
             qr_image_url : undefined,
             last_profile_update : data?.last_profile_update??"",
             last_qr_update : data?.last_qr_update??"",
-            is_active: true,
+            phone_number : data?.phone_number??"",
+            
         }
     })
 
@@ -63,12 +64,15 @@ export default function BusinessProfileForm(
                 if(res && res.status){
                     if(!isOnPage && closeDialog){
                         closeDialog();
+                        setIsLoading(false);
                     }
                     toast.success("Business profile updated!", { description:"Business profile has been updated successfully!" })
                     if(isOnPage){
                         router.push("/business");
+                        setIsLoading(false);
                     } else {
                         router.refresh();
+                        setIsLoading(false);
                     }
                 } else {
                     setError(res?.message??"Unexpected error occurred! Please reload the page!");

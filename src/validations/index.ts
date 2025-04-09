@@ -67,14 +67,13 @@ export const CategoryValidation = z.object({
 })
 
 export const BusinessProfileValidation = z.object({
-    business_profile_id: z.number(),
+    id: z.number(),
     business_name: z.string().nonempty("Business name must not be empty"),
     address:  z.string().nonempty("Business address must not be empty"),
     email: z.string(),
     bank_account_name: z.string().nonempty("Bank account name must not be empty"),
     bank_account_number: z.string().nonempty("Bank account number must not be empty"),
     code: z.string(),
-    created_at: z.string(),
     phone_number: z.string().nonempty("Phone number must not be empty").min(10, {
         message: "Invalid phone number"
     }).max(14, {
@@ -94,7 +93,7 @@ export const BusinessProfileValidation = z.object({
       "Only .jpg, .jpeg, and .png formats are supported."),
     last_profile_update : z.string(),
     last_qr_update: z.string(),
-    is_active: z.boolean()
+    
 })
 
 export const FirstLoginValidation = z.object({

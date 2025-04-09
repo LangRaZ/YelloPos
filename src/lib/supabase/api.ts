@@ -1,5 +1,5 @@
 import { createClientBrowser } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
 import { generateCode } from "../utils"
 import { updateAuthUser, getUserBusinessProfileId } from "./api_server"
@@ -45,6 +45,57 @@ async function UploadFileSupabase(File: File, imagePath: string){
         const res = await supabase
         .storage
         .from('product-image')
+        .upload(imagePath, File, {
+            cacheControl: '0',
+            upsert: false
+        })
+        return res;
+    } catch (error) {
+        return null;
+    }
+}
+
+
+async function UploadFileSupabaseBusinessProfile(File: File, imagePath: string){
+    try {
+        const res = await supabase
+        .storage
+        .from('business-image')
+        .upload(imagePath, File, {
+            cacheControl: '0',
+            upsert: false
+        })
+        return res;
+    } catch (error) {
+        return null;
+    }
+}
+
+async function deleteFileSupabaseBusinessProfile(path: string){
+    try {
+        const res = await supabase.storage.from('business-image').remove([path])
+        console.log(`sukses delete ${path}`)
+        return res;
+    } catch (error) {
+        return null;
+    }
+}
+
+async function deleteFileSupabaseBusinessQR(path: string){
+    try {
+        const res = await supabase.storage.from('bank-qr').remove([path])
+        console.log(`sukses delete ${path}`)
+        return res;
+    } catch (error) {
+        return null;
+    }
+}
+
+async function UploadFileSupabaseBusinessQR(File: File, imagePath: string){
+    try {
+        const res = await supabase
+        .storage
+        .from('bank-qr')
         .upload(imagePath, File, {
             cacheControl: '0',
             upsert: false
@@ -489,17 +540,32 @@ export async function createBusiness(business: BusinessMutation) : Promise<Respo
 }
 
 //Business Profile
+export async function getBusinessProfile(id: number) : Promise<BusinessProfileResponse>{
+    try {
+        const Business_id = await supabase.from("BusinessProfile").select("*").eq("id", id).single()
+        if(!Business_id.data){
+            return {status:false, code:200, message: Business_id.statusText, data: Business_id.data};
+        }
+        return {status:true, code:200, message: Business_id.statusText, data: Business_id.data};
+
+    } catch (error) {
+        return {
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        }
+    }
+}
+
 export async function updateBusinessProfile(id: number, BusinessProfile: BusinessProfileImage,OldBusinessImageURL:string,oldBusinessImageExt:string,OldQRImageURL:string,OldQRImageExt:string) : Promise<Response>{
     const unixTimestamp = Math.floor(Date.now()/1000);
 
     const businessSup:BusinessProfileMutation={
-        business_profile_id: BusinessProfile.business_profile_id,
+        id: BusinessProfile.id,
         address: BusinessProfile.address,
         bank_account_name: BusinessProfile.bank_account_name,
         bank_account_number: BusinessProfile.bank_account_number,
         business_name: BusinessProfile.business_name,
         code: BusinessProfile.code,
-        created_at: BusinessProfile.created_at,
         email: BusinessProfile.email,
         phone_number: BusinessProfile.phone_number,
         profile_image_url : OldBusinessImageURL,
@@ -511,10 +577,10 @@ export async function updateBusinessProfile(id: number, BusinessProfile: Busines
     const supabaseProfileImagePath = `business_profile_id${id}${unixTimestamp}.${BusinessProfile.profile_image_url.type.split("/").pop()}`
     const supabaseOldprofileImagePath = `business_profile_id${id}${BusinessProfile.last_profile_update}.${oldBusinessImageExt}`
     try {
-        const delRes = await deleteFileSupabase(supabaseOldprofileImagePath)
-        const fileRes = await UploadFileSupabase(BusinessProfile.profile_image_url,supabaseProfileImagePath)
-        const fileSupabaseURL = supabase.storage.from('profile_image_url').getPublicUrl(supabaseProfileImagePath)    
-
+        const delRes = await deleteFileSupabaseBusinessProfile(supabaseOldprofileImagePath)
+        const fileRes = await UploadFileSupabaseBusinessProfile(BusinessProfile.profile_image_url,supabaseProfileImagePath)
+        const fileSupabaseURL = supabase.storage.from('business-image').getPublicUrl(supabaseProfileImagePath)    
+        businessSup.profile_image_url = fileSupabaseURL.data.publicUrl
 
         const res = await supabase.from("BusinessProfile").update(businessSup).eq("id", id)
         if (!res){
@@ -530,13 +596,12 @@ export async function updateQrProfile(id: number, BusinessProfile: BusinessProfi
     const unixTimestamp = Math.floor(Date.now()/1000);
 
     const businessSup:BusinessProfileMutation={
-        business_profile_id: BusinessProfile.business_profile_id,
+        id: BusinessProfile.id,
         address: BusinessProfile.address,
         bank_account_name: BusinessProfile.bank_account_name,
         bank_account_number: BusinessProfile.bank_account_number,
         business_name: BusinessProfile.business_name,
         code: BusinessProfile.code,
-        created_at: BusinessProfile.created_at,
         email: BusinessProfile.email,
         phone_number: BusinessProfile.phone_number,
         profile_image_url : OldBusinessImageURL,
@@ -549,10 +614,10 @@ export async function updateQrProfile(id: number, BusinessProfile: BusinessProfi
     const supabaseOldprofileQrPath = `business_profile_id${id}${BusinessProfile.last_qr_update}.${OldQRImageExt}`
 
     try {
-        const delRes = await deleteFileSupabase(supabaseOldprofileQrPath)
-        const fileRes = await UploadFileSupabase(BusinessProfile.profile_image_url,supabaseProfileQrPath)
-        const fileSupabaseURL = supabase.storage.from('profile_image_url').getPublicUrl(supabaseProfileQrPath)    
-
+        const delRes = await deleteFileSupabaseBusinessQR(supabaseOldprofileQrPath)
+        const fileRes = await UploadFileSupabaseBusinessQR(BusinessProfile.profile_image_url,supabaseProfileQrPath)
+        const fileSupabaseURL = supabase.storage.from('bank-qr').getPublicUrl(supabaseProfileQrPath)    
+        businessSup.qr_image_url = fileSupabaseURL.data.publicUrl
 
         const res = await supabase.from("BusinessProfile").update(businessSup).eq("id", id)
         if (!res){
