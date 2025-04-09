@@ -30,7 +30,7 @@ export const ProductValidation = z.object({
     product_category_id: z.number({
         required_error: "Category must not be empty",
     }).positive("Category must not be empty"),
-    description: z.string(),
+    description: z.string().max(300, {message: "Max Character is 300!"}),
     sell_price: z.number({
         required_error: "Product price must no be empty",
     }).int(),
@@ -61,7 +61,7 @@ export const CategoryValidation = z.object({
     business_profile_id: z.number(),
     category_name: z.string().nonempty("Product name must not be empty"),
     
-    description: z.string(),
+    description: z.string().max(300, {message: "Max Character is 300!"}),
     
     is_active: z.boolean()
 })
