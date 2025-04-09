@@ -387,6 +387,18 @@ export type Database = {
           product_count: number
         }[]
       }
+      get_categories_with_product_count2: {
+        Args: { businessprofileid: number }
+        Returns: {
+          id: number
+          category_name: string
+          is_active: boolean
+          created_at: string
+          business_profile_id: number
+          description: string
+          product_count: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

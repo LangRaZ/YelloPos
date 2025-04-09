@@ -140,7 +140,7 @@ export async function createProduct(product: ProductMutationImage) : Promise<Res
         quantity : product.quantity,
         is_active: product.is_active,
         last_image_update: `${unixTimestamp}`,
-        business_profile_id: (await supabase.auth.getUser()).data.user?.user_metadata.business_profile_id
+        business_profile_id: await getUserBusinessProfileId()
     }
 
 
@@ -185,7 +185,7 @@ export async function updateProduct(id: number, product: ProductMutationImage, o
         quantity : product.quantity,
         is_active: product.is_active,
         last_image_update: `${unixTimestamp}`,
-        business_profile_id: (await supabase.auth.getUser()).data.user?.user_metadata.business_profile_id
+        business_profile_id: await getUserBusinessProfileId()
     }
 
     const supabaseImagePath = `product-id${id}${unixTimestamp}.${product.product_image.type.split("/").pop()}`
@@ -278,12 +278,15 @@ export async function updateUser(id: string, user: UserMutation) : Promise<Respo
 }
 
 export async function getCategories(){
-    const categories = await supabase.from('Category').select().order('created_at', {ascending: false})
+    const categories = await supabase.from('Category').select().eq('business_profile_id', await getUserBusinessProfileId()).order('created_at', {ascending: false})
     return categories
 }
 
 export async function getCategoriesWithProductsCount(){
-    const categories = await supabase.rpc("get_categories_with_product_count")
+    const test = await getUserBusinessProfileId()
+    console.log(test)
+    const categories = await supabase.rpc("get_categories_with_product_count2", { businessprofileid : test })
+    console.log(categories)
     return categories
 }
 
@@ -349,7 +352,7 @@ export async function updateCategory(id: number, Category: CategoryMutation) : P
         return {status: false, code: 500, message: check.data?.category_name + " already exists"};
     }
 
-    Category.business_profile_id = (await supabase.auth.getUser()).data.user?.user_metadata.business_profile_id
+    Category.business_profile_id = await getUserBusinessProfileId()
 
     try {
         const res = await supabase.from("Category").update(Category).eq("id", id)
@@ -373,8 +376,7 @@ export async function createCategory(Category: CategoryMutation) : Promise<Respo
         return {status: false, code: 500, message: check.data?.category_name + " already exists"};
     }
 
-    Category.business_profile_id = (await supabase.auth.getUser()).data.user?.user_metadata.business_profile_id
-
+    Category.business_profile_id = await getUserBusinessProfileId()
     try {
         const res = await supabase.from("Category").insert(Category)
         if (!res){
