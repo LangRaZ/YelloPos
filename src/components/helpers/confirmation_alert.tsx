@@ -18,6 +18,7 @@ import { OrderMutation, Response } from "@/interface";
 import { useState } from "react";
 import { ButtonLoading } from "./button_loading";
 
+
 /**
  * ConfirmationAlert - A component that asks for confirmation before executing a
  * function, display a success message afterwards
@@ -58,7 +59,7 @@ export default function ConfirmationAlert ({
   warningMessage: string;
   successMessage: string;
   successDescription: string;
-  variant: "Delete" | "Confirm";
+  variant: "Delete" | "Confirm" | "Cancel";
   disabled?: boolean
   
 }) {
@@ -74,6 +75,12 @@ export default function ConfirmationAlert ({
       {variant === "Confirm" && (
       <AlertDialogTrigger className="w-full bg-primary hover:bg-primary/90 rounded-md h-9 text-primary-foreground px-2 py-4 text-sm font-medium inline-flex justify-center items-center" role="button" disabled={disabled??false}>
         <p>Confirm Order</p>
+      </AlertDialogTrigger>
+      )}
+      {variant === "Cancel" && (
+      <AlertDialogTrigger 
+      className="w-full relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground [disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 hover:cursor-pointer hover:bg-accent">
+          <p>Cancel Order</p>
       </AlertDialogTrigger>
       )}
       <AlertDialogContent>

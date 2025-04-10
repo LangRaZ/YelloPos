@@ -175,6 +175,7 @@ export type Database = {
           id: number
           total_payment: number | null
           transaction_status: string
+          payment_method: string
         }
         Insert: {
           business_profile_id?: number | null
@@ -182,6 +183,7 @@ export type Database = {
           id?: number
           total_payment?: number | null
           transaction_status?: string
+          payment_method?: string
         }
         Update: {
           business_profile_id?: number | null
@@ -189,6 +191,7 @@ export type Database = {
           id?: number
           total_payment?: number | null
           transaction_status?: string
+          payment_method?: string
         }
         Relationships: [
           {

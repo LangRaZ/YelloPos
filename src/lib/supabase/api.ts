@@ -648,7 +648,7 @@ export async function createOrder(order: OrderMutation) : Promise<Response>{
     try {
         const {data, error} = await supabase.from('Order').insert({
             total_payment: order.total_price,
-            business_profile_id: 2,
+            business_profile_id: order.business_profile_id,
         }).select().single()
 
         if(data && !error){
@@ -669,6 +669,20 @@ export async function createOrder(order: OrderMutation) : Promise<Response>{
         return {status: false, code: 400, message:"Failed to confirm order"}
     }
     catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+export async function cancelOrder(id: string) : Promise<Response>{
+    try {
+        const res = await supabase.from('Order').update({transaction_status: "Cancelled"}).eq('id', Number(id))
+
+        if(!res || res.error){
+            return {status: false, code: 500, message:"Failed to cancel order"}
+        }
+
+        return {status: true, code: res.status, message:"Order has been cancelled!"}
+    } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
     }
 }

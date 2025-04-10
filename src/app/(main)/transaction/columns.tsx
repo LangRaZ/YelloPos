@@ -6,6 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Pencil } from "lucide-react"
 import { Transaction } from "@/interface"
 import { format } from "date-fns"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DotsVerticalIcon } from "@radix-ui/react-icons"
+import ConfirmationAlert from "@/components/helpers/confirmation_alert"
+import { cancelOrder } from "@/lib/supabase/api"
 
 
 
@@ -37,17 +41,41 @@ export const columns: ColumnDef<Transaction>[] = [
 
         return (
           <div className="flex gap-2 justify-center">
-            <Link href={`/transaction/${transaction.id}/edit`}>
-              <Button 
-                variant="outline"
-                size="sm"
-                onClick={() => console.log("Edit", transaction.id)}
-                className="flex items-center gap-1"
-              >
-                <Pencil className="w-4 h-4" />
-              </Button>
-            </Link>
-            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="p-4 w-8 h-7">
+                  <DotsVerticalIcon></DotsVerticalIcon>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-30">
+                <DropdownMenuGroup>
+                  {transaction?.transaction_status === "Completed" || transaction?.transaction_status === "Cancelled" && (
+                    <DropdownMenuItem className="hover:cursor-pointer" asChild>
+                      <Link href={`/transaction/view`}>
+                        View Order
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  {(transaction?.transaction_status === "Pending" && 
+                    <DropdownMenuItem className="hover:cursor-pointer" asChild>
+                      <Link href={`/transaction/edit`}>
+                        Process Order
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  {transaction?.transaction_status === "Pending" && (
+                    <ConfirmationAlert
+                      id={transaction.id.toString()}
+                      EditAction={cancelOrder}
+                      warningMessage="This action cannot be undone. This order will be cancelled permanently"
+                      successMessage="Cancellation success!"
+                      successDescription="Order has been cancelled"
+                      variant="Cancel"
+                    />
+                  )}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         );
       },

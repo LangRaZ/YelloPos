@@ -16,28 +16,28 @@ import ConfirmationAlert from "@/components/helpers/confirmation_alert";
 import Link from "next/link";
 import { getProducts, createOrder, getCategoriesWithProductsCount } from "@/lib/supabase/api"
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useEffect, useState } from "react";
-import { Category, OrderDetailTemporary, Product, Response } from "@/interface";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { Category, OrderDetailTemporary, Product } from "@/interface";
+import { getUserBusinessProfileId } from "@/lib/supabase/api_server";
 
 
 export default function OrderMenuPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [business_profile_id, setBPID] = useState<number>(0)
   const [productQuantities, setProductQuantities] = useState<{[key: number]: number}>({});
   const [loading, setLoading] = useState(true);
-  const router = useRouter()
 
   useEffect(()=>{
     const init = async () =>{
       const { data: categories } = await getCategoriesWithProductsCount();
       const { data: products } = await getProducts();
+      const bpid = await getUserBusinessProfileId();
 
       setProducts(products ?? [])
       setCategories(categories ?? [])
+      setBPID(bpid)
 
       const initialQuantities: {[key: number]: number} = {};
       products?.forEach((product)=>{
@@ -189,7 +189,7 @@ export default function OrderMenuPage() {
               <ConfirmationAlert 
                 order={{
                   OrderDetail: orderDetails,
-                  business_profile_id: 2,
+                  business_profile_id: business_profile_id,
                   total_price: totalAmount
                 }}
                 OrderAction={createOrder}
@@ -202,7 +202,7 @@ export default function OrderMenuPage() {
               <ConfirmationAlert 
                 order={{
                   OrderDetail: orderDetails,
-                  business_profile_id: 2,
+                  business_profile_id: business_profile_id,
                   total_price: totalAmount
                 }}
                 OrderAction={createOrder}
