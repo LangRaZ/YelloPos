@@ -113,3 +113,33 @@ export const FirstLoginValidation = z.object({
     last_profile_update: z.string(),
     last_qr_update: z.string()
 })
+
+export const TaxFirstLoginValidation = z
+  .object({
+    id: z.number(),
+    business_profile_id: z.number(),
+    is_pph: z.boolean(),
+    is_ppn: z.boolean(),
+    pph_type: z.string().nonempty("Required PPH Type"),
+    pph_percentage: z.number().min(0),
+    ppn_percentage: z.number().min(0),
+    monthly_bruto: z.number().min(0),
+    yearly_bruto: z.number().min(0),
+//     tax_id_number: z
+//       .string()
+//       .nonempty("NPWP tidak boleh kosong")
+//       .min(15, { message: "Format NPWP tidak valid" }),
+
+//     effective_date: z
+//       .string()
+//       .nonempty("Tanggal mulai berlaku wajib diisi"),
+
+//   })
+//   .refine((data) => {
+//     if (data.tax_type === "PPH_FINAL_05" && data.tax_rate !== 0.5) return false;
+//     if (data.tax_type === "PPH_FINAL_1" && data.tax_rate !== 1) return false;
+//     return true;
+//   }, {
+//     message: "Tarif pajak tidak sesuai dengan jenis pajak",
+//     path: ["tax_rate"],
+  });

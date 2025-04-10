@@ -36,3 +36,22 @@ export async function getUserBusinessProfileId(){
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" }
     }
 }
+
+//Tax First Login
+export async function updateAuthTax(firstTaxState: boolean) : Promise<Response>{
+    const supabaseServer = await createClient()
+    try {
+        const {data, error} = await supabaseServer.auth.updateUser({
+            data:{
+                first_setup_tax: firstTaxState,
+                
+            }
+        })
+        if(!error){
+            return { status: true, code: 200, message:"Tax updated successfully" }
+        }
+        return { status: false, code: 500, message: error.message }
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" }
+    }
+}
