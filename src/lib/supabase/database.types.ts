@@ -399,6 +399,10 @@ export type Database = {
           product_count: number
         }[]
       }
+      update_product_stock: {
+        Args: { orderquantity: number; orderproductid: number }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
