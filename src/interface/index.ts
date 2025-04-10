@@ -121,6 +121,7 @@ export interface AuthOptData{
     name: string
     phone_number: string
     first_login:boolean
+    first_setup_tax:boolean
 }
 
 export interface Auth {
@@ -210,8 +211,15 @@ export interface BusinessProfileImage{
 
 
 export interface BusinessProfileResponse extends Response{
-    data: BusinessProfileMutation | null
-    
+    data: BusinessProfileMutation | null    
+}
+
+//Tax
+
+export interface TaxMutation{
+    id: number
+    pph_percentage: number | null
+    pph_type: string | null
 }
 
 export interface SidebarParam {
