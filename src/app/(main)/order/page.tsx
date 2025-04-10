@@ -139,6 +139,7 @@ export default function OrderMenuPage() {
                             className="flex-none rounded-full" 
                             size={"icon"}
                             onClick={()=> increaseQuantity(product.id)}
+                            disabled={productQuantities[product.id] == product.quantity}
                           ><Plus /></Button>
                         </CardFooter>
                       </Card>
