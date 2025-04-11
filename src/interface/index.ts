@@ -100,10 +100,18 @@ export interface TransactionDetail{
 
 export interface Transaction extends TransactionMutation{
     id: number,
+    completed_time: string | null
+    processed_by_account_id: string | null
+    processed_time: string | null
+    payment_method: string
 }
 
 export interface TransactionsResponse extends Response{
     data: Transaction[] | null
+}
+
+export interface TransactionResponse extends Response{
+    data: Transaction | null
 }
 
 //interface for roles

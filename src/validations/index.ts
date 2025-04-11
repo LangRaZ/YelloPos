@@ -48,6 +48,10 @@ export const ProductValidation = z.object({
     business_profile_id: z.number()
 })
 
+export const TransactionValidation = z.object({
+    payment_method: z.string().nonempty("Choose a payment method!")
+})
+
 export const UserValidation = z.object({
     name: z.string().nonempty("Name must not be empty"),
     email: z.string().nonempty("Email must not be empty").email("Invalid email address"),

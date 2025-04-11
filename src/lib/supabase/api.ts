@@ -1,5 +1,5 @@
 import { createClientBrowser } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TransactionResponse } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
 import { generateCode } from "../utils"
 import { updateAuthUser, getUserBusinessProfileId, updateAuthTax} from "./api_server"
@@ -432,9 +432,11 @@ export async function deleteCategory(id: string) : Promise<Response>{
 }
 
 //Transaction
-export async function updateTransaction(id: number, Transaction: TransactionMutation) : Promise<Response>{
+export async function completeTransaction(id: number, paymentMethod: string) : Promise<Response>{
+    const currentTimestamptz = new Date().toISOString();
+
     try {
-        const res = await supabase.from("Order").update(Transaction).eq("id", id)
+        const res = await supabase.from("Order").update({'payment_method': paymentMethod, 'completed_time': currentTimestamptz, transaction_status: "Completed"}).eq("id", id)
         if (!res){
             return {status: false, code: 500, message: "Failed to update transaction"};
         }
@@ -457,8 +459,22 @@ export async function getTransactions() : Promise<TransactionsResponse>{
         
     } catch (error) {
         return { 
-            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
-            data:null
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", data:null
+        };
+    }
+}
+
+export async function getTransactionById(id: number) : Promise<TransactionResponse>{
+    try {
+        const res = await supabase.from('Order').select('*').eq('id', id).single()
+        if(res.error){
+            return {status:false, code:500, message: res.statusText, data: res.data};
+        }
+
+       return { status: true, code: 200, message: res.statusText, data: res.data }
+    } catch (error) {
+        return { 
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", data:null
         };
     }
 }

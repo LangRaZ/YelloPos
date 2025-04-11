@@ -171,27 +171,36 @@ export type Database = {
       Order: {
         Row: {
           business_profile_id: number | null
+          completed_time: string | null
           created_at: string
           id: number
           total_payment: number | null
           transaction_status: string
+          processed_by_account_id: string | null
+          processed_time: string | null
           payment_method: string
         }
         Insert: {
           business_profile_id?: number | null
+          completed_time?: string | null
           created_at?: string
           id?: number
+          payment_method?: string
+          processed_by_account_id?: string | null
+          processed_time?: string | null
           total_payment?: number | null
           transaction_status?: string
-          payment_method?: string
         }
         Update: {
           business_profile_id?: number | null
+          completed_time?: string | null
           created_at?: string
           id?: number
+          payment_method?: string
+          processed_by_account_id?: string | null
+          processed_time?: string | null
           total_payment?: number | null
           transaction_status?: string
-          payment_method?: string
         }
         Relationships: [
           {
@@ -199,6 +208,13 @@ export type Database = {
             columns: ["business_profile_id"]
             isOneToOne: false
             referencedRelation: "BusinessProfile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Order_processed_by_account_id_fkey"
+            columns: ["processed_by_account_id"]
+            isOneToOne: false
+            referencedRelation: "Accounts"
             referencedColumns: ["id"]
           },
         ]

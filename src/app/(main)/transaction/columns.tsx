@@ -49,7 +49,7 @@ export const columns: ColumnDef<Transaction>[] = [
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-30">
                 <DropdownMenuGroup>
-                  {transaction?.transaction_status === "Completed" || transaction?.transaction_status === "Cancelled" && (
+                  {(transaction?.transaction_status.includes('Completed') || transaction?.transaction_status.includes('Cancelled')) && (
                     <DropdownMenuItem className="hover:cursor-pointer" asChild>
                       <Link href={`/transaction/view`}>
                         View Order
@@ -58,7 +58,7 @@ export const columns: ColumnDef<Transaction>[] = [
                   )}
                   {(transaction?.transaction_status === "Pending" && 
                     <DropdownMenuItem className="hover:cursor-pointer" asChild>
-                      <Link href={`/transaction/edit`}>
+                      <Link href={`/transaction/${transaction.id}/edit`}>
                         Process Order
                       </Link>
                     </DropdownMenuItem>

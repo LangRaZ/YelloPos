@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { ProductValidation } from "@/validations";
+import { TransactionValidation } from "@/validations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,68 +16,49 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ProductMutation, Category } from "@/interface";
-import { createProduct, updateProduct } from "@/lib/supabase/api";
+import { Transaction } from "@/interface";
+import { completeTransaction } from "@/lib/supabase/api";
 
 export default function TransactionForm(
-    { id, data, categories, isOnPage = false, closeDialog } :
-    { id?: number, data?: ProductMutation|null, categories: Category[]|null, isOnPage?: boolean, closeDialog?:()=>void }
+    { id, data, isOnPage = false, closeDialog } :
+    { id?: number, data?: Transaction |null, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
     const [ error, setError ] = useState<string|null>(null);
     const [open, setOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
 
     //Declare form and form data
     const form = useForm<z.infer<typeof TransactionValidation>>({
-        resolver: zodResolver(ProductValidation),
+        resolver: zodResolver(TransactionValidation),
         defaultValues:{
-            product_name: data?.product_name??"",
-            product_category_id: data?.product_category_id??Number(),
-            description: data?.description??"",
-            sell_price: data?.sell_price??0,
-            quantity: data?.quantity??0,
-            is_active: true,
+            payment_method: data?.payment_method??"",
         }
     })
     
     //Declare on submit function for submit handler
-    function onSubmit(values: z.infer<typeof ProductValidation>){
+    function onSubmit(values: z.infer<typeof TransactionValidation>){
         setError(null);
         form.clearErrors();
+        setIsLoading(true);
         //Handle update or create object decision on form submit handler
         if(id){
-            updateProduct(id, values).then(res=>{
+            completeTransaction(id, values.payment_method).then(res=>{
                 if(res && res.status){
                     if(!isOnPage && closeDialog){
                         closeDialog();
                     }
-                    toast.success("Product updated!", { description:"Product has been updated successfully!" })
+                    toast.success("Transaction completed!", { description:"Transcation has been completed successfully!" })
                     if(isOnPage){
-                        router.push("/product");
+                        router.push("/transaction");
                     } else {
                         router.refresh();
+                        setIsLoading(false);
                     }
                 } else {
                     setError(res?.message??"Unexpected error occurred! Please reload the page!");
-                    form.reset();         
-                }
-            })
-        }else {
-            //If id is null then its create object
-            createProduct(values).then(res=>{
-                if(res && res.status){
-                    if(!isOnPage && closeDialog){
-                        closeDialog();
-                    }
-                    toast.success("Product added!", { description:"Product has been added successfully!" })
-                    if(isOnPage){
-                        router.push("/product");
-                    } else {
-                        router.refresh();
-                    }
-                } else {
-                    setError(res?.message??"Unexpected error occurred! Please reload the page!");
-                    form.reset();         
+                    form.reset();
+                    setIsLoading(false);
                 }
             })
         }
@@ -91,135 +72,12 @@ export default function TransactionForm(
                 {/* Form data field starts here */}
                 <FormField
                     control={form.control}
-                    name="product_name"
+                    name="payment_method"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Product name</FormLabel>
+                            <FormLabel>Payment Method</FormLabel>
                             <FormControl>
-                                <Input placeholder="Enter product name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                {/* Form data field ends here */}
-                { categories && 
-                    <FormField
-                        control={form.control}
-                        name="product_category_id"
-                        render={({ field }) => {
-                            return <FormItem>
-                                <div className="flex flex-col space-y-2">
-                                    <FormLabel>Product category</FormLabel>
-                                    <Popover open={open} onOpenChange={setOpen}>
-                                        <PopoverTrigger asChild>
-                                        <FormControl className="grow">
-                                            <Button
-                                            variant="outline"
-                                                role="combobox"
-                                                className={cn(
-                                                    "w-[200px] justify-between",
-                                                    !field.value && "text-muted-foreground"
-                                                )}
-                                            >
-                                            {field.value
-                                                ? (categories??[]).find(
-                                                    (category) => category.id === field.value
-                                                )?.category_name
-                                                : "Select category"}
-                                                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                            </Button>
-                                        </FormControl>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-[200px] p-0">
-                                        <Command>
-                                            <CommandInput
-                                                placeholder="Search category..."
-                                                className="h-9"
-                                            />
-                                            <CommandList>
-                                                <CommandEmpty>No categories found!</CommandEmpty>
-                                                    <CommandGroup>
-                                                        {(categories??[]).map((category) => {
-                                                        return <CommandItem
-                                                            value={category.category_name??""}
-                                                            key={category.id}
-                                                            onSelect={(currentValue) => {
-                                                                currentValue = form.getValues("product_category_id").toString()
-                                                                currentValue === category.id.toString() ?
-                                                                (
-                                                                    form.setValue("product_category_id", Number())
-                                                                ):(
-                                                                    form.setValue("product_category_id", category.id)
-                                                                )
-                                                                form.clearErrors('product_category_id')
-                                                                setOpen(false)
-                                                            }}
-                                                        >
-                                                            {category.category_name}
-                                                            <CheckIcon
-                                                            className={cn(
-                                                                "ml-auto h-4 w-4",
-                                                                category.id === field.value
-                                                                ? "opacity-100"
-                                                                : "opacity-0"
-                                                            )}
-                                                            />
-                                                        </CommandItem>
-                                                        })}
-                                                    </CommandGroup>
-                                            </CommandList>
-                                        </Command>
-                                        </PopoverContent>
-                                    </Popover>
-                                </div>
-                                <FormMessage />
-                            </FormItem>
-                        }}
-                    />
-                }
-                <FormField
-                    control={form.control}
-                    name="sell_price"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Product price</FormLabel>
-                            <FormControl>
-                                <Input 
-                                placeholder="Enter product price" {...field} 
-                                value={field.value || 0}
-                                onChange={(e)=> field.onChange(parseFloat(e.target.value) || 0)}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="quantity"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Product quantity</FormLabel>
-                            <FormControl>
-                                <Input
-                                placeholder="Enter product quantity" {...field}
-                                value={field.value || 0}
-                                onChange={(e)=> field.onChange(parseFloat(e.target.value) || 0)}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Product description</FormLabel>
-                            <FormControl>
-                                <Textarea placeholder="Enter product description" {...field}/>
+                                <Input placeholder="Enter transaction payment method" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
