@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { FirstLoginValidation, TaxFirstLoginValidation } from "@/validations";
-import z from "zod"
+import z, { boolean } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
@@ -13,25 +13,28 @@ import { createBusiness, createTaxProfile } from "@/lib/supabase/api";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { ButtonLoading } from "@/components/helpers/button_loading";
+import { TaxMutation } from "@/interface";
 
 
-export default function TaxFirstLoginForm() {
+export default function TaxFirstLoginForm(
+    { isOnPage = false, closeDialog } :
+    { isOnPage?: boolean, closeDialog?:()=>void }
+) {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
   
     const form = useForm<z.infer<typeof TaxFirstLoginValidation>>({
       resolver: zodResolver(TaxFirstLoginValidation),
       defaultValues: {
-        id: 0,
-        business_profile_id: 0,
+        business_profile_id: 2,
         is_pph: true,
         is_ppn: false,
-        pph_type: "PPH_FINAL_05",
+        pph_type: "",
         pph_percentage: 0.5,
         ppn_percentage: 0,
         monthly_bruto: 0,
         yearly_bruto: 0,
-      },
+      }
     });
   
     function handleSubmitTax(values: z.infer<typeof TaxFirstLoginValidation>) {
@@ -40,7 +43,7 @@ export default function TaxFirstLoginForm() {
   
       createTaxProfile(values).then((res) => {
         if (res.status) {
-          router.push("/");
+          router.push("/tax");
           toast.success("Tax Info Saved!", {
             description: "Your tax settings have been saved successfully.",
           });
@@ -64,16 +67,18 @@ export default function TaxFirstLoginForm() {
             name="pph_type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Jenis PPh</FormLabel>
+                <FormLabel>PPH type</FormLabel>
                 <FormControl>
                   <select
                     {...field}
                     className="w-full border border-gray-300 rounded p-2"
                     onChange={(e) => {
-                      field.onChange(e);
-                      form.setValue("pph_percentage", e.target.value === "PPH_FINAL_05" ? 0.5 : 1);
+                      const value = e.target.value;
+                      field.onChange(value); // must pass string
+                      form.setValue("pph_percentage", value === "PPH_FINAL_05" ? 0.5 : 1);
                     }}
                   >
+                    <option></option>
                     <option value="PPH_FINAL_05">PPh Final 0.5%</option>
                     <option value="PPH_FINAL_1">PPh Final 1%</option>
                   </select>
@@ -83,7 +88,7 @@ export default function TaxFirstLoginForm() {
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="pph_percentage"
             render={({ field }) => (
@@ -167,8 +172,8 @@ export default function TaxFirstLoginForm() {
                   Aktifkan PPN
                 </label>
               )}
-            />
-          </div>
+            /> */}
+          {/* </div> */}
 
           <Button
             type="submit"

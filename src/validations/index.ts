@@ -116,7 +116,6 @@ export const FirstLoginValidation = z.object({
 
 export const TaxFirstLoginValidation = z
   .object({
-    id: z.number(),
     business_profile_id: z.number(),
     is_pph: z.boolean(),
     is_ppn: z.boolean(),
