@@ -1,5 +1,5 @@
 import { createClientBrowser } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TransactionResponse } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
 import { generateCode } from "../utils"
 import { updateAuthUser, getUserBusinessProfileId, updateAuthTax} from "./api_server"
@@ -715,6 +715,7 @@ export async function cancelOrder(id: string) : Promise<Response>{
 //Tax
 export async function createTaxProfile(tax: TaxMutation) : Promise<Response>{
     try {
+        tax.business_profile_id = await getUserBusinessProfileId();
         const res = await supabase.from("Tax Module").insert(tax)
         
         if (res.error){
@@ -730,6 +731,22 @@ export async function createTaxProfile(tax: TaxMutation) : Promise<Response>{
         return { status:true, code: res.status, message: "Tax profile has been completed!" };
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+export async function getTaxProfile(id: number) : Promise<TaxProfileResponse>{
+    try {
+        const tax_id = await supabase.from("Tax Module").select("*").eq("id", id).single()
+        if(!tax_id.data){
+            return {status:false, code:200, message: tax_id.statusText, data: tax_id.data};
+        }
+        return {status:true, code:200, message: tax_id.statusText, data : tax_id.data};
+
+    } catch (error) {
+        return {
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        }
     }
 }
 

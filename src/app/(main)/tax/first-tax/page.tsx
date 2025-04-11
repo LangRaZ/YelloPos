@@ -1,9 +1,10 @@
 import TaxFirstLoginForm from "./ui/first_login_tax";
 
-export default function FirstTaxPage(){
+export default async function FirstTaxPage(){
+
     return(
         <main>
-            <TaxFirstLoginForm></TaxFirstLoginForm>
+            <TaxFirstLoginForm/>
         </main>
     )
 }

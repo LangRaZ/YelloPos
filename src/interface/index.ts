@@ -225,9 +225,18 @@ export interface BusinessProfileResponse extends Response{
 //Tax
 
 export interface TaxMutation{
-    id: number
+    business_profile_id: number | null
+    is_pph: boolean | null
+    is_ppn: boolean | null
+    monthly_bruto: number | null
     pph_percentage: number | null
     pph_type: string | null
+    ppn_percentage: number | null
+    yearly_bruto: number | null
+}
+
+export interface TaxProfileResponse extends Response{
+    data: TaxMutation | null
 }
 
 export interface SidebarParam {
