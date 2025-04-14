@@ -418,6 +418,39 @@ export type Database = {
           product_count: number
         }[]
       }
+      get_profit_yearly: {
+        Args: { businessprofileid: number }
+        Returns: {
+          month: string
+          sum: number
+        }[]
+      }
+      get_order_count_completed_yearly: {
+        Args: { businessprofileid: number }
+        Returns: {
+          month: string
+          count: number
+        }[]
+      }
+      get_order_count_yearly: {
+        Args: { businessprofileid: number }
+        Returns: {
+          month: string
+          count: number
+        }[]
+      }
+      get_order_count: {
+        Args: { businessprofileid: number }
+        Returns: number
+      }
+      get_order_count_completed: {
+        Args: { businessprofileid: number }
+        Returns: number
+      }
+      get_profit: {
+        Args: { businessprofileid: number }
+        Returns: number
+      }
       update_product_stock: {
         Args: { orderquantity: number; orderproductid: number }
         Returns: undefined
