@@ -51,8 +51,8 @@ export const columns: ColumnDef<Transaction>[] = [
                 <DropdownMenuGroup>
                   {(transaction?.transaction_status.includes('Completed') || transaction?.transaction_status.includes('Cancelled')) && (
                     <DropdownMenuItem className="hover:cursor-pointer" asChild>
-                      <Link href={`/transaction/view`}>
-                        View Order
+                      <Link href={`/transaction/${transaction.id}/view`}>
+                        View Detail
                       </Link>
                     </DropdownMenuItem>
                   )}

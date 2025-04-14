@@ -38,6 +38,10 @@ export interface Product extends ProductMutation{
     need_quantity?: boolean | null
 }
 
+export interface ProductDetail{
+    product_name: string | null
+}
+
 export interface ProductResponse extends Response{
     data: Product | null
 }
@@ -181,6 +185,15 @@ export interface OrderMutation{
     OrderDetail: OrderDetailTemporary[]
     total_price: number
     business_profile_id: number
+}
+
+export interface OrderDetail extends OrderDetailMutation{
+    id: number
+    product_detail: ProductDetail
+}
+
+export interface OrderDetailsResponse extends Response{
+    data: OrderDetail[] | null
 }
 
 //Business Profile

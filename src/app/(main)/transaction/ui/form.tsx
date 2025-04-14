@@ -8,11 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CheckIcon } from "lucide-react";
-import { CaretSortIcon } from "@radix-ui/react-icons"
-import { cn } from "@/lib/utils";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -74,17 +70,46 @@ export default function TransactionForm(
                     control={form.control}
                     name="payment_method"
                     render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Payment Method</FormLabel>
+                        <FormItem className="space-y-3">
+                            <FormLabel className="text-base">Payment Method</FormLabel>
                             <FormControl>
-                                <Input placeholder="Enter transaction payment method" {...field} />
+                                <RadioGroup
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                className="flex flex-col space-y-1"
+                                >
+                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                    <FormControl>
+                                        <RadioGroupItem value="Cash" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal text-base hover:cursor-pointer">
+                                        Cash
+                                    </FormLabel>
+                                </FormItem>
+                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                    <FormControl>
+                                    <RadioGroupItem value="QR" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal text-base hover:cursor-pointer">
+                                        QR
+                                    </FormLabel>
+                                </FormItem>
+                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                    <FormControl>
+                                    <RadioGroupItem value="Bank Transfer" />
+                                    </FormControl>
+                                    <FormLabel className="font-normal text-base hover:cursor-pointer">
+                                        Bank Transfer
+                                    </FormLabel>
+                                </FormItem>
+                                </RadioGroup>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
                 <div className="flex justify-end">
-                    <Button type="submit" className="mt-5">Submit</Button>
+                    <Button type="submit" className="mt-5">Process</Button>
                 </div>
             </form>
         </Form>

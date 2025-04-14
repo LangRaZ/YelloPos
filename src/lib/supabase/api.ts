@@ -1,5 +1,5 @@
 import { createClientBrowser } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
 import { generateCode } from "../utils"
 import { updateAuthUser, getUserBusinessProfileId, updateAuthTax} from "./api_server"
@@ -472,6 +472,21 @@ export async function getTransactionById(id: number) : Promise<TransactionRespon
         }
 
        return { status: true, code: 200, message: res.statusText, data: res.data }
+    } catch (error) {
+        return { 
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", data:null
+        };
+    }
+}
+
+export async function getOrderDetailsbyOrderId(orderId: number) : Promise<OrderDetailsResponse>{
+    try {
+        const res = await supabase.from('OrderDetail').select('*, product_detail:product_id(product_name)').eq('order_id', orderId)
+        
+        if(res.error){
+            return {status:false, code:500, message: res.statusText, data: res.data};
+        }
+        return { status: true, code: 200, message: res.statusText, data: res.data }
     } catch (error) {
         return { 
             status:false, code: 500, message: String(error)??"Unexpected error occurred", data:null

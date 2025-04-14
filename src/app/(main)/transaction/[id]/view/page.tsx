@@ -9,9 +9,10 @@ import TransactionForm from "../../ui/form";
 import { useEffect, useState } from "react";
 import { OrderDetail, Transaction } from "@/interface";
 import { Separator } from "@/components/ui/separator";
+import { StringToDateTime } from "@/lib/utils";
 
 
-export default function TransactionEditPage({ params } : { params:{ id:string } }){
+export default function TransactionViewPage({ params } : { params:{ id:string } }){
     const [loading, setLoading] = useState(true);
     const [id, setId] = useState<number>()
     const [Transaction, setTransaction] = useState<Transaction|null>(null);
@@ -23,10 +24,9 @@ export default function TransactionEditPage({ params } : { params:{ id:string } 
             const param = await params;
             const id = Number(param.id)
             setId(id)
+
             const {data: transaction} = await getTransactionById(id)
-            console.log(transaction)
             setTransaction(transaction??null)
-            console.log(Transaction)
 
             const orderId = transaction?.id
             const orderDetails = await getOrderDetailsbyOrderId(orderId??0)
@@ -49,7 +49,7 @@ export default function TransactionEditPage({ params } : { params:{ id:string } 
         <>
             <div className="flex items-center mb-5">
                 <BackButton />
-                <h2 className="text-2xl font-semibold">Process Transaction - TR{Transaction?.id}</h2>
+                <h2 className="text-2xl font-semibold">View Transaction - TR{Transaction?.id}</h2>
             </div>
             <Card>
                 <CardHeader>
@@ -57,7 +57,8 @@ export default function TransactionEditPage({ params } : { params:{ id:string } 
                 </CardHeader>
                 <CardContent>
                     <div>
-                        <p>Transaction Status : <span className="font-medium">{Transaction?.transaction_status}</span></p>
+                        <p className="mb-2">Transaction Status : <span className="font-medium">{Transaction?.transaction_status}</span></p>
+                        <p>Completed Time : <span className="font-medium">{StringToDateTime(Transaction?.completed_time??null)}</span></p>
                         <Separator className="mt-4 mb-4"/>
                         <div className="flex justify-between items-center">
                             <div className="flex flex-row items-center">
@@ -85,9 +86,9 @@ export default function TransactionEditPage({ params } : { params:{ id:string } 
                             </div>
                         )}
                         <Separator className="mt-4 mb-4"/>
-                        <p className="mb-4">Total Payment : <span className="font-medium">Rp{Transaction?.total_payment?.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></p>
+                        <p className="mb-2">Total Payment : <span className="font-medium">Rp{Transaction?.total_payment?.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></p>
+                        <p className="">Payment Method : <span className="font-medium">{Transaction?.payment_method}</span></p>
                     </div>
-                    <TransactionForm id={id} data={Transaction} isOnPage/>
                 </CardContent>
             </Card>
         </>
