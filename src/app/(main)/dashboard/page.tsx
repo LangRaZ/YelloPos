@@ -17,8 +17,21 @@ import {
 } from "@/components/ui/tabs"
 import  DataTable  from "@/components/helpers/data_table"
 // import { columns } from "./columns"
-import { Barchart } from "./bar_chart"
-export default function Dashboard() {
+import { BarOrderCompleted, BarOrderCount, BarProfit, getOrder, getOrderCompleted, getProfit } from "@/lib/supabase/api"
+import BarchartOrder from "./bar_chart_order"
+import { getUserBusinessProfileId } from "@/lib/supabase/api_server"
+import BarchartProfit from "./bar_chart_profit"
+import BarchartOrderCompleted from "./bar_chart_completed"
+
+
+export default async function Dashboard() {
+  const Profit =  await getProfit()
+  const Order = await getOrder()
+  const completedOrder = await getOrderCompleted()
+
+  const dataOrder = await BarOrderCount()
+  const dataOrderCompleted = await BarOrderCompleted()
+  const dataProfit = await BarProfit()
   return (
     <>
       <div>
@@ -27,11 +40,11 @@ export default function Dashboard() {
           <div className="rounded-sm flex justify-evenly items-center">
               <Card>
                 <CardHeader className="items-center">
-                  <CardTitle >Penghasilan</CardTitle>
+                  <CardTitle >Profit</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <div className="flex items-center justify-center relative">
-                      <p className="text-4xl font-bold mb-4">Rp 5000000</p>
+                      <p className="text-4xl font-bold mb-4">Rp {Profit}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -41,24 +54,26 @@ export default function Dashboard() {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <div className="flex items-center justify-center relative">
-                      <p className="text-4xl font-bold mb-4">300</p>
+                      <p className="text-4xl font-bold mb-4">{Order}</p>
                   </div>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="items-center">
-                  <CardTitle>Order terbayar</CardTitle>
+                  <CardTitle>Order Completed</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <div className="flex items-center justify-center relative">
-                      <p className="text-4xl font-bold mb-4">280</p>
+                      <p className="text-4xl font-bold mb-4">{completedOrder}</p>
                   </div>
                 </CardContent>
               </Card>
           </div>
           
       </div>
-      <Barchart></Barchart>
+      <BarchartOrder data={dataOrder}/>
+      <BarchartProfit data={dataProfit}/>
+      <BarchartOrderCompleted data={dataOrderCompleted}/>
     </>
     
   )

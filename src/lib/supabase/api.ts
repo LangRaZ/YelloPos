@@ -789,3 +789,77 @@ export async function OrderValidation(order: OrderMutation) : Promise<Response>{
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
     }
 }
+
+export async function getProfit(){
+    try { 
+        let { data, error } = await supabase.rpc('get_profit', {
+            businessprofileid: await getUserBusinessProfileId()
+        })
+        if (error) console.error(error)
+         return data
+    }catch(error){
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+
+}
+
+export async function getOrder(){
+    try {
+        let { data, error } = await supabase.rpc('get_order_count', {
+            businessprofileid: await getUserBusinessProfileId()
+        })
+        if(error) console.error(error)
+        return data
+        }catch(error){
+            return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+        }
+}
+
+export async function getOrderCompleted(){
+    try{
+        let { data, error } = await supabase.rpc('get_order_count_completed', {
+            businessprofileid: await getUserBusinessProfileId()
+          })
+        if (error) console.error(error)
+        return data
+        }catch(error){
+            return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+        }
+}
+
+export async function BarOrderCount() {
+    const { data, error } = await supabase.rpc("get_order_count_yearly", {
+      businessprofileid: await getUserBusinessProfileId(),
+    })
+  
+    if (error || !data) {
+      console.error("Error:", error)
+      return [] // Ensure that you return an empty array in case of error
+    }
+    return data
+  }
+
+export async function BarOrderCompleted(){
+    const { data, error } = await supabase.rpc("get_order_count_completed_yearly", {
+        businessprofileid: await getUserBusinessProfileId(),
+      })
+    
+      if (error || !data) {
+        console.error("Error:", error)
+        return [] // Ensure that you return an empty array in case of error
+      }
+
+      return data
+}
+
+export async function BarProfit(){
+    const { data, error } = await supabase.rpc("get_profit_yearly", {
+        businessprofileid: await getUserBusinessProfileId(),
+      })
+    
+      if (error || !data) {
+        console.error("Error:", error)
+        return [] // Ensure that you return an empty array in case of error
+      }
+      return data
+}
