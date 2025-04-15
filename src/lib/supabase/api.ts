@@ -240,10 +240,20 @@ export async function checkUniqueProduct(name: string, categoryId: number) : Pro
 }
 
 
-export async function getUser(){
+export async function getUsers(){
     try {
-        const user = await supabase.from('Accounts').select().order('created_at', {ascending: false})
-        return user
+        const bpid = await getUserBusinessProfileId();
+        if(!bpid){
+            return { status:false, code: 500, message: "Failed to get users", data: null };
+        }
+
+        const user = await supabase.from('Accounts').select('*, Role:role_id(role_name)').eq('business_profile_id', bpid).order('created_at', {ascending: false})
+        if(user.error){
+            return { status:false, code: 500, message: "Failed to get users", data: null };
+        }
+        return { 
+            status:true, code: 200, message: user.statusText, data: user.data
+        };
         
     } catch (error) {
         return { 
@@ -256,6 +266,11 @@ export async function getUser(){
 
 export async function createUser(user: UserMutation) : Promise<Response>{
     try {
+        const bpid = await getUserBusinessProfileId();
+        if(!bpid){
+            return { status:false, code: 500, message: "Failed to create user" };
+        }
+        user.business_profile_id = bpid
         const User_res = await supabase.from("Accounts").insert(user)
         if (!User_res){
             return {status: false, code: 500, message: "Failed to create user"};
@@ -295,7 +310,7 @@ export async function getRoles(){
 }
 
 //Get User ID Single
-export async function getusers(id: string) : Promise<UserResponse>{
+export async function getUser(id: string) : Promise<UserResponse>{
     try {
         const user = await supabase.from("Accounts").select("*").eq("id", id).single()
         if(!user.data){
@@ -506,7 +521,8 @@ export async function createAuthUser(user: AuthMutation) : Promise<Response>{
                 phone_number: user.phone_number,
                 first_login: true,
                 first_setup_tax: true,
-
+                role_id: 1,
+                business_profile_id: null
             }
         }
     };

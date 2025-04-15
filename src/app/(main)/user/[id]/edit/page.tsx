@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import BackButton from "@/components/helpers/back_button";
-import { getRoles, getusers} from "@/lib/supabase/api";
+import { getRoles, getUser} from "@/lib/supabase/api";
 import UserForm from "../../ui/form";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
@@ -9,7 +9,7 @@ import { Metadata } from "next";
 export default async function UserEditPage({ params } : { params:{ id:string } }){
     const param = await params;
     const id = param.id
-    const user = await getusers(id)
+    const user = await getUser(id)
     const {data: Roles} = await getRoles()
 
     if(!user.status) notFound();

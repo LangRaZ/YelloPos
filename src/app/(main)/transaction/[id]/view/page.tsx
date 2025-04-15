@@ -82,7 +82,7 @@ export default function TransactionViewPage({ params } : { params:{ id:string } 
                             </div>
                         ):(
                             <div className="text-center text-gray-500 py-8">
-                            Your order is empty
+                            No items
                             </div>
                         )}
                         <Separator className="mt-4 mb-4"/>

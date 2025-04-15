@@ -37,6 +37,7 @@ export default function UserForm(
             email: data?.email??"",
             role_id: data?.role_id??Number(),
             phone_number: data?.phone_number??"",
+            business_profile_id: data?.business_profile_id??0
         }
     })
     

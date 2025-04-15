@@ -58,7 +58,8 @@ export const UserValidation = z.object({
     role_id: z.number({
         required_error: "Role must not be empty",
     }).positive("Role must not be empty"),
-    phone_number:z.string().nonempty("Phone number must not be empty")
+    phone_number:z.string().nonempty("Phone number must not be empty"),
+    business_profile_id: z.number()
 })
 
 export const CategoryValidation = z.object({

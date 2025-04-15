@@ -56,7 +56,7 @@ export interface ProductsResponse extends Response{
 //Interfaces for User
 export interface UserMutation{
     // access_code: string | null
-    // business_profile_id: number | null    
+    business_profile_id: number | null    
     email: string | null
     name: string | null
     role_id: number | null
@@ -134,6 +134,8 @@ export interface AuthOptData{
     phone_number: string
     first_login:boolean
     first_setup_tax:boolean
+    business_profile_id:number|null
+    role_id:number|null
 }
 
 export interface Auth {

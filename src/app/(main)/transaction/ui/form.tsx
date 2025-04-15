@@ -14,6 +14,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Transaction } from "@/interface";
 import { completeTransaction } from "@/lib/supabase/api";
+import { ButtonLoading } from "@/components/helpers/button_loading";
 
 export default function TransactionForm(
     { id, data, isOnPage = false, closeDialog } :
@@ -109,7 +110,11 @@ export default function TransactionForm(
                     )}
                 />
                 <div className="flex justify-end">
-                    <Button type="submit" className="mt-5">Process</Button>
+                    {isLoading ? (
+                        <ButtonLoading />
+                    ):(
+                        <Button type="submit" className="mt-5">Process</Button>
+                    )}
                 </div>
             </form>
         </Form>

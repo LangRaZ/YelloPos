@@ -24,7 +24,7 @@ export const columns: ColumnDef<User>[] = [
     header: "Phone Number",
   },
   {
-    accessorKey: "role_id",
+    accessorKey: "Role.role_name",
     header: "Role",
   },
   
@@ -35,7 +35,7 @@ export const columns: ColumnDef<User>[] = [
       const user = row.original;
 
       return (
-        <div className="flex gap-2">
+        <div className="flex gap-2 justify-center">
           <Link href={`/user/${user.id}/edit`}>
             <Button 
               variant="outline"
