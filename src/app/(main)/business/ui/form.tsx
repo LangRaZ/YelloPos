@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BusinessProfileMutation} from "@/interface";
-import { createCategory, updateBusinessProfile, updateQrProfile } from "@/lib/supabase/api";
+import { createCategory, updateBusinessProfile } from "@/lib/supabase/api";
 
 export default function BusinessProfileForm(
     { id, data, isOnPage = false, closeDialog } :
