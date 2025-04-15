@@ -49,8 +49,6 @@ export default function BusinessProfileForm(
         }
     })
 
-    
-
     //Declare on submit function for submit handler
     function onSubmit(values: z.infer<typeof BusinessProfileValidation>){
         setError(null);
@@ -137,6 +135,7 @@ export default function BusinessProfileForm(
                                 </FormControl>
                                 {preview && (
                                     <div className="mt-2">
+                                        <FormLabel>Preview Business Profile Image</FormLabel>
                                         <img
                                         src={preview}
                                         alt="Product Preview"
@@ -151,59 +150,59 @@ export default function BusinessProfileForm(
                         )}
                     /> 
                 </div>
-
-                <h1>Business Information</h1>
-                <div className="max-w  p-6 bg-white rounded-lg shadow-md">
-                <div className="w-full flex flex-col gap-5">
-                    <div className="w-full xl:grid xl:grid-cols-2 xl:gap-10 flex flex-col gap-5">
-                        <FormField
-                        control={form.control}
-                        name="business_name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Business name</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Enter business profile Name" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-
-                        <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                <Input placeholder="Enter email address" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-
-                    </div>
-                    
-                    <FormField
-                    control={form.control}
-                    name="address"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Business Address</FormLabel>
-                            <FormControl>
-                                <Textarea placeholder="Enter business address" {...field}/>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                    />
-
                 
+                <div className="max-w  p-6 bg-white rounded-lg shadow-md">
+                    <h1 className="text-xl font-bold mb-4">Business Information</h1>
+                    <div className="w-full flex flex-col gap-5">
+                        <div className="w-full xl:grid xl:grid-cols-2 xl:gap-10 flex flex-col gap-5">
+                            <FormField
+                            control={form.control}
+                            name="business_name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Business name</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Enter business profile Name" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+
+                            <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                    <Input placeholder="Enter email address" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+
+                        </div>
+                        
+                        <FormField
+                        control={form.control}
+                        name="address"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Business Address</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="Enter business address" {...field}/>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+
                     
-                    
-                </div>
+                        
+                        
+                    </div>
                 </div>
                 
                 

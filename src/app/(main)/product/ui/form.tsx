@@ -44,6 +44,8 @@ export default function ProductForm(
             business_profile_id: data?.business_profile_id??0
         }
     })
+
+    console.log(data)
     
     function checkDiffFileExtension(imageExt: string): boolean{
         if(!imageExt || imageExt === ""){
@@ -275,7 +277,7 @@ export default function ProductForm(
                             </FormControl>
                             {preview && (
                                 <div className="mt-2">
-                                    <FormLabel>Preview</FormLabel>
+                                    <FormLabel>Preview Product Image</FormLabel>
                                     <img
                                     src={preview}
                                     alt="Product Preview"
