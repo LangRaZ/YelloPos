@@ -22,9 +22,10 @@ import BarchartOrder from "./bar_chart_order"
 import { getUserBusinessProfileId } from "@/lib/supabase/api_server"
 import BarchartProfit from "./bar_chart_profit"
 import BarchartOrderCompleted from "./bar_chart_completed"
+import ChartSwitcher from "./dropdown_barchart"
 
 
-export default async function Dashboard() {
+export default async function Dashboard({ searchParams }: { searchParams: { chart?: string } }) {
   const Profit =  await getProfit()
   const Order = await getOrder()
   const completedOrder = await getOrderCompleted()
@@ -32,6 +33,7 @@ export default async function Dashboard() {
   const dataOrder = await BarOrderCount()
   const dataOrderCompleted = await BarOrderCompleted()
   const dataProfit = await BarProfit()
+  
   return (
     <>
       <div>
@@ -71,9 +73,7 @@ export default async function Dashboard() {
           </div>
           
       </div>
-      <BarchartOrder data={dataOrder}/>
-      <BarchartProfit data={dataProfit}/>
-      <BarchartOrderCompleted data={dataOrderCompleted}/>
+      <ChartSwitcher dataOrder={dataOrder} dataProfit={dataProfit} dataOrderCompleted={dataOrderCompleted}/>
     </>
     
   )

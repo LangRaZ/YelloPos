@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BusinessProfileMutation} from "@/interface";
-import { createCategory, updateBusinessProfile, updateQrProfile } from "@/lib/supabase/api";
+import { createCategory, updateBusinessProfile } from "@/lib/supabase/api";
 
 export default function BusinessProfileForm(
     { id, data, isOnPage = false, closeDialog } :
@@ -81,23 +81,6 @@ export default function BusinessProfileForm(
                 }
             })
             
-            updateQrProfile(id, values,(data?.profile_image_url??""),profileimageExt,(data?.qr_image_url??""),qrImageExt).then(res=>{
-                if(res && res.status){
-                    if(!isOnPage && closeDialog){
-                        closeDialog();
-                    }
-                    toast.success("Business profile updated!", { description:"Business profile has been updated successfully!" })
-                    if(isOnPage){
-                        router.push("/business");
-                    } else {
-                        router.refresh();
-                    }
-                } else {
-                    setError(res?.message??"Unexpected error occurred! Please reload the page!");
-                    form.reset();
-                    setIsLoading(false);
-                }
-            })
         }
     }
 

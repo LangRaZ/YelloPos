@@ -45,7 +45,7 @@ export default function BarchartProfit({ data }: { data: ChartDataItem[] }) {
           <Legend verticalAlign="top" height={36} />
 
           {/* Bar Chart */}
-          <Bar dataKey="sum" fill="#3a00e7" radius={[4, 4, 0, 0]} name="Order" />
+          <Bar dataKey="sum" fill="#3a00e7" radius={[4, 4, 0, 0]} name="Profit" />
         </BarChart>
       </ResponsiveContainer>
     </div>
