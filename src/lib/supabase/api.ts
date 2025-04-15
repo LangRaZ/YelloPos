@@ -1,5 +1,5 @@
 import { createClientBrowser } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
 import { generateCode } from "../utils"
 import { updateAuthUser, getUserBusinessProfileId, updateAuthTax} from "./api_server"
@@ -849,4 +849,36 @@ export async function BarProfit(){
         return [] // Ensure that you return an empty array in case of error
       }
       return data
+}
+
+export async function getReportMonthly() : Promise<ReportsResponse>{
+    try {
+        const reports = await supabase.from('Report').select('*').eq('business_profile_id', await getUserBusinessProfileId()).eq('is_monthly', true).order('created_at', {ascending: false})
+        if(!reports.data){
+            return {status:false, code:200, message: reports.statusText, data: reports.data};
+        }
+        return {status:true, code:200, message: reports.statusText, data: reports.data};
+        
+    } catch (error) {
+        return { 
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        };
+    }
+}
+
+export async function getReportYearly() : Promise<ReportsResponse>{
+    try {
+        const reports = await supabase.from('Report').select('*').eq('business_profile_id', await getUserBusinessProfileId()).eq('is_yearly', true).order('created_at', {ascending: false})
+        if(!reports.data){
+            return {status:false, code:200, message: reports.statusText, data: reports.data};
+        }
+        return {status:true, code:200, message: reports.statusText, data: reports.data};
+        
+    } catch (error) {
+        return { 
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        };
+    }
 }

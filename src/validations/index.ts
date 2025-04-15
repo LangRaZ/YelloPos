@@ -147,3 +147,12 @@ export const TaxFirstLoginValidation = z
 //     message: "Tarif pajak tidak sesuai dengan jenis pajak",
 //     path: ["tax_rate"],
   });
+
+export const ReportValidation = z
+  .object({
+    business_profile_id: z.number(),
+    is_monthly: z.boolean(),
+    is_yearly: z.boolean(),
+    month: z.number(),
+    year: z.number()
+  })

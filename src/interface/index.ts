@@ -258,3 +258,16 @@ export interface SidebarParam {
     email:string
     name:string
 }
+
+export interface Report {
+    report_url: string | null
+    business_profile_id: number | null
+    is_monthly: boolean | null
+    is_yearly: boolean | null
+    month: number | null
+    year: number | null
+}
+
+export interface ReportsResponse extends Response{
+    data: Report[] | null
+}

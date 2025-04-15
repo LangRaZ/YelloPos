@@ -324,6 +324,47 @@ export type Database = {
           },
         ]
       }
+      Report: {
+        Row: {
+          business_profile_id: number | null
+          created_at: string
+          id: number
+          is_monthly: boolean | null
+          is_yearly: boolean | null
+          month: number | null
+          report_url: string | null
+          year: number | null
+        }
+        Insert: {
+          business_profile_id?: number | null
+          created_at?: string
+          id?: number
+          is_monthly?: boolean | null
+          is_yearly?: boolean | null
+          month?: number | null
+          report_url?: string | null
+          year?: number | null
+        }
+        Update: {
+          business_profile_id?: number | null
+          created_at?: string
+          id?: number
+          is_monthly?: boolean | null
+          is_yearly?: boolean | null
+          month?: number | null
+          report_url?: string | null
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Report_business_profile_id_fkey"
+            columns: ["business_profile_id"]
+            isOneToOne: false
+            referencedRelation: "BusinessProfile"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Roles: {
         Row: {
           created_at: string
