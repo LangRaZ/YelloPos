@@ -18,10 +18,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Report } from "@/interface";
 import { ButtonLoading } from "@/components/helpers/button_loading";
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-export default function ReportForm(
+export default function ReportFormMonthly(
     { id, data, isOnPage = false, closeDialog } :
     { id?: number, data?: Report|null, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
@@ -34,8 +33,7 @@ export default function ReportForm(
     const form = useForm<z.infer<typeof ReportValidation>>({
         resolver: zodResolver(ReportValidation),
         defaultValues:{
-            is_monthly: data?.is_monthly?? false,
-            is_yearly: data?.is_yearly?? false
+            month: data?.month?? 0,
         }
     })
 
@@ -63,19 +61,27 @@ export default function ReportForm(
                     name="is_monthly"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Type of Report</FormLabel>
+                            <FormLabel>Choose a month</FormLabel>
                             <FormControl>
-                                <RadioGroup>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="Monthly" id="r1" />
-                                        <Label htmlFor="r1">Monthly</Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="Yearly" id="r2" />
-                                        <Label htmlFor="r2">Yearly</Label>
-                                    </div>
-                                </RadioGroup>
-                                
+                                <Select>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="1">January</SelectItem>
+                                        <SelectItem value="2">February</SelectItem>
+                                        <SelectItem value="3">March</SelectItem>
+                                        <SelectItem value="4">April</SelectItem>
+                                        <SelectItem value="5">May</SelectItem>
+                                        <SelectItem value="6">June</SelectItem>
+                                        <SelectItem value="7">July</SelectItem>
+                                        <SelectItem value="8">August</SelectItem>
+                                        <SelectItem value="9">September</SelectItem>
+                                        <SelectItem value="10">October</SelectItem>
+                                        <SelectItem value="11">November</SelectItem>
+                                        <SelectItem value="12">December</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
