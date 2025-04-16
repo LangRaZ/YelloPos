@@ -35,9 +35,11 @@ export default function UserForm(
         defaultValues:{
             name: data?.name??"",
             email: data?.email??"",
+            username: data?.username??"",
             role_id: data?.role_id??Number(),
             phone_number: data?.phone_number??"",
-            business_profile_id: data?.business_profile_id??0
+            business_profile_id: data?.business_profile_id??0,
+            password: ""
         }
     })
     
@@ -67,7 +69,7 @@ export default function UserForm(
             })
         }else {
             //If id is null then its create object
-            createUser(values).then(res=>{
+            createUser(values, values.password).then(res=>{
                 if(res && res.status){
                     if(!isOnPage && closeDialog){
                         closeDialog();
@@ -95,6 +97,20 @@ export default function UserForm(
                 {/* Form data field starts here */}
                 <FormField
                     control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Enter Email" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
                     name="name"
                     render={({ field }) => (
                         <FormItem>
@@ -109,12 +125,12 @@ export default function UserForm(
 
                 <FormField
                     control={form.control}
-                    name="email"
+                    name="username"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel>Username</FormLabel>
                             <FormControl>
-                                <Input placeholder="Enter Email" {...field} />
+                                <Input placeholder="Enter Username. Example: Staff 1, Staff A, Admin 1" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -210,6 +226,27 @@ export default function UserForm(
                         }}
                     />
                 }
+
+                <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                        <div className="relative">
+                            <Input
+                            className="pr-8"
+                            placeholder="Enter your password"
+                            {...field}
+                            type="password"
+                            />
+                        </div>
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
                 
                 <div className="flex justify-end">
                     {isLoading ? (

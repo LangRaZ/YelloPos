@@ -57,11 +57,11 @@ export interface ProductsResponse extends Response{
 export interface UserMutation{
     // access_code: string | null
     business_profile_id: number | null    
-    email: string | null
-    name: string | null
+    email: string
+    name: string
     role_id: number | null
-    // username: string | null
-    phone_number : string | null
+    username: string
+    phone_number : string
 }
 
 
@@ -132,6 +132,7 @@ export interface AuthOpt{
 export interface AuthOptData{
     name: string
     phone_number: string
+    username: string | null
     first_login:boolean
     first_setup_tax:boolean
     business_profile_id:number|null
@@ -146,6 +147,11 @@ export interface Auth {
 
 export interface AuthRegister extends Auth{
     options?: AuthOpt
+}
+
+export interface AuthNewUser extends Auth{
+    user_metadata?: AuthOptData
+    email_confirm: boolean
 }
 
 export interface AuthMutation{

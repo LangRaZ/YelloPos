@@ -1,8 +1,9 @@
 import { createClientBrowser } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse } from "@/interface"
-import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser } from "@/interface"
+import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse, User } from "@/interface"
 import { generateCode } from "../utils"
 import { updateAuthUser, getUserBusinessProfileId, updateAuthTax} from "./api_server"
+import supabaseAdmin from "./admin_config"
 
 const supabase = createClientBrowser()
 
@@ -264,14 +265,45 @@ export async function getUsers(){
 }
 
 
-export async function createUser(user: UserMutation) : Promise<Response>{
+export async function createUser(user: UserMutation, password: string) : Promise<Response>{
     try {
         const bpid = await getUserBusinessProfileId();
         if(!bpid){
             return { status:false, code: 500, message: "Failed to create user" };
         }
+        
+        const AuthUser: AuthNewUser = {
+            email: user.email,
+            password: password,
+            user_metadata: {
+                name: user.name,
+                phone_number: user.phone_number,
+                username: user.username,
+                first_login: false,
+                first_setup_tax: false,
+                role_id: user.role_id,
+                business_profile_id: bpid
+            },
+            email_confirm: true
+        };
         user.business_profile_id = bpid
-        const User_res = await supabase.from("Accounts").insert(user)
+
+        const {data, error} = await supabaseAdmin.auth.admin.createUser(AuthUser)
+        if(error){
+            return {status: false, code: 500, message: "Failed to create user"};
+        }
+
+        const userSB: User = {
+            id: data.user?.id!,
+            email: user.email,
+            name: user.name,
+            username: user.username,
+            phone_number: user.phone_number,
+            business_profile_id: user.business_profile_id,
+            role_id: user.role_id
+        }
+
+        const User_res = await supabase.from("Accounts").insert(userSB)
         if (!User_res){
             return {status: false, code: 500, message: "Failed to create user"};
         }
@@ -519,6 +551,7 @@ export async function createAuthUser(user: AuthMutation) : Promise<Response>{
             data: {
                 name: user.name,
                 phone_number: user.phone_number,
+                username: null,
                 first_login: true,
                 first_setup_tax: true,
                 role_id: 1,

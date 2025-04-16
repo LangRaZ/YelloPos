@@ -39,34 +39,34 @@ export type Database = {
           access_code: string | null
           business_profile_id: number | null
           created_at: string
-          email: string | null
+          email: string
           id: string
-          name: string | null
-          phone_number: string | null
+          name: string 
+          phone_number: string
           role_id: number | null
-          username: string | null
+          username: string
         }
         Insert: {
           access_code?: string | null
           business_profile_id?: number | null
           created_at?: string
-          email?: string | null
+          email?: string
           id?: string
-          name?: string | null
-          phone_number?: string | null
+          name?: String
+          phone_number?: string
           role_id?: number | null
-          username?: string | null
+          username?: string
         }
         Update: {
           access_code?: string | null
           business_profile_id?: number | null
           created_at?: string
-          email?: string | null
+          email?: string
           id?: string
-          name?: string | null
-          phone_number?: string | null
+          name?: string
+          phone_number?: string 
           role_id?: number | null
-          username?: string | null
+          username?: string
         }
         Relationships: [
           {

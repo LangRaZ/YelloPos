@@ -55,11 +55,13 @@ export const TransactionValidation = z.object({
 export const UserValidation = z.object({
     name: z.string().nonempty("Name must not be empty"),
     email: z.string().nonempty("Email must not be empty").email("Invalid email address"),
+    username: z.string().nonempty("Username must not be empty"),
     role_id: z.number({
         required_error: "Role must not be empty",
     }).positive("Role must not be empty"),
     phone_number:z.string().nonempty("Phone number must not be empty"),
-    business_profile_id: z.number()
+    business_profile_id: z.number(),
+    password: z.string().nonempty("Password must not be empty")
 })
 
 export const CategoryValidation = z.object({

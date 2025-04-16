@@ -7,6 +7,7 @@ import { AppSidebar } from "@/components/partials/app_sidebar";
 import { createClient } from "@/lib/supabase/server_config";
 import '../globals.css';
 import { SidebarParam } from "@/interface";
+import { roleArray } from "@/constants";
 
 
 export default async function MainLayout({
@@ -21,8 +22,8 @@ export default async function MainLayout({
   const { data: { session } } = await supabase.auth.getSession();
 
   const sidebarParam : SidebarParam = {
-    email: session?.user.user_metadata.email,
-    name: session?.user.user_metadata.name
+    email: roleArray[session?.user.user_metadata.role_id - 1]??roleArray[0],
+    name: session?.user.user_metadata.username ?? session?.user.user_metadata.name
   }
   
   return (

@@ -43,3 +43,9 @@ export const secondaryLinks = [
         label: 'Business Profile',
     },
 ]
+
+export const roleArray = [
+    'Owner',
+    'Staff',
+    'Admin'
+]
