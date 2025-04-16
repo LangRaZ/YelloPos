@@ -20,6 +20,10 @@ export const columnsMonthly: ColumnDef<Report>[] = [
     header: "Month",
   },
   {
+    accessorKey: "year",
+    header: "Year",
+  },
+  {
     accessorKey: "action",
     header: "Actions",
 

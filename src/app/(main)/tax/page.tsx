@@ -19,7 +19,8 @@ import  DataTable  from "@/components/helpers/data_table"
 import { columnsMonthly } from "./columnsMonthly"
 import { columnsYearly } from "./columnsYearly"
 import { getReportMonthly, getReportYearly } from "@/lib/supabase/api"
-import { CreateReportButton } from "./ui/actions"
+import { CreateReportYearlyButton } from "./ui/actionsYearly"
+import { CreateReportMonthlyButton } from "./ui/actionsMonthly"
 
 export default async function tax() {
   const {data: reportMonthly} = await getReportMonthly();
@@ -70,13 +71,18 @@ export default async function tax() {
               <TabsTrigger value="monthly">Monthly</TabsTrigger>
               <TabsTrigger value="yearly">Yearly</TabsTrigger>
             </TabsList>
-            <CreateReportButton type={}/>
           </div>
           
           <TabsContent value="monthly">
+            <div className="justify-self-end mb-5">
+              <CreateReportMonthlyButton type={'Monthly'}/>
+            </div>
             <DataTable columns={columnsMonthly} data={reportMonthly ?? []}></DataTable>
           </TabsContent>
           <TabsContent value="yearly">
+            <div className="justify-self-end mb-5">
+              <CreateReportYearlyButton type={'Yearly'}/>
+            </div>
             <DataTable columns={columnsYearly} data={reportYearly ?? []}></DataTable>
           </TabsContent>
         </Tabs>
