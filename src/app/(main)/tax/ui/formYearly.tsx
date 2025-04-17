@@ -16,13 +16,14 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Report } from "@/interface";
+import { ReportMutation } from "@/interface";
 import { ButtonLoading } from "@/components/helpers/button_loading";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { exportToExcel } from "@/lib/exportToExcel";
 
 export default function ReportFormYearly(
     { id, data, isOnPage = false, closeDialog } :
-    { id?: number, data?: Report|null, isOnPage?: boolean, closeDialog?:()=>void }
+    { id?: number, data?: ReportMutation|null, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
     const [ error, setError ] = useState<string|null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -30,12 +31,20 @@ export default function ReportFormYearly(
     const router = useRouter()
     const currentYear = new Date().getFullYear()
     const years = Array.from({ length: 6 }, (_, i) => currentYear - i)
+    const testdata = [
+        { Year: 2024, Revenue: 1200, Expenses: 500 },
+        { Year: 2025, Revenue: 1400, Expenses: 600 },
+    ];
 
     //Declare form and form data
     const form = useForm<z.infer<typeof ReportValidation>>({
         resolver: zodResolver(ReportValidation),
         defaultValues:{
-            year: data?.year?? 0,
+            business_profile_id: data?.business_profile_id?? 0,
+            is_monthly: data?.is_monthly?? false,
+            is_yearly: data?.is_yearly?? false,
+            month: data?.month?? 0,
+            year: data?.year?? 0
         }
     })
 
@@ -45,10 +54,10 @@ export default function ReportFormYearly(
         form.clearErrors();
         setIsLoading(true);
         //Handle update or create object decision on form submit handler
-        if(id){
-
-        }else {
-
+        exportToExcel(testdata, "Yearly_report")
+        console.log(1)
+        if(!isOnPage && closeDialog){
+            closeDialog();
         }
     }
 

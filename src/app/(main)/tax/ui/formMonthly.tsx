@@ -5,35 +5,43 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { ReportValidation } from "@/validations";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CheckIcon } from "lucide-react";
-import { CaretSortIcon } from "@radix-ui/react-icons"
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Report } from "@/interface";
+import { ReportMutation } from "@/interface";
 import { ButtonLoading } from "@/components/helpers/button_loading";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { exportToExcel } from "@/lib/exportToExcel";
+import { saveReport } from "@/lib/supabase/api";
+import { Download } from "lucide-react";
 
 export default function ReportFormMonthly(
     { id, data, isOnPage = false, closeDialog } :
-    { id?: number, data?: Report|null, isOnPage?: boolean, closeDialog?:()=>void }
+    { id?: number, data?: ReportMutation|null, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
     const [ error, setError ] = useState<string|null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false)
     const router = useRouter()
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    const testdata = [
+        { Month: "January", Revenue: 1200, Expenses: 500 },
+        { Month: "February", Revenue: 1400, Expenses: 600 },
+    ];
 
     //Declare form and form data
     const form = useForm<z.infer<typeof ReportValidation>>({
         resolver: zodResolver(ReportValidation),
         defaultValues:{
+            report_url: data?.report_url??"",
+            business_profile_id: data?.business_profile_id?? 0,
+            is_monthly: data?.is_monthly?? false,
+            is_yearly: data?.is_yearly?? false,
             month: data?.month?? 0,
+            year: data?.year?? 0
         }
     })
 
@@ -42,11 +50,20 @@ export default function ReportFormMonthly(
         setError(null);
         form.clearErrors();
         setIsLoading(true);
-        //Handle update or create object decision on form submit handler
-        if(id){
 
-        }else {
+        values.is_monthly = true
+        values.is_yearly = false
+        values.year = new Date().getFullYear()
 
+        const excelFile = exportToExcel(testdata, "monthly_report")
+        const file = new File([excelFile], "monthly_report_" + months[values.month - 1] + "_" + values.year, {
+            type: excelFile.type,
+          });
+
+        console.log(values)
+        saveReport(values, file)
+        if(!isOnPage && closeDialog){
+            closeDialog();
         }
     }
 
@@ -58,12 +75,14 @@ export default function ReportFormMonthly(
                 {/* Form data field starts here */}
                 <FormField
                     control={form.control}
-                    name="is_monthly"
+                    name="month"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Choose a month</FormLabel>
                             <FormControl>
-                                <Select>
+                                <Select value={String(field.value)}
+                                    onValueChange={(val) => field.onChange(Number(val))} 
+                                >
                                     <SelectTrigger className="w-full">
                                         <SelectValue/>
                                     </SelectTrigger>

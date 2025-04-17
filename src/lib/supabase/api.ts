@@ -1,5 +1,5 @@
 import { createClientBrowser } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser, ReportMutation } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse, User } from "@/interface"
 import { generateCode } from "../utils"
 import { updateAuthUser, getUserBusinessProfileId, updateAuthTax} from "./api_server"
@@ -782,6 +782,67 @@ export async function getTaxProfile(id: number) : Promise<TaxProfileResponse>{
             status:false, code: 500, message: String(error)??"Unexpected error occurred", 
             data:null
         }
+    }
+}
+
+export async function saveReport(report: ReportMutation, excelFile: File) : Promise<Response>{
+    const reportSup: ReportMutation = {
+        report_url: "",
+        business_profile_id: await getUserBusinessProfileId(),
+        is_monthly: report.is_monthly,
+        is_yearly: report.is_yearly,
+        month: report.month,
+        year: report.year
+    }
+
+    // console.log("File info:", {
+    //     name: excelFile.name,
+    //     type: excelFile.type,
+    //     size: excelFile.size
+    //   });
+
+    try {
+        const res = await supabase.from("Report").insert(reportSup).select().single()
+        
+        if (res.error){
+            return {status: false, code: 500, message: "Failed to save report"};
+        }
+
+        if (res.data){
+            const report_name = excelFile.name
+            const supabaseReportPath = `${report_name}.xlsx`
+
+            const uploadedFile = await UploadReportSupabase(excelFile, supabaseReportPath)
+            if(!uploadedFile){
+                return {status: true, code: 202, message: "Report has been added successfully but failed to upload Report"}
+            }
+            const fileSupabaseURL = supabase.storage.from('report').getPublicUrl(supabaseReportPath)
+            if(!fileSupabaseURL){
+                return {status: true, code: 202, message: "Report has been added successfully but failed to save Report"}
+            }
+            const resUpdate = await supabase.from('Report').update({report_url: `${fileSupabaseURL.data.publicUrl}`}).eq("id", res.data.id)
+            if (!resUpdate){
+                return {status: true, code: 202, message: "Report has been added successfully but failed to save Report"}
+            }
+        }
+        return { status:true, code: res.status, message: "Report has been completed!" };
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+async function UploadReportSupabase(File: File, path: string){
+    try {
+        const res = await supabase
+        .storage
+        .from('report')
+        .upload(path, File, {
+            cacheControl: '0',
+            upsert: true
+        })
+        return res;
+    } catch (error) {
+        return null;
     }
 }
 

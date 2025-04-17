@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { SquarePlus } from "lucide-react"
 import ReportFormYearly from "./formYearly"
 
-export function CreateReportYearlyButton({ type }: { type: string}){
+export function CreateReportYearlyButton(){
     return(
         //Use popup container for popup create update form
         //Add trigger : trigger button, modalTitle: form title, modalDescription: form description
