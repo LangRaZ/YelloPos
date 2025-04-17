@@ -18,7 +18,7 @@ export default async function CompanyEditPage({ params } : { params:{ id:string 
     return (
         <>
             <div className="flex items-center mb-5">
-                <BackButton />
+                <BackButton target="/category"/>
                 <h2 className="text-2xl font-semibold">Edit Category - {category.data?.category_name}</h2>
             </div>
             <Card>

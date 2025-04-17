@@ -55,3 +55,19 @@ export async function updateAuthTax(firstTaxState: boolean) : Promise<Response>{
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" }
     }
 }
+
+export async function getUserUID() : Promise<string>{
+    const supabaseServer = await createClient()
+    try {
+        const temp = await supabaseServer.auth.getUser()
+        // console.log(temp)
+        if(temp.data.user){
+            return temp.data.user.id
+        }
+        else {
+            return ""
+        }
+    } catch (error) {
+        return ""
+    }
+}

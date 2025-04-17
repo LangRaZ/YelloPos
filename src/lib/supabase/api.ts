@@ -1,5 +1,5 @@
 import { createClientBrowser } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionMutation, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse, User } from "@/interface"
 import { generateCode } from "../utils"
 import { updateAuthUser, getUserBusinessProfileId, updateAuthTax} from "./api_server"
@@ -479,6 +479,30 @@ export async function deleteCategory(id: string) : Promise<Response>{
 }
 
 //Transaction
+export async function processTransaction(id: number, processedByID: string) : Promise<Response>{
+    const currentTimestamptz = new Date().toISOString();
+
+    try {
+        const refetchRes = await supabase.from('Order').select('processed_by_account_id').eq('id', id).single()
+        if(refetchRes.error){
+            return {status: false, code: 500, message: "Failed to fetch transaction data"};
+        }
+        else if(refetchRes.data.processed_by_account_id === null || refetchRes.data.processed_by_account_id === processedByID){
+            const res = await supabase.from('Order').update({processed_by_account_id: processedByID, processed_time: currentTimestamptz, transaction_status: "In-Process"}).eq('id', id)
+            if(res.error){
+                console.log(res)
+                return {status: false, code: 500, message: "Failed to process transaction"};
+            }
+    
+            return { status:true, code: res.status, message: res.statusText };
+        }
+        return {status: false, code: 401, message: "Transaction has been processed by another user!"};
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+
 export async function completeTransaction(id: number, paymentMethod: string) : Promise<Response>{
     const currentTimestamptz = new Date().toISOString();
 

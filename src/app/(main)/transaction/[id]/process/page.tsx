@@ -11,7 +11,7 @@ import { OrderDetail, Transaction } from "@/interface";
 import { Separator } from "@/components/ui/separator";
 
 
-export default function TransactionEditPage({ params } : { params:{ id:string } }){
+export default function TransactionProcessPage({ params } : { params:{ id:string } }){
     const [loading, setLoading] = useState(true);
     const [id, setId] = useState<number>()
     const [Transaction, setTransaction] = useState<Transaction|null>(null);
@@ -48,7 +48,7 @@ export default function TransactionEditPage({ params } : { params:{ id:string } 
     return (
         <>
             <div className="flex items-center mb-5">
-                <BackButton />
+                <BackButton target="/transaction"/>
                 <h2 className="text-2xl font-semibold">Process Transaction - TR{Transaction?.id}</h2>
             </div>
             <Card>

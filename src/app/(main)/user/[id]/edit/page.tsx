@@ -17,7 +17,7 @@ export default async function UserEditPage({ params } : { params:{ id:string } }
     return (
         <>
             <div className="flex items-center mb-5">
-                <BackButton />
+                <BackButton target="/user"/>
                 <h2 className="text-2xl font-semibold">Edit User - {user.data?.name}</h2>
             </div>
             <Card>

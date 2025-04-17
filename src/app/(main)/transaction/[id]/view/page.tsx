@@ -48,7 +48,7 @@ export default function TransactionViewPage({ params } : { params:{ id:string } 
     return (
         <>
             <div className="flex items-center mb-5">
-                <BackButton />
+                <BackButton target="/transaction"/>
                 <h2 className="text-2xl font-semibold">View Transaction - TR{Transaction?.id}</h2>
             </div>
             <Card>

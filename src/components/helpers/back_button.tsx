@@ -5,13 +5,15 @@ import { ChevronLeft } from "lucide-react";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "../ui/button";
 
-export default function BackButton(){
+export default function BackButton({target}: {target: string}){
     const router = useRouter();
     return (
         <Button
         variant={"outline"}
         size={"icon"}
-        onClick={router.back}
+        onClick={()=>{
+            router.replace(target);
+        }}
         className="mr-3"
         >
             <ArrowLeft />
