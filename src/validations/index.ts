@@ -152,9 +152,12 @@ export const TaxFirstLoginValidation = z
 
 export const ReportValidation = z
   .object({
+    report_url: z.string(),
     business_profile_id: z.number(),
     is_monthly: z.boolean(),
     is_yearly: z.boolean(),
-    month: z.number(),
+    month: z.number({
+        required_error: "Please choose a Month",
+    }),
     year: z.number()
   })

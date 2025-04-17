@@ -265,7 +265,7 @@ export interface SidebarParam {
     name:string
 }
 
-export interface Report {
+export interface ReportMutation {
     report_url: string | null
     business_profile_id: number | null
     is_monthly: boolean | null
@@ -275,5 +275,5 @@ export interface Report {
 }
 
 export interface ReportsResponse extends Response{
-    data: Report[] | null
+    data: ReportMutation[] | null
 }

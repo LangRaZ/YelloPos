@@ -75,13 +75,13 @@ export default async function tax() {
           
           <TabsContent value="monthly">
             <div className="justify-self-end mb-5">
-              <CreateReportMonthlyButton type={'Monthly'}/>
+              <CreateReportMonthlyButton/>
             </div>
             <DataTable columns={columnsMonthly} data={reportMonthly ?? []}></DataTable>
           </TabsContent>
           <TabsContent value="yearly">
             <div className="justify-self-end mb-5">
-              <CreateReportYearlyButton type={'Yearly'}/>
+              <CreateReportYearlyButton/>
             </div>
             <DataTable columns={columnsYearly} data={reportYearly ?? []}></DataTable>
           </TabsContent>

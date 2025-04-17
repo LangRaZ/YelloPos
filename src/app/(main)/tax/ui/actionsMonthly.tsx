@@ -1,10 +1,9 @@
 import PopupContainer from "@/components/helpers/popup_container"
 import { Button } from "@/components/ui/button"
 import { SquarePlus } from "lucide-react"
-import ReportForm from "./formYearly"
 import ReportFormMonthly from "./formMonthly"
 
-export function CreateReportMonthlyButton({ type }: { type: string}){
+export function CreateReportMonthlyButton(){
     return(
         //Use popup container for popup create update form
         //Add trigger : trigger button, modalTitle: form title, modalDescription: form description
