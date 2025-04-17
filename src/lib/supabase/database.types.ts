@@ -435,6 +435,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+
       get_categories_with_product_count: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -495,6 +496,14 @@ export type Database = {
       update_product_stock: {
         Args: { orderquantity: number; orderproductid: number }
         Returns: undefined
+      }
+      topselling: {
+        Args: { businessprofileid: number }
+        Returns: {
+          id: number
+          product_name: string
+          total_quantity_sold: number
+        }[]
       }
     }
     Enums: {

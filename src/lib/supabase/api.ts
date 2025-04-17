@@ -847,6 +847,18 @@ export async function getOrderCompleted(){
         }
 }
 
+export async function getTopSelling(){
+    try{
+        let { data, error } = await supabase.rpc('topselling', {
+            businessprofileid: await getUserBusinessProfileId()
+        })
+        if (error) console.error(error)
+        return data
+    }catch(error){
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
 export async function BarOrderCount() {
     const { data, error } = await supabase.rpc("get_order_count_yearly", {
       businessprofileid: await getUserBusinessProfileId(),
