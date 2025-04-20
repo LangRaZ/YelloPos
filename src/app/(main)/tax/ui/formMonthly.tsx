@@ -41,7 +41,8 @@ export default function ReportFormMonthly(
             is_monthly: data?.is_monthly?? false,
             is_yearly: data?.is_yearly?? false,
             month: data?.month?? 0,
-            year: data?.year?? 0
+            year: data?.year?? 0,
+            report_name: data?.report_name??""
         }
     })
 
@@ -55,11 +56,14 @@ export default function ReportFormMonthly(
         values.is_yearly = false
         values.year = new Date().getFullYear()
 
-        const excelFile = exportToExcel(testdata, "monthly_report")
-        const file = new File([excelFile], "monthly_report_" + months[values.month - 1] + "_" + values.year, {
+        const fileName = "monthly_report_" + months[values.month - 1] + "_" + values.year
+
+        const excelFile = exportToExcel(testdata, fileName)
+        const file = new File([excelFile], fileName, {
             type: excelFile.type,
           });
 
+        values.report_name = "Monthly Report " + months[values.month - 1] + " " + values.year
         console.log(values)
         saveReport(values, file)
         if(!isOnPage && closeDialog){

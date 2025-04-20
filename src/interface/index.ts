@@ -272,6 +272,7 @@ export interface ReportMutation {
     is_yearly: boolean | null
     month: number | null
     year: number | null
+    report_name?: string | null
 }
 
 export interface ReportsResponse extends Response{

@@ -156,8 +156,8 @@ export const ReportValidation = z
     business_profile_id: z.number(),
     is_monthly: z.boolean(),
     is_yearly: z.boolean(),
-    month: z.number({
-        required_error: "Please choose a Month",
-    }),
-    year: z.number()
+    month: z.number().min(1, { message: "Please select a month" })
+    .max(12),
+    year: z.number(),
+    report_name: z.string()
   })

@@ -44,7 +44,8 @@ export default function ReportFormYearly(
             is_monthly: data?.is_monthly?? false,
             is_yearly: data?.is_yearly?? false,
             month: data?.month?? 0,
-            year: data?.year?? 0
+            year: data?.year?? 0,
+            report_name: data?.report_name??""
         }
     })
 
@@ -69,7 +70,7 @@ export default function ReportFormYearly(
                 {/* Form data field starts here */}
                 <FormField
                     control={form.control}
-                    name="is_monthly"
+                    name="year"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Type of Report</FormLabel>

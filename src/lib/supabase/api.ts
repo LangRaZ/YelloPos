@@ -816,14 +816,9 @@ export async function saveReport(report: ReportMutation, excelFile: File) : Prom
         is_monthly: report.is_monthly,
         is_yearly: report.is_yearly,
         month: report.month,
-        year: report.year
+        year: report.year,
+        report_name: report.report_name
     }
-
-    // console.log("File info:", {
-    //     name: excelFile.name,
-    //     type: excelFile.type,
-    //     size: excelFile.size
-    //   });
 
     try {
         const res = await supabase.from("Report").insert(reportSup).select().single()
