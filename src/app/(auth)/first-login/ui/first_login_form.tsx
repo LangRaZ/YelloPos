@@ -40,7 +40,7 @@ export default function FirstLoginForm() {
         form.clearErrors();
         createBusiness(values).then((res) => {
           if (res.status) {
-            router.push("/");
+            router.push("/dashboard");
             toast.success("Business Profile Completed!" , { description: "Your business profile has been completed" })
           } else {
             setError(res.message);

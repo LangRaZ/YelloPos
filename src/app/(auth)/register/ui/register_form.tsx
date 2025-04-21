@@ -74,9 +74,9 @@ export default function RegisterForm() {
                             <p className="text-[--sidebar-text-color]">
                                 Fill the form to register your account
                             </p>
-                            {/* {error && (
+                            {error && (
                                 <p className="my-4 text-red-800 font-semibold">{error}</p>
-                            )} */}
+                            )}
 
                         </div>
                         <div className="flex flex-col gap-6">
