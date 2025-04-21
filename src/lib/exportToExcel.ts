@@ -2,8 +2,10 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
 export function exportToExcel(data: any[], fileName: string) {
-    const worksheet = XLSX.utils.json_to_sheet(data);
+    const worksheet = XLSX.utils.aoa_to_sheet([["Test"]])
+    XLSX.utils.sheet_add_json(worksheet, data, { origin: "A2", skipHeader: false });
     const workbook = XLSX.utils.book_new();
+
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
   
     const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });

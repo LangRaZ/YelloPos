@@ -25,7 +25,7 @@ import { CreateReportMonthlyButton } from "./ui/actionsMonthly"
 export default async function tax() {
   const {data: reportMonthly} = await getReportMonthly();
   const {data: reportYearly} = await getReportYearly();
-  console.log(reportMonthly)
+  // console.log(reportMonthly)
 
   return (
     <>

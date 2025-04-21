@@ -23,6 +23,7 @@ export default function ReportFormMonthly(
     const [isLoading, setIsLoading] = useState(false);
     const [open, setOpen] = useState(false)
     const router = useRouter()
+    const currentYear = new Date().getFullYear()
     const months = [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
@@ -41,7 +42,7 @@ export default function ReportFormMonthly(
             is_monthly: data?.is_monthly?? false,
             is_yearly: data?.is_yearly?? false,
             month: data?.month?? 0,
-            year: data?.year?? 0,
+            year: data?.year?? currentYear,
             report_name: data?.report_name??""
         }
     })
@@ -54,7 +55,6 @@ export default function ReportFormMonthly(
 
         values.is_monthly = true
         values.is_yearly = false
-        values.year = new Date().getFullYear()
 
         const fileName = "monthly_report_" + months[values.month - 1] + "_" + values.year
 
@@ -64,10 +64,11 @@ export default function ReportFormMonthly(
           });
 
         values.report_name = "Monthly Report " + months[values.month - 1] + " " + values.year
-        console.log(values)
+        // console.log(values)
         saveReport(values, file)
         if(!isOnPage && closeDialog){
             closeDialog();
+            router.refresh();
         }
     }
 

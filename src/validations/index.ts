@@ -150,6 +150,8 @@ export const TaxFirstLoginValidation = z
 //     path: ["tax_rate"],
   });
 
+const currentYear = new Date().getFullYear()
+
 export const ReportValidation = z
   .object({
     report_url: z.string(),
@@ -158,6 +160,6 @@ export const ReportValidation = z
     is_yearly: z.boolean(),
     month: z.number().min(1, { message: "Please select a month" })
     .max(12),
-    year: z.number(),
+    year: z.number().min(currentYear - 6, { message: "Please select a year"}).max(currentYear),
     report_name: z.string()
   })
