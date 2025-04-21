@@ -29,9 +29,9 @@ export default async function Dashboard({ searchParams }: { searchParams: { char
           <CardHeader className="items-center text-center">
             <CardTitle className="text-xl text-gray-700">Profit</CardTitle>
           </CardHeader>
-          <CardContent className="text-center">
+          <CardContent className="text-center text-wrap">
             {typeof Profit === "number" ? (
-              <p className="text-4xl font-bold text-purple-600">Rp.{Profit.toLocaleString()}</p>
+              <p className="text-4xl font-bold text-purple-600 text-wrap">Rp{Profit.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
             ) : (
             <p className="text-sm text-muted-foreground">Profit data not available</p>
             )}  
@@ -43,7 +43,7 @@ export default async function Dashboard({ searchParams }: { searchParams: { char
             <CardTitle className="text-xl text-gray-700">Total Orders</CardTitle>
           </CardHeader>
           <CardContent className="text-center">
-            <p className="text-3xl font-bold text-blue-600">{typeof Order === "number" ? Order : "N/A"}</p>
+            <p className="text-3xl font-bold text-purple-600">{typeof Order === "number" ? Order : "N/A"}</p>
           </CardContent>
         </Card>
 

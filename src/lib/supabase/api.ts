@@ -567,7 +567,7 @@ export async function getOrderDetailsbyOrderId(orderId: number) : Promise<OrderD
 
 
 //Auth
-export async function createAuthUser(user: AuthMutation) : Promise<Response>{   
+export async function createAuthUser(user: AuthMutation) : Promise<Response>{  
     const AuthUser: AuthRegister = {
         email: user.email,
         password: user.password,
@@ -589,6 +589,7 @@ export async function createAuthUser(user: AuthMutation) : Promise<Response>{
         if(!error){
             return { status: true, code: 200, message:"Account registered successfully" }
         }
+        console.log(error)
         return { status: false, code: 500, message: error.message }
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" }
@@ -776,16 +777,14 @@ export async function createTaxProfile(tax: TaxMutation) : Promise<Response>{
     try {
         tax.business_profile_id = await getUserBusinessProfileId();
         const res = await supabase.from("Tax Module").insert(tax)
-        
+
         if (res.error){
             return {status: false, code: 500, message: "Failed to create tax profile"};
         }
 
-        if(res.data){
-            const updateTax_res = await  updateAuthTax(false)
-            if(!updateTax_res){
-                return {status: false, code: 500, message: "Failed to update tax"};
-            }
+        const updateTax_res = await  updateAuthTax(false)
+        if(!updateTax_res){
+            return {status: false, code: 500, message: "Failed to update tax"};
         }
         return { status:true, code: res.status, message: "Tax profile has been completed!" };
     } catch (error) {

@@ -23,6 +23,9 @@ export async function middleware(request: NextRequest) {
             if(request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register')){
                 return NextResponse.redirect(new URL('/', request.url))
             }
+            if(user.user_metadata.first_setup_tax && request.nextUrl.pathname === '/tax'){
+                return NextResponse.redirect(new URL('/tax/first-tax', request.url))
+            }
         }
     }
 
