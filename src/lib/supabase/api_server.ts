@@ -13,6 +13,7 @@ export async function updateAuthUser(firstLoginState: boolean, businessProfileId
             }
         })
         if(!error){
+            const updateAccountSB_res = await supabaseServer.from('Accounts').update({business_profile_id: businessProfileId}).eq('id', data.user.id)
             return { status: true, code: 200, message:"Account updated successfully" }
         }
         return { status: false, code: 500, message: error.message }

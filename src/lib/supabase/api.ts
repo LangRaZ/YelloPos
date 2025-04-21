@@ -488,13 +488,15 @@ export async function processTransaction(id: number, processedByID: string) : Pr
             return {status: false, code: 500, message: "Failed to fetch transaction data"};
         }
         else if(refetchRes.data.processed_by_account_id === null || refetchRes.data.processed_by_account_id === processedByID){
-            const res = await supabase.from('Order').update({processed_by_account_id: processedByID, processed_time: currentTimestamptz, transaction_status: "In-Process"}).eq('id', id)
-            if(res.error){
-                console.log(res)
-                return {status: false, code: 500, message: "Failed to process transaction"};
+            if(refetchRes.data.processed_by_account_id === null){
+                const res = await supabase.from('Order').update({processed_by_account_id: processedByID, processed_time: currentTimestamptz, transaction_status: "In-Process"}).eq('id', id)
+                if(res.error){
+                    console.log(res)
+                    return {status: false, code: 500, message: "Failed to process transaction"};
+                }
+                return { status:true, code: res.status, message: res.statusText };
             }
-    
-            return { status:true, code: res.status, message: res.statusText };
+            return { status:true, code: 200, message: "Process successful" };
         }
         return {status: false, code: 401, message: "Transaction has been processed by another user!"};
     } catch (error) {
@@ -537,7 +539,7 @@ export async function getTransactions() : Promise<TransactionsResponse>{
 
 export async function getTransactionById(id: number) : Promise<TransactionResponse>{
     try {
-        const res = await supabase.from('Order').select('*').eq('id', id).single()
+        const res = await supabase.from('Order').select('*, Account:processed_by_account_id(name)').eq('id', id).single()
         if(res.error){
             return {status:false, code:500, message: res.statusText, data: res.data};
         }
@@ -584,8 +586,22 @@ export async function createAuthUser(user: AuthMutation) : Promise<Response>{
         }
     };
 
+    
     try {
-        const {error} = await supabase.auth.signUp(AuthUser)
+        const {data, error} = await supabase.auth.signUp(AuthUser)
+        
+        if(data && data.user){
+            const userSB: User = {
+                id: data.user.id,
+                email: user.email,
+                name: user.name,
+                username: data.user?.user_metadata.username,
+                phone_number: user.phone_number,
+                business_profile_id: data.user?.user_metadata.business_profile_id,
+                role_id: data.user?.user_metadata.role_id
+            }
+            const res = await supabase.from('Accounts').insert(userSB)
+        }
         if(!error){
             return { status: true, code: 200, message:"Account registered successfully" }
         }

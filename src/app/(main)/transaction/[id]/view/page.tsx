@@ -58,7 +58,8 @@ export default function TransactionViewPage({ params } : { params:{ id:string } 
                 <CardContent>
                     <div>
                         <p className="mb-2">Transaction Status : <span className="font-medium">{Transaction?.transaction_status}</span></p>
-                        <p>Completed Time : <span className="font-medium">{StringToDateTime(Transaction?.completed_time??null)}</span></p>
+                        <p>Processed By : <span className="font-medium">{StringToDateTime(Transaction?.Account?.name??"-")}</span></p>
+                        <p>Completed Time : <span className="font-medium">{StringToDateTime(Transaction?.completed_time??"-")}</span></p>
                         <Separator className="mt-4 mb-4"/>
                         <div className="flex justify-between items-center">
                             <div className="flex flex-row items-center">

@@ -102,12 +102,17 @@ export interface TransactionDetail{
     category_name: string | null
 }
 
+export interface TransactionAccountDetail{
+    name: string
+}
+
 export interface Transaction extends TransactionMutation{
     id: number,
     completed_time: string | null
     processed_by_account_id: string | null
     processed_time: string | null
     payment_method: string
+    Account?: TransactionAccountDetail | null
 }
 
 export interface TransactionsResponse extends Response{
