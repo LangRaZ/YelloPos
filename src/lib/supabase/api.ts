@@ -1010,7 +1010,7 @@ export async function getReportMonthly() : Promise<ReportsResponse>{
 
 export async function getReportYearly() : Promise<ReportsResponse>{
     try {
-        const reports = await supabase.from('Report').select('*').eq('business_profile_id', await getUserBusinessProfileId()).eq('is_yearly', true).order('created_at', {ascending: false})
+        const reports = await supabase.from('Report').select('*').eq('business_profile_id', await getUserBusinessProfileId()).eq('is_yearly', true).order('year', {ascending: false})
         if(!reports.data){
             return {status:false, code:200, message: reports.statusText, data: reports.data};
         }

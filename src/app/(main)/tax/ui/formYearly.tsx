@@ -20,6 +20,7 @@ import { ReportMutation } from "@/interface";
 import { ButtonLoading } from "@/components/helpers/button_loading";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { exportToExcel } from "@/lib/exportToExcel";
+import { saveReport } from "@/lib/supabase/api";
 
 export default function ReportFormYearly(
     { id, data, isOnPage = false, closeDialog } :
@@ -40,10 +41,11 @@ export default function ReportFormYearly(
     const form = useForm<z.infer<typeof ReportValidation>>({
         resolver: zodResolver(ReportValidation),
         defaultValues:{
+            report_url: data?.report_url??"",
             business_profile_id: data?.business_profile_id?? 0,
             is_monthly: data?.is_monthly?? false,
             is_yearly: data?.is_yearly?? false,
-            month: data?.month?? 0,
+            month: data?.month?? 1,
             year: data?.year?? 0,
             report_name: data?.report_name??""
         }
@@ -54,11 +56,24 @@ export default function ReportFormYearly(
         setError(null);
         form.clearErrors();
         setIsLoading(true);
-        //Handle update or create object decision on form submit handler
-        exportToExcel(testdata, "Yearly_report")
-        console.log(1)
+
+        values.month = 0
+        values.is_monthly = false
+        values.is_yearly = true
+
+        const fileName = "yearly_report_" + values.year
+        
+        const excelFile = exportToExcel(testdata, fileName)
+        const file = new File([excelFile], fileName, {
+            type: excelFile.type,
+            });
+
+        values.report_name = "Yearly Report " + values.year
+        console.log(values)
+        saveReport(values, file)
         if(!isOnPage && closeDialog){
             closeDialog();
+            router.refresh();
         }
     }
 
@@ -73,9 +88,11 @@ export default function ReportFormYearly(
                     name="year"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Type of Report</FormLabel>
+                            <FormLabel>Choose a year</FormLabel>
                             <FormControl>
-                                <Select>
+                                <Select value={String(field.value)}
+                                    onValueChange={(val) => field.onChange(Number(val))}
+                                >
                                     <SelectTrigger className="w-full">
                                         <SelectValue/>
                                     </SelectTrigger>
