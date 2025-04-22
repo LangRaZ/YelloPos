@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { BusinessProfileValidation, CategoryValidation } from "@/validations";
+import { BusinessProfileValidation } from "@/validations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,6 +19,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BusinessProfileMutation} from "@/interface";
 import { createCategory, updateBusinessProfile } from "@/lib/supabase/api";
+import { convertURLToFileBusiness,convertURLToFileQR } from "@/lib/convert_URL_to_file";
 
 export default function BusinessProfileForm(
     { id, data, isOnPage = false, closeDialog } :
@@ -48,7 +49,24 @@ export default function BusinessProfileForm(
             
         }
     })
-
+    
+    useEffect(() => {
+            async function convertAndSetFile() {
+              if (data?.profile_image_url) {
+                const file_Business = await convertURLToFileBusiness(data.profile_image_url);
+                const file_QR = await convertURLToFileQR(data.qr_image_url)
+                if (file_Business && file_QR) {
+                  form.setValue("profile_image_url", file_Business);
+                  setPreviewBusinessImage(URL.createObjectURL(file_Business));
+                  form.setValue("qr_image_url", file_QR);
+                  setPreviewQrImage(URL.createObjectURL(file_QR))
+                }
+              }
+            }
+          
+            convertAndSetFile();
+          }, [data?.profile_image_url]);
+          
     //Declare on submit function for submit handler
     function onSubmit(values: z.infer<typeof BusinessProfileValidation>){
         setError(null);

@@ -61,7 +61,6 @@ export default function ProductForm(
         convertAndSetFile();
       }, [data?.product_image]);
 
-    console.log(data)
     
     function checkDiffFileExtension(imageExt: string): boolean{
         if(!imageExt || imageExt === ""){
