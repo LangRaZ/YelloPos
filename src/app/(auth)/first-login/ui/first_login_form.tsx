@@ -12,10 +12,13 @@ import { Button } from "@/components/ui/button";
 import { createBusiness } from "@/lib/supabase/api";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-
+import { ButtonLoading } from "@/components/helpers/button_loading";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
 
 export default function FirstLoginForm() {
     const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const router = useRouter()
 
     const form = useForm<z.infer<typeof FirstLoginValidation>>({
@@ -36,6 +39,7 @@ export default function FirstLoginForm() {
     });
 
     function handleFirstLogin(values: z.infer<typeof FirstLoginValidation>) {
+        setIsLoading(true);
         setError(null);
         form.clearErrors();
         createBusiness(values).then((res) => {
@@ -45,6 +49,7 @@ export default function FirstLoginForm() {
           } else {
             setError(res.message);
             console.log(error)
+            setIsLoading(false)
             // form.reset();
           }
         });
@@ -68,9 +73,15 @@ export default function FirstLoginForm() {
                             <p className="text-[--sidebar-text-color]">
                                 Fill the form to complete your business account
                             </p>
-                            {/* {error && (
-                                <p className="my-4 text-red-800 font-semibold">{error}</p>
-                            )} */}
+                            {error && (
+                                <Alert variant="destructive">
+                                    <AlertCircle className="h-4 w-4" />
+                                    <AlertTitle>Login Failed!</AlertTitle>
+                                    <AlertDescription>
+                                        {error}
+                                    </AlertDescription>
+                                </Alert>
+                            )}
 
                         </div>
                         <div className="flex flex-col gap-6">
@@ -157,12 +168,16 @@ export default function FirstLoginForm() {
                             </span>
 
                             <div className="flex justify-end">
-                                <Button
-                                    type="submit"
-                                    className=""
-                                >
-                                Complete
-                                </Button>
+                                {isLoading ? (
+                                    <ButtonLoading />
+                                ):(
+                                    <Button
+                                        type="submit"
+                                        className=""
+                                    >
+                                    Complete
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     </div>

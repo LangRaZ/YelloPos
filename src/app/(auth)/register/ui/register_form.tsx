@@ -13,10 +13,14 @@ import Link from "next/link";
 import { createAuthUser } from "@/lib/supabase/api";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { ButtonLoading } from "@/components/helpers/button_loading";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
 
 
 export default function RegisterForm() {
     const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const router = useRouter()
 
     const form = useForm<z.infer<typeof RegisterValidation>>({
@@ -31,6 +35,7 @@ export default function RegisterForm() {
     });
 
     function handleRegister(values: z.infer<typeof RegisterValidation>) {
+        setIsLoading(true);
         setError(null);
         form.clearErrors();
         createAuthUser(values).then((res) => {
@@ -40,6 +45,7 @@ export default function RegisterForm() {
           } else {
             setError(res.message);
             form.reset();
+            setIsLoading(false);
           }
         });
     }
@@ -75,7 +81,13 @@ export default function RegisterForm() {
                                 Fill the form to register your account
                             </p>
                             {error && (
-                                <p className="my-4 text-red-800 font-semibold">{error}</p>
+                                <Alert variant="destructive">
+                                    <AlertCircle className="h-4 w-4" />
+                                    <AlertTitle>Register Failed!</AlertTitle>
+                                    <AlertDescription>
+                                        {error}
+                                    </AlertDescription>
+                                </Alert>
                             )}
 
                         </div>
@@ -160,13 +172,17 @@ export default function RegisterForm() {
                                 )}
                             />
                             <div className="flex flex-col gap-3">
-                                <Button
-                                    type="submit"
-                                    className=""
-                                    variant={"default"}
-                                >
-                                Register
-                                </Button>
+                                {isLoading ? (
+                                    <ButtonLoading />
+                                ):(
+                                    <Button
+                                        type="submit"
+                                        className=""
+                                        variant={"default"}
+                                    >
+                                    Register
+                                    </Button>
+                                )}
                                 <div>
                                     <span className="text-sm">
                                         Already have an account?&nbsp;

@@ -266,7 +266,7 @@ export interface TaxProfileResponse extends Response{
 }
 
 export interface SidebarParam {
-    email:string
+    role_name:string
     name:string
 }
 

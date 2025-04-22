@@ -25,7 +25,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
-import { signOutAuthUser, getUserByEmail } from "@/lib/supabase/api"
+import { signOutAuthUser } from "@/lib/supabase/api"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -34,7 +34,7 @@ export function NavUser({
 }: {
   user: {
     name: string
-    email: string
+    role_name: string
     avatar: string
   }
 }) {
@@ -43,7 +43,10 @@ export function NavUser({
 
   const logout = () =>{
     signOutAuthUser().then((res) =>{
-      if(res.status) router.push("/login");
+      if(res.status) {
+        router.push("/login");
+        router.refresh();
+      }
     })
   }
 
@@ -62,7 +65,7 @@ export function NavUser({
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">Welcome, {user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate text-xs">{user.role_name}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>

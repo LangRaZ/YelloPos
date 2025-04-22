@@ -20,9 +20,13 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { signInAuthUser } from "@/lib/supabase/api"
+import { ButtonLoading } from "@/components/helpers/button_loading";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
 
 export default function LoginForm() {
     const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const router = useRouter();
 
     const form = useForm<z.infer<typeof LoginValidation>>({
@@ -34,14 +38,16 @@ export default function LoginForm() {
     });
 
     async function handleLogin(values: z.infer<typeof LoginValidation>){
+        setIsLoading(true);
         setError(null);
         form.clearErrors();
         signInAuthUser(values).then((res) => {
             if (res.status) {
-                router.push("/");
+                router.push("/dashboard");
             } else{
                 setError(res.message);
                 form.reset();
+                setIsLoading(false)
             }
         });
     }
@@ -74,9 +80,15 @@ export default function LoginForm() {
                             <p className="text-[--sidebar-text-color]">
                                 Fill the form to login into your account
                             </p>
-                            {/* {error && (
-                                <p className="my-4 text-red-800 font-semibold">{error}</p>
-                            )} */}
+                            {error && (
+                                <Alert variant="destructive">
+                                    <AlertCircle className="h-4 w-4" />
+                                    <AlertTitle>Login Failed!</AlertTitle>
+                                    <AlertDescription>
+                                        {error}
+                                    </AlertDescription>
+                                </Alert>
+                            )}
 
                         </div>
                         <div className="flex flex-col gap-6">
@@ -114,24 +126,30 @@ export default function LoginForm() {
                                 )}
                             />
                             <div className="flex flex-col gap-3">
-                                <Button
-                                    type="submit"
-                                    className=""
-                                    variant={"default"}
-                                >
-                                Login
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    className=""
-                                    variant={"default"}
-                                    onClick={()=>{
-                                        form.setValue("email", "devyellopos@gmail.com")
-                                        form.setValue("password", "abc123")
-                                    }}
-                                >
-                                Login Dev
-                                </Button>
+                                {isLoading ? (
+                                    <ButtonLoading />
+                                ):(
+                                    <>
+                                        <Button
+                                            type="submit"
+                                            className=""
+                                            variant={"default"}
+                                        >
+                                        Login
+                                        </Button>
+                                        <Button
+                                            type="submit"
+                                            className=""
+                                            variant={"default"}
+                                            onClick={()=>{
+                                                form.setValue("email", "devyellopos@gmail.com")
+                                                form.setValue("password", "abc123")
+                                            }}
+                                        >
+                                        Login Dev
+                                        </Button>
+                                    </>
+                                )}
                                 <div>
                                     <span className="text-sm">
                                         Don&apos;t have any account?&nbsp;

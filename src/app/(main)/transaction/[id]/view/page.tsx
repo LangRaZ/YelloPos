@@ -57,9 +57,9 @@ export default function TransactionViewPage({ params } : { params:{ id:string } 
                 </CardHeader>
                 <CardContent>
                     <div>
-                        <p className="mb-2">Transaction Status : <span className="font-medium">{Transaction?.transaction_status}</span></p>
-                        <p>Processed By : <span className="font-medium">{StringToDateTime(Transaction?.Account?.name??"-")}</span></p>
-                        <p>Completed Time : <span className="font-medium">{StringToDateTime(Transaction?.completed_time??"-")}</span></p>
+                        <p>Transaction Status : <span className="font-medium">{Transaction?.transaction_status}</span></p>
+                        <p>Processed By : <span className="font-medium">{Transaction?.Account?.name??"-"}</span></p>
+                        <p>Completed Time : <span className="font-medium">{StringToDateTime(Transaction?.completed_time??"") === "" ? "-" : StringToDateTime(Transaction?.completed_time??"")}</span></p>
                         <Separator className="mt-4 mb-4"/>
                         <div className="flex justify-between items-center">
                             <div className="flex flex-row items-center">
@@ -88,7 +88,7 @@ export default function TransactionViewPage({ params } : { params:{ id:string } 
                         )}
                         <Separator className="mt-4 mb-4"/>
                         <p className="mb-2">Total Payment : <span className="font-medium">Rp{Transaction?.total_payment?.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></p>
-                        <p className="">Payment Method : <span className="font-medium">{Transaction?.payment_method}</span></p>
+                        <p className="">Payment Method : <span className="font-medium">{Transaction?.payment_method === "" ? "-" : Transaction?.payment_method}</span></p>
                     </div>
                 </CardContent>
             </Card>

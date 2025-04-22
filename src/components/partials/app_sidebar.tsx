@@ -25,7 +25,7 @@ export function AppSidebar({ Params } : { Params:SidebarParam | null }) {
     const data = {
         user: {
         name: Params?.name?? "",
-        email: Params?.email?? "",
+        role_name: Params?.role_name?? "",
         avatar: "/icons/logo-collapsed.svg",
         },
     }
@@ -47,7 +47,9 @@ export function AppSidebar({ Params } : { Params:SidebarParam | null }) {
                     <SidebarGroupLabel>APPLICATION</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {sidebarLinks.map((item) => (
+                            {sidebarLinks.filter((item)=>
+                                item.role.includes(data.user.role_name)
+                            ).map((item) => (
                                 (pathName.startsWith(item.route))?(
                                     <SidebarMenuItem key={item.label}>
                                         <SidebarMenuButton isActive asChild>
@@ -81,44 +83,48 @@ export function AppSidebar({ Params } : { Params:SidebarParam | null }) {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
-                <SidebarGroup className="mt-auto">
-                    <SidebarGroupLabel>ACCOUNT MANAGEMENT</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                    <SidebarMenu>
-                        {secondaryLinks.map((item) => (
-                            (pathName.startsWith(item.route))?(
-                                <SidebarMenuItem key={item.label}>
-                                    <SidebarMenuButton isActive asChild>
-                                    <a href={item.route}>
-                                        {open ? (
-                                            <>
-                                                <span className="h-full w-[3px] bg-sidebar-accent-foreground rounded-xl"></span>
-                                                <img src={item.imgURL} alt="" width="20px" height="20px" />
-                                                <span>{item.label}</span>
-                                            </>
-                                        ):(
-                                            <>
-                                                <img src={item.imgURL} alt="" width="20px" height="20px" />
-                                                <span>{item.label}</span>
-                                            </>
-                                        )}
-                                    </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ):(
-                                <SidebarMenuItem key={item.label}>
-                                    <SidebarMenuButton asChild>
-                                    <a href={item.route}>
-                                        <img src={item.imgURL} alt="" width="20px" height="20px" />
-                                        <span>{item.label}</span>
-                                    </a>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            )
-                        ))}
-                    </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
+                {(data.user.role_name === "Owner") ? (
+                    <SidebarGroup className="mt-auto">
+                        <SidebarGroupLabel>ACCOUNT MANAGEMENT</SidebarGroupLabel>
+                        <SidebarGroupContent>
+                        <SidebarMenu>
+                            {secondaryLinks.map((item) => (
+                                (pathName.startsWith(item.route))?(
+                                    <SidebarMenuItem key={item.label}>
+                                        <SidebarMenuButton isActive asChild>
+                                        <a href={item.route}>
+                                            {open ? (
+                                                <>
+                                                    <span className="h-full w-[3px] bg-sidebar-accent-foreground rounded-xl"></span>
+                                                    <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                                    <span>{item.label}</span>
+                                                </>
+                                            ):(
+                                                <>
+                                                    <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                                    <span>{item.label}</span>
+                                                </>
+                                            )}
+                                        </a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ):(
+                                    <SidebarMenuItem key={item.label}>
+                                        <SidebarMenuButton asChild>
+                                        <a href={item.route}>
+                                            <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                            <span>{item.label}</span>
+                                        </a>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                )
+                            ))}
+                        </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                ):(
+                    <></>
+                )}
             </SidebarContent>
             <SidebarFooter>
                 <NavUser user={data.user} />

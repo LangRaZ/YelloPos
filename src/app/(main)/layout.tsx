@@ -22,8 +22,8 @@ export default async function MainLayout({
   const { data: { session } } = await supabase.auth.getSession();
 
   const sidebarParam : SidebarParam = {
-    email: roleArray[session?.user.user_metadata.role_id - 1]??roleArray[0],
-    name: session?.user.user_metadata.username ?? session?.user.user_metadata.name
+    role_name: roleArray[session?.user.user_metadata.role_id - 1]??roleArray[0],
+    name: session?.user.user_metadata.username ?? session?.user.user_metadata.name,
   }
   
   return (

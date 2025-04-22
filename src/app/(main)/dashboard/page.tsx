@@ -10,7 +10,7 @@ import {
   getProfit,
 } from "@/lib/supabase/api"
 
-export default async function Dashboard({ searchParams }: { searchParams: { chart?: string } }) {
+export default async function Dashboard() {
   const Profit = await getProfit()
   const Order = await getOrder()
   const completedOrder = await getOrderCompleted()
