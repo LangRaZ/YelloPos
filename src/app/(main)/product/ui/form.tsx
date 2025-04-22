@@ -19,6 +19,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ProductMutation, Category } from "@/interface";
 import { createProduct, updateProduct } from "@/lib/supabase/api";
 import { ButtonLoading } from "@/components/helpers/button_loading";
+import { convertURLToFile } from "@/lib/convert_URL_to_file";
+import { useEffect } from "react";
 
 export default function ProductForm(
     { id, data, categories, isOnPage = false, closeDialog } :
@@ -44,6 +46,20 @@ export default function ProductForm(
             business_profile_id: data?.business_profile_id??0
         }
     })
+
+    useEffect(() => {
+        async function convertAndSetFile() {
+          if (data?.product_image) {
+            const file = await convertURLToFile(data.product_image);
+            if (file) {
+              form.setValue("product_image", file);
+              setPreview(URL.createObjectURL(file));
+            }
+          }
+        }
+      
+        convertAndSetFile();
+      }, [data?.product_image]);
 
     console.log(data)
     
