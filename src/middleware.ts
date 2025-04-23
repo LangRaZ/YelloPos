@@ -6,6 +6,8 @@ export async function middleware(request: NextRequest) {
     const supabase = await createClient();
 
     const { data: {user} } = await supabase.auth.getUser()
+    const staffAccessiblePage = ['/order', '/transaction']
+    const adminAccessiblePage = ['/order', '/transaction', '/product', '/category']
 
     if(
         !user &&
@@ -19,12 +21,20 @@ export async function middleware(request: NextRequest) {
     if(user){
         if(user.user_metadata.first_login && !request.nextUrl.pathname.startsWith('/first-login')){
             return NextResponse.redirect(new URL('/first-login', request.url))
-        }else{
-            if(request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register')){
-                return NextResponse.redirect(new URL('/', request.url))
+        }
+        else if(request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register')){
+            return NextResponse.redirect(new URL('/', request.url))
+        }
+        else if(user.user_metadata.first_setup_tax && request.nextUrl.pathname === '/tax'){
+            return NextResponse.redirect(new URL('/tax/first-tax', request.url))
+        }
+        else{
+            //middleware staff
+            if(user.user_metadata.role_id === 2 && !staffAccessiblePage.some((page) => request.nextUrl.pathname.startsWith(page))){
+                return NextResponse.redirect(new URL('/order', request.url))
             }
-            if(user.user_metadata.first_setup_tax && request.nextUrl.pathname === '/tax'){
-                return NextResponse.redirect(new URL('/tax/first-tax', request.url))
+            if(user.user_metadata.role_id === 3 && !adminAccessiblePage.some((page) => request.nextUrl.pathname.startsWith(page))){
+                return NextResponse.redirect(new URL('/order', request.url))
             }
         }
     }
