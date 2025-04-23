@@ -20,7 +20,7 @@ import { ReportMutation } from "@/interface";
 import { ButtonLoading } from "@/components/helpers/button_loading";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { exportToExcel } from "@/lib/exportToExcel";
-import { saveReport } from "@/lib/supabase/api";
+import { saveReport, getYearlyTaxReport } from "@/lib/supabase/api";
 
 export default function ReportFormYearly(
     { id, data, isOnPage = false, closeDialog } :
@@ -32,10 +32,10 @@ export default function ReportFormYearly(
     const router = useRouter()
     const currentYear = new Date().getFullYear()
     const years = Array.from({ length: 6 }, (_, i) => currentYear - i)
-    const testdata = [
-        { Year: 2024, Revenue: 1200, Expenses: 500 },
-        { Year: 2025, Revenue: 1400, Expenses: 600 },
-    ];
+    // const testdata = [
+    //     { Year: 2024, Revenue: 1200, Expenses: 500 },
+    //     { Year: 2025, Revenue: 1400, Expenses: 600 },
+    // ];
 
     //Declare form and form data
     const form = useForm<z.infer<typeof ReportValidation>>({
@@ -52,7 +52,7 @@ export default function ReportFormYearly(
     })
 
     //Declare on submit function for submit handler
-    function onSubmit(values: z.infer<typeof ReportValidation>){
+    async function onSubmit(values: z.infer<typeof ReportValidation>){
         setError(null);
         form.clearErrors();
         setIsLoading(true);
@@ -62,8 +62,10 @@ export default function ReportFormYearly(
         values.is_yearly = true
 
         const fileName = "yearly_report_" + values.year
-        
-        const excelFile = exportToExcel(testdata, fileName)
+
+        const dataYearly = await getYearlyTaxReport(values.year);
+
+        const excelFile = await exportToExcel(dataYearly.data??[], fileName)
         const file = new File([excelFile], fileName, {
             type: excelFile.type,
             });

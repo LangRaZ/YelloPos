@@ -334,6 +334,7 @@ export type Database = {
           month: number | null
           report_url: string | null
           year: number | null
+          report_name: string
         }
         Insert: {
           business_profile_id?: number | null
@@ -344,6 +345,7 @@ export type Database = {
           month?: number | null
           report_url?: string | null
           year?: number | null
+          report_name?: string
         }
         Update: {
           business_profile_id?: number | null
@@ -354,6 +356,7 @@ export type Database = {
           month?: number | null
           report_url?: string | null
           year?: number | null
+          report_name?: string
         }
         Relationships: [
           {
@@ -460,12 +463,13 @@ export type Database = {
           product_count: number
         }[]
       }
-      get_profit_yearly: {
+      get_order_count: {
         Args: { businessprofileid: number }
-        Returns: {
-          month: string
-          sum: number
-        }[]
+        Returns: number
+      }
+      get_order_count_completed: {
+        Args: { businessprofileid: number }
+        Returns: number
       }
       get_order_count_completed_yearly: {
         Args: { businessprofileid: number }
@@ -481,21 +485,24 @@ export type Database = {
           count: number
         }[]
       }
-      get_order_count: {
-        Args: { businessprofileid: number }
-        Returns: number
-      }
-      get_order_count_completed: {
-        Args: { businessprofileid: number }
-        Returns: number
-      }
       get_profit: {
         Args: { businessprofileid: number }
         Returns: number
       }
-      update_product_stock: {
-        Args: { orderquantity: number; orderproductid: number }
-        Returns: undefined
+      get_profit_yearly: {
+        Args: { businessprofileid: number }
+        Returns: {
+          month: string
+          sum: number
+        }[]
+      }
+      get_yearly_tax_report: {
+        Args: { businessprofileid: number; year: number }
+        Returns: {
+          month: string
+          sum: number
+          pph: number
+        }[]
       }
       topselling: {
         Args: { businessprofileid: number }
@@ -504,6 +511,10 @@ export type Database = {
           product_name: string
           total_quantity_sold: number
         }[]
+      }
+      update_product_stock: {
+        Args: { orderquantity: number; orderproductid: number }
+        Returns: undefined
       }
     }
     Enums: {
