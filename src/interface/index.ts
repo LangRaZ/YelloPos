@@ -277,9 +277,20 @@ export interface ReportMutation {
     is_yearly: boolean | null
     month: number | null
     year: number | null
-    report_name?: string | null
+    report_name: string | null
+    created_at: string
 }
 
 export interface ReportsResponse extends Response{
     data: ReportMutation[] | null
+}
+
+export interface TaxReportMutation {
+    month: string | null
+    sum: number | null
+    pph: number | null
+}
+
+export interface TaxReportsResponse extends Response{
+    data: TaxReportMutation[] | null
 }

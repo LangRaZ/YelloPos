@@ -1,5 +1,5 @@
 import { createClientBrowser } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser, ReportMutation } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser, ReportMutation, TaxReportsResponse } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse, User } from "@/interface"
 import { generateCode } from "../utils"
 import { updateAuthUser, getUserBusinessProfileId, updateAuthTax} from "./api_server"
@@ -826,14 +826,16 @@ export async function getTaxProfile(id: number) : Promise<TaxProfileResponse>{
 }
 
 export async function saveReport(report: ReportMutation, excelFile: File) : Promise<Response>{
-    const reportSup: ReportMutation = {
+    const unixTimestamp = Math.floor(Date.now()/1000);
+
+    const reportSup = {
         report_url: "",
         business_profile_id: await getUserBusinessProfileId(),
         is_monthly: report.is_monthly,
         is_yearly: report.is_yearly,
         month: report.month,
         year: report.year,
-        report_name: report.report_name
+        report_name: report.report_name??""
     }
 
     try {
@@ -845,7 +847,7 @@ export async function saveReport(report: ReportMutation, excelFile: File) : Prom
 
         if (res.data){
             const report_name = excelFile.name
-            const supabaseReportPath = `${report_name}.xlsx`
+            const supabaseReportPath = `${report_name}${unixTimestamp}.xlsx`
 
             const uploadedFile = await UploadReportSupabase(excelFile, supabaseReportPath)
             if(!uploadedFile){
@@ -1010,11 +1012,30 @@ export async function getReportMonthly() : Promise<ReportsResponse>{
 
 export async function getReportYearly() : Promise<ReportsResponse>{
     try {
-        const reports = await supabase.from('Report').select('*').eq('business_profile_id', await getUserBusinessProfileId()).eq('is_yearly', true).order('year', {ascending: false})
+        const reports = await supabase.from('Report').select('*').eq('business_profile_id', await getUserBusinessProfileId()).eq('is_yearly', true).order('year', {ascending: false}).order('created_at', {ascending: false})
         if(!reports.data){
             return {status:false, code:200, message: reports.statusText, data: reports.data};
         }
         return {status:true, code:200, message: reports.statusText, data: reports.data};
+        
+    } catch (error) {
+        return { 
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        };
+    }
+}
+
+export async function getYearlyTaxReport(selectedYear : number) : Promise<TaxReportsResponse>{
+    try {
+        const taxreports = await supabase.rpc('get_yearly_tax_report', {
+            businessprofileid : await getUserBusinessProfileId(), 
+            year : selectedYear
+        })
+        if(!taxreports.data){
+            return {status:false, code:200, message: taxreports.statusText, data: taxreports.data};
+        }
+        return {status:true, code:200, message: taxreports.statusText, data: taxreports.data};
         
     } catch (error) {
         return { 

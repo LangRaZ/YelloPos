@@ -161,5 +161,6 @@ export const ReportValidation = z
     month: z.number().min(1, { message: "Please select a month" })
     .max(12),
     year: z.number().min(currentYear - 6, { message: "Please select a year"}).max(currentYear),
-    report_name: z.string()
+    report_name: z.string(),
+    created_at: z.string()
   })
