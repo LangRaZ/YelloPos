@@ -4,10 +4,10 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 
 type ChartDataItem = {
   month: string
-  sum: number
+  count: number
 }
 
-export default function BarchartProfit({ data }: { data: ChartDataItem[] }) {
+export default function BarchartDashboard({ data, barKey, barName, YLabelOffset }: { data: ChartDataItem[], barKey: string, barName: string, YLabelOffset?: number }) {
   if (data.length === 0) {
     return <p>No data available for this business profile.</p> // Handle no data case
   }
@@ -24,16 +24,16 @@ export default function BarchartProfit({ data }: { data: ChartDataItem[] }) {
             tickFormatter={(value) => value.slice(0, 3)} // Jan, Feb, etc.
             tick={{ fontSize: 12 }}
             label={{ value: "Month", position: "insideBottom", offset: -25 }}
-            
+           
           />
 
           {/* Y-Axis with order count */}
           <YAxis
             label={{
-              value: "sum",
+              value: "Total",
               angle: -90,
               position: "insideLeft",
-              offset: 10,
+              offset: YLabelOffset??10,
             }}
             tick={{ fontSize: 12 }}
           />
@@ -45,7 +45,7 @@ export default function BarchartProfit({ data }: { data: ChartDataItem[] }) {
           <Legend verticalAlign="top" height={36} />
 
           {/* Bar Chart */}
-          <Bar dataKey="sum" fill="#3a00e7" radius={[4, 4, 0, 0]} name="Profit" />
+          <Bar dataKey={barKey} fill="#3a00e7" radius={[4, 4, 0, 0]} name={barName} />
         </BarChart>
       </ResponsiveContainer>
     </div>

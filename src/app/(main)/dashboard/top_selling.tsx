@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { TrendingUp } from "lucide-react";
+import { Loader2, TrendingUp } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -50,11 +50,7 @@ export default function TopSellingChart() {
   useEffect(() => {
     async function fetchData() {
       const result = await getTopSelling();
-      if (Array.isArray(result)) {
-        setTopProducts(result.slice(0, 5));
-      } else {
-        console.error("Failed to fetch data", result);
-      }
+      setTopProducts(result.data??[]);
       setLoading(false);
     }
 
@@ -84,7 +80,7 @@ export default function TopSellingChart() {
       </CardHeader>
       <CardContent>
         {loading ? (
-          <p className="text-muted-foreground">Loading chart...</p>
+          <Loader2 className="animate-spin" />
         ) : topProducts.length === 0 ? (
           <p className="text-muted-foreground">No sales data available</p>
         ) : (

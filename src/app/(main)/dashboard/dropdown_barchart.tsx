@@ -8,18 +8,17 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select"
-
-import BarchartOrder from "./bar_chart_order"
-import BarchartProfit from "./bar_chart_profit"
-import BarchartOrderCompleted from "./bar_chart_completed"
+import BarchartDashboard from "./barchart_dashboard"
+import { Loader2 } from "lucide-react"
 
 type Props = {
   dataOrder: any
   dataProfit: any
   dataOrderCompleted: any
+  loading: boolean
 }
 
-export default function ChartSwitcher({ dataOrder, dataProfit, dataOrderCompleted }: Props) {
+export default function ChartSwitcher({ dataOrder, dataProfit, dataOrderCompleted, loading }: Props) {
   const [selectedChart, setSelectedChart] = useState("order")
 
   return (
@@ -30,14 +29,19 @@ export default function ChartSwitcher({ dataOrder, dataProfit, dataOrderComplete
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="order">Order</SelectItem>
-          <SelectItem value="profit">Profit</SelectItem>
+          <SelectItem value="income">Income</SelectItem>
           <SelectItem value="completed">Order Completed</SelectItem>
         </SelectContent>
       </Select>
-
-      {selectedChart === "order" && <BarchartOrder data={dataOrder} />}
-      {selectedChart === "profit" && <BarchartProfit data={dataProfit} />}
-      {selectedChart === "completed" && <BarchartOrderCompleted data={dataOrderCompleted} />}
+      {loading ? (
+        <Loader2 className="animate-spin" />
+      ) : (
+        <>
+          {selectedChart === "order" && <BarchartDashboard data={dataOrder} barKey="count" barName="Order"/>}
+          {selectedChart === "income" && <BarchartDashboard data={dataProfit} barKey="sum" barName="Income" YLabelOffset={-10}/>}
+          {selectedChart === "completed" && <BarchartDashboard data={dataOrderCompleted} barKey="count" barName="Order Completed" />}
+        </>
+      )}
     </div>
   )
 }

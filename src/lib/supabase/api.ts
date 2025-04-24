@@ -913,10 +913,12 @@ export async function getProfit(){
         let { data, error } = await supabase.rpc('get_profit', {
             businessprofileid: await getUserBusinessProfileId()
         })
-        if (error) console.error(error)
-         return data
+        if (error){
+            return { status:false, code: 500, message: error.message, data: null };
+        }
+         return { status:true , code: 200, message: "Fetched Successfully", data: data };
     }catch(error){
-        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured", data: null};
     }
 
 }
@@ -926,10 +928,12 @@ export async function getOrder(){
         let { data, error } = await supabase.rpc('get_order_count', {
             businessprofileid: await getUserBusinessProfileId()
         })
-        if(error) console.error(error)
-        return data
+        if (error){
+            return { status:false, code: 500, message: error.message, data: null };
+        }
+        return { status:true , code: 200, message: "Fetched Successfully", data: data };
         }catch(error){
-            return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+            return { status:false, code: 500, message: String(error)??"Unexpected error occured", data: null};
         }
 }
 
@@ -938,10 +942,12 @@ export async function getOrderCompleted(){
         let { data, error } = await supabase.rpc('get_order_count_completed', {
             businessprofileid: await getUserBusinessProfileId()
           })
-        if (error) console.error(error)
-        return data
+        if (error){
+            return { status:false, code: 500, message: error.message, data: null };
+        }
+        return { status:true , code: 200, message: "Fetched Successfully", data: data };
         }catch(error){
-            return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+            return { status:false, code: 500, message: String(error)??"Unexpected error occured", data: null};
         }
 }
 
@@ -950,10 +956,12 @@ export async function getTopSelling(){
         let { data, error } = await supabase.rpc('topselling', {
             businessprofileid: await getUserBusinessProfileId()
         })
-        if (error) console.error(error)
-        return data
+        if (error){
+            return { status:false, code: 500, message: error.message, data: null };
+        }
+        return { status:true , code: 200, message: "Fetched Successfully", data: data };
     }catch(error){
-        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured", data: null};
     }
 }
 
