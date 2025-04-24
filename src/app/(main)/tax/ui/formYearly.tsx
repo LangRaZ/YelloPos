@@ -44,7 +44,7 @@ export default function ReportFormYearly(
             report_url: data?.report_url??"",
             business_profile_id: data?.business_profile_id?? 0,
             is_monthly: data?.is_monthly?? false,
-            is_yearly: data?.is_yearly?? false,
+            is_yearly: data?.is_yearly?? true,
             month: data?.month?? 1,
             year: data?.year?? 0,
             report_name: data?.report_name??""
@@ -71,7 +71,7 @@ export default function ReportFormYearly(
             });
 
         values.report_name = "Yearly Report " + values.year
-        console.log(values)
+        // console.log(values)
         saveReport(values, file)
         if(!isOnPage && closeDialog){
             closeDialog();

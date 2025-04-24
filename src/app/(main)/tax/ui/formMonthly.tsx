@@ -11,8 +11,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ReportMutation } from "@/interface";
 import { ButtonLoading } from "@/components/helpers/button_loading";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { exportToExcel } from "@/lib/exportToExcel";
-import { saveReport } from "@/lib/supabase/api";
+import { exportToExcel, exportToExcelMonthly } from "@/lib/exportToExcel";
+import { getMonthlyTaxReport, saveReport } from "@/lib/supabase/api";
 import { Download } from "lucide-react";
 
 export default function ReportFormMonthly(
@@ -28,10 +28,10 @@ export default function ReportFormMonthly(
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ];
-    const testdata = [
-        { Month: "January", Revenue: 1200, Expenses: 500 },
-        { Month: "February", Revenue: 1400, Expenses: 600 },
-    ];
+    // const testdata = [
+    //     { Month: "January", Revenue: 1200, Expenses: 500 },
+    //     { Month: "February", Revenue: 1400, Expenses: 600 },
+    // ];
 
     //Declare form and form data
     const form = useForm<z.infer<typeof ReportValidation>>({
@@ -39,7 +39,7 @@ export default function ReportFormMonthly(
         defaultValues:{
             report_url: data?.report_url??"",
             business_profile_id: data?.business_profile_id?? 0,
-            is_monthly: data?.is_monthly?? false,
+            is_monthly: data?.is_monthly?? true,
             is_yearly: data?.is_yearly?? false,
             month: data?.month?? 0,
             year: data?.year?? currentYear,
@@ -48,7 +48,7 @@ export default function ReportFormMonthly(
     })
 
     //Declare on submit function for submit handler
-    function onSubmit(values: z.infer<typeof ReportValidation>){
+    async function onSubmit(values: z.infer<typeof ReportValidation>){
         setError(null);
         form.clearErrors();
         setIsLoading(true);
@@ -58,7 +58,9 @@ export default function ReportFormMonthly(
 
         const fileName = "monthly_report_" + months[values.month - 1] + "_" + values.year
 
-        const excelFile = exportToExcel(testdata, fileName)
+        const dataMonthly = await getMonthlyTaxReport(values.month)
+
+        const excelFile = await exportToExcelMonthly(dataMonthly.data??[], fileName, months[values.month - 1], values.year)
         const file = new File([excelFile], fileName, {
             type: excelFile.type,
           });

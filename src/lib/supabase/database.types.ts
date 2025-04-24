@@ -463,6 +463,13 @@ export type Database = {
           product_count: number
         }[]
       }
+      get_monthly_tax_report: {
+        Args: { businessprofileid: number; month: number }
+        Returns: {
+          day: number
+          grossprofit: number
+        }[]
+      }
       get_order_count: {
         Args: { businessprofileid: number }
         Returns: number

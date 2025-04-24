@@ -278,6 +278,9 @@ export interface ReportMutation {
     month: number | null
     year: number | null
     report_name: string | null
+}
+
+export interface Reports extends ReportMutation {
     created_at: string
 }
 
@@ -293,4 +296,13 @@ export interface TaxReportMutation {
 
 export interface TaxReportsResponse extends Response{
     data: TaxReportMutation[] | null
+}
+
+export interface MonthlyTaxReportMutation {
+    day: number | null
+    grossprofit: number | null
+}
+
+export interface MonthlyTaxReportsResponse extends Response{
+    data: MonthlyTaxReportMutation[] | null
 }

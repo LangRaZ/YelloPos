@@ -160,7 +160,6 @@ export const ReportValidation = z
     is_yearly: z.boolean(),
     month: z.number().min(1, { message: "Please select a month" })
     .max(12),
-    year: z.number().min(currentYear - 6, { message: "Please select a year"}).max(currentYear),
-    report_name: z.string(),
-    created_at: z.string()
+    year: z.number().min(currentYear - 5, { message: "Please select a year"}).max(currentYear),
+    report_name: z.string()
   })

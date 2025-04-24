@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Download } from "lucide-react"
-import { ReportMutation } from "@/interface"
+import { Reports } from "@/interface"
 import { deleteProduct } from "@/lib/supabase/api"
 import DeleteAlert from "@/components/helpers/confirmation_alert"
 import { saveAs } from "file-saver"
@@ -12,7 +12,7 @@ import { format } from "date-fns"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const columnsYearly: ColumnDef<ReportMutation>[] = [
+export const columnsYearly: ColumnDef<Reports>[] = [
   {
     accessorKey: "report_name",
     header: "Report Name",
