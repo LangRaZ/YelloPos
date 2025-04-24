@@ -1,5 +1,5 @@
 import { createClientBrowser } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser, ReportMutation, TaxReportsResponse } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser, ReportMutation, TaxReportsResponse, MonthlyTaxReportsResponse } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse, User } from "@/interface"
 import { generateCode } from "../utils"
 import { updateAuthUser, getUserBusinessProfileId, updateAuthTax} from "./api_server"
@@ -809,9 +809,9 @@ export async function createTaxProfile(tax: TaxMutation) : Promise<Response>{
     }
 }
 
-export async function getTaxProfile(id: number) : Promise<TaxProfileResponse>{
+export async function getTaxProfile() : Promise<TaxProfileResponse>{
     try {
-        const tax_id = await supabase.from("Tax Module").select("*").eq("id", id).single()
+        const tax_id = await supabase.from("Tax Module").select("*").eq("business_profile_id", await getUserBusinessProfileId()).single()
         if(!tax_id.data){
             return {status:false, code:200, message: tax_id.statusText, data: tax_id.data};
         }
@@ -1025,6 +1025,25 @@ export async function getReportYearly() : Promise<ReportsResponse>{
             return {status:false, code:200, message: reports.statusText, data: reports.data};
         }
         return {status:true, code:200, message: reports.statusText, data: reports.data};
+        
+    } catch (error) {
+        return { 
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        };
+    }
+}
+
+export async function getMonthlyTaxReport(selectedMonth : number) : Promise<MonthlyTaxReportsResponse>{
+    try {
+        const taxreports = await supabase.rpc('get_monthly_tax_report', {
+            businessprofileid : await getUserBusinessProfileId(), 
+            month : selectedMonth
+          })
+        if(!taxreports.data){
+            return {status:false, code:200, message: taxreports.statusText, data: taxreports.data};
+        }
+        return {status:true, code:200, message: taxreports.statusText, data: taxreports.data};
         
     } catch (error) {
         return { 
