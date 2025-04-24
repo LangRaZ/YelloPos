@@ -27,13 +27,13 @@ export default async function Dashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
         <Card className="shadow-md">
           <CardHeader className="items-center text-center">
-            <CardTitle className="text-xl text-gray-700">Profit</CardTitle>
+            <CardTitle className="text-xl text-gray-700">Gross profit</CardTitle>
           </CardHeader>
           <CardContent className="text-center text-wrap">
             {typeof Profit === "number" ? (
               <p className="text-4xl font-bold text-purple-600 text-wrap">Rp{Profit.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
             ) : (
-            <p className="text-sm text-muted-foreground">Profit data not available</p>
+            <p className="text-sm text-muted-foreground">Gross profit data not available</p>
             )}  
           </CardContent>
         </Card>
