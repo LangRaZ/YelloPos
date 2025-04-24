@@ -75,7 +75,7 @@ export default function TaxFirstLoginForm(
                     onChange={(e) => {
                       const value = e.target.value;
                       field.onChange(value); // must pass string
-                      form.setValue("pph_percentage", value === "PPH_FINAL_05" ? 0.5 : 1);
+                      form.setValue("pph_percentage", value === "PPH_FINAL_05" ? 0.005 : 0.01);
                     }}
                   >
                     <option></option>
