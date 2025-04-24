@@ -285,7 +285,7 @@ export interface Reports extends ReportMutation {
 }
 
 export interface ReportsResponse extends Response{
-    data: ReportMutation[] | null
+    data: Reports[] | null
 }
 
 export interface TaxReportMutation {
