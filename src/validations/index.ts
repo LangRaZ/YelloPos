@@ -163,3 +163,9 @@ export const ReportValidation = z
     year: z.number().min(currentYear - 5, { message: "Please select a year"}).max(currentYear),
     report_name: z.string()
   })
+
+  export const orderDetailValidation = z.object({
+    quantity: z.number({
+        required_error: "Product quantity must not be empty",
+    }).int().gt(0, "Quantity must be greater than 0"),
+  })

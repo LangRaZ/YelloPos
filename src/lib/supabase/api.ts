@@ -758,7 +758,8 @@ export async function createOrder(order: OrderMutation) : Promise<Response>{
                 product_id: items.product.id,
                 order_id: data.id,
                 quantity: items.quantity,
-                total_price: items.total_price
+                total_price: items.total_price,
+                current_price: items.current_price
             }))
             
             const resDetails = await createOrderDetails(orderDetails)
@@ -784,6 +785,31 @@ export async function cancelOrder(id: string) : Promise<Response>{
         }
 
         return {status: true, code: res.status, message:"Order has been cancelled!"}
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+export async function deleteOrderDetail(id: string) : Promise<Response>{
+    try {
+        const res = await supabase.from("OrderDetail").delete().eq("id", Number(id))
+        if(!res){
+            return {status: false, code:500, message: "Failed to delete order detail"};
+        }
+        return { status:true, code: res.status, message: res.statusText };
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+export async function updateOrderDetail(id: number, qty: number, curr_price: number): Promise<Response>{
+    const new_total_price = qty * curr_price
+    try {
+        const res = await supabase.from("OrderDetail").update({quantity: qty, total_price: new_total_price}).eq("id", id)
+        if(!res){
+            return {status: false, code:500, message: "Failed to update order detail"};
+        }
+        return { status:true, code: res.status, message: res.statusText };
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
     }

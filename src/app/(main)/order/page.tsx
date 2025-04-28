@@ -71,6 +71,7 @@ export default function OrderMenuPage() {
     product,
     quantity: productQuantities[product.id],
     total_price: ((product.sell_price??0) * productQuantities[product.id]),
+    current_price: product.sell_price
   }));
 
   const totalAmount = orderDetails.reduce(

@@ -8,10 +8,8 @@ export default async function TransactionOverviewPage() {
   // const count = products?.length
 
   return (
-    <>
       <div className="">
         <TransactionTable data={transaction ?? []}/>
       </div>
-    </>
   )
 }

@@ -222,6 +222,7 @@ export type Database = {
       OrderDetail: {
         Row: {
           created_at: string
+          current_price: number
           id: number
           order_id: number
           product_id: number
@@ -230,6 +231,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          current_price: number
           id?: number
           order_id: number
           product_id: number
@@ -238,6 +240,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          current_price?: number
           id?: number
           order_id?: number
           product_id?: number
@@ -275,7 +278,7 @@ export type Database = {
           product_image: string | null
           product_name: string | null
           quantity: number | null
-          sell_price: number | null
+          sell_price: number
         }
         Insert: {
           business_profile_id?: number | null
@@ -290,7 +293,7 @@ export type Database = {
           product_image?: string | null
           product_name?: string | null
           quantity?: number | null
-          sell_price?: number | null
+          sell_price?: number
         }
         Update: {
           business_profile_id?: number | null
@@ -305,7 +308,7 @@ export type Database = {
           product_image?: string | null
           product_name?: string | null
           quantity?: number | null
-          sell_price?: number | null
+          sell_price?: number
         }
         Relationships: [
           {

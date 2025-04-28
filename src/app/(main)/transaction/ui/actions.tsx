@@ -45,7 +45,7 @@ export function ProcessOrderButton({ id, transaction } : { id: string, transacti
                     </span>
                 ):(
                 <p onClick={handleProcess}>
-                    Process Order
+                    Process Transaction
                 </p>
                 )}
             </DropdownMenuItem>

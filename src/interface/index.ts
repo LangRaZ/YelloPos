@@ -13,7 +13,7 @@ export interface ProductMutation{
     product_category_id : number | null
     product_image : string | null
     description : string | null
-    sell_price : number | null
+    sell_price : number
     quantity : number | null
     is_active: boolean | null
     last_image_update: string
@@ -25,7 +25,7 @@ export interface ProductMutationImage{
     product_category_id : number | null
     product_image : File
     description : string | null
-    sell_price : number | null
+    sell_price : number
     quantity : number | null
     is_active: boolean | null
     last_image_update: string
@@ -185,6 +185,7 @@ export interface OrderDetailTemporary{
     product: Product
     quantity: number
     total_price: number
+    current_price: number
 }
 
 export interface OrderDetailMutation{
@@ -192,6 +193,8 @@ export interface OrderDetailMutation{
     order_id: number
     quantity: number
     total_price: number
+    current_price: number
+
 }
 
 export interface OrderMutation{

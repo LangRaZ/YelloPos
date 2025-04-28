@@ -28,6 +28,7 @@ export function getColumns(currentUserUID: string): ColumnDef<Transaction>[]{
     {
       accessorKey: "total_payment",
       header: "Total",
+      cell: ({row}) => `Rp${row.original.total_payment}`,
     },
     {
       accessorKey: "transaction_status",
@@ -55,6 +56,13 @@ export function getColumns(currentUserUID: string): ColumnDef<Transaction>[]{
                         View Detail
                       </Link>
                     </DropdownMenuItem>
+                    {transaction.transaction_status !== "Cancelled" && 
+                      <DropdownMenuItem className="hover:cursor-pointer" asChild>
+                        <Link href={`/transaction/${transaction.id}/edit`}>
+                          Edit Transaction
+                        </Link>
+                      </DropdownMenuItem>
+                    }
                     {((transaction?.transaction_status === "Pending" || transaction?.transaction_status === "In-Process") && 
                       <ProcessOrderButton id={currentUserUID} transaction={transaction} />
                     )}
