@@ -2,7 +2,11 @@ import { columns } from "./columns"
 import  DataTable  from "@/components/helpers/data_table"
 import { getProducts, getCategories } from "@/lib/supabase/api"
 import { CreateProductButton } from "./ui/actions"
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Product Overview"
+};
 
 export default async function ProductOverviewPage() {
   const {data: products} = await getProducts();

@@ -5,10 +5,13 @@ import { usePathname } from "next/navigation";
 
 const formatPathname = (path : String) => {
     if (path === "/") return "Dashboard";
-  
-    return path
-      .replace("/", "")
-      .replace(/^\w/, (c) => c.toUpperCase());
+     
+    const title = path
+    .replace("/", "")
+    .split("/")
+    .shift()??""
+
+    return title.charAt(0).toUpperCase() + title.slice(1);
   };
 
 export default function header() {

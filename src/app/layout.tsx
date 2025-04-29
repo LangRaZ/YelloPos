@@ -2,6 +2,14 @@ import './globals.css';
 import { Metadata } from "next";
 import { Toaster } from 'sonner';
 
+export const metadata = {
+  title: "YelloPOS",
+  description: "",
+  icons:{
+    icon: [{url: "/icons/logo-collapsed.svg", sizes: "196x196", type: "image/svg"}]
+  }
+} 
+
 export default function RootLayout({
   children,
 }: Readonly<{

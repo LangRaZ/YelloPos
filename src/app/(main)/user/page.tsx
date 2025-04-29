@@ -1,8 +1,12 @@
 import { columns } from "./columns"
 import  DataTable  from "@/components/helpers/data_table"
-import { SquarePlus} from "lucide-react"
-import { getUser, getRoles, getUsers } from "@/lib/supabase/api"
+import { getRoles, getUsers } from "@/lib/supabase/api"
 import { CreateUserButton } from "./ui/actions"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "User Overview"
+};
 
 export default async function UserOverviewPage() {
   const {data: Users} = await getUsers();

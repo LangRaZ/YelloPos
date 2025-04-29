@@ -1,8 +1,12 @@
 import { columns } from "./columns"
 import  DataTable  from "@/components/helpers/data_table"
-import { getProducts, getCategories } from "@/lib/supabase/api"
+import { getCategories } from "@/lib/supabase/api"
 import { CreateCategoryButton } from "./ui/actions"
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Category Overview"
+};
 
 export default async function CategoryOverviewPage() {
   const {data: categories} = await getCategories();

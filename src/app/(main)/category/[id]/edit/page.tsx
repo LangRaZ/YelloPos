@@ -6,6 +6,9 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import CategoryForm from "../../ui/form";
 
+export const metadata: Metadata = {
+    title: "Edit Category"
+};
 
 export default async function CompanyEditPage({ params } : { params:{ id:string } }){
     const param = await params;

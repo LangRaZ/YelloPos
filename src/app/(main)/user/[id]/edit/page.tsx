@@ -5,6 +5,10 @@ import UserForm from "../../ui/form";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
+export const metadata: Metadata = {
+    title: "Edit User"
+};
+  
 
 export default async function UserEditPage({ params } : { params:{ id:string } }){
     const param = await params;

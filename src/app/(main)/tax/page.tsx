@@ -21,6 +21,11 @@ import { columnsYearly } from "./columnsYearly"
 import { getReportMonthly, getReportYearly } from "@/lib/supabase/api"
 import { CreateReportYearlyButton } from "./ui/actionsYearly"
 import { CreateReportMonthlyButton } from "./ui/actionsMonthly"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Tax"
+}
 
 export default async function tax() {
   const {data: reportMonthly} = await getReportMonthly();
@@ -68,7 +73,7 @@ export default async function tax() {
       <div className="mt-10">
         <Tabs defaultValue="monthly">
           <div className="flex justify-between">
-            <TabsList className="grid w-full grid-cols-2 w-[400px]">
+            <TabsList className="grid w-full grid-cols-2 md:w-[400px]">
               <TabsTrigger value="monthly">Monthly</TabsTrigger>
               <TabsTrigger value="yearly">Yearly</TabsTrigger>
             </TabsList>

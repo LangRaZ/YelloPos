@@ -248,7 +248,7 @@ export async function getUsers(){
             return { status:false, code: 500, message: "Failed to get users", data: null };
         }
 
-        const user = await supabase.from('Accounts').select('*, Role:role_id(role_name)').eq('business_profile_id', bpid).order('created_at', {ascending: false})
+        const user = await supabase.from('Accounts').select('*, Role:role_id(role_name)').eq('business_profile_id', bpid).neq('role_id', 1).order('created_at', {ascending: false})
         if(user.error){
             return { status:false, code: 500, message: "Failed to get users", data: null };
         }

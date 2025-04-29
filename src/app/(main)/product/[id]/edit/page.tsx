@@ -5,12 +5,19 @@ import ProductForm from "../../ui/form";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
+export const metadata: Metadata = {
+    title: "Edit Product"
+};
 
 export default async function ProductEditPage({ params } : { params:{ id:string } }){
     const param = await params;
     const id = Number(param.id)
     const product = await getProduct(id)
     const {data: categories} = await getCategories()
+
+    const metadata: Metadata = {
+        title: `Product - ${product.data?.product_name}`,
+    }
 
     if(!product.status) notFound();
 
