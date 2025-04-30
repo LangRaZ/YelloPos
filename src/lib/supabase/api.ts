@@ -816,6 +816,34 @@ export async function updateOrderDetail(id: number, qty: number, curr_price: num
 }
 
 //Tax
+export async function getyearlygross(){
+    try {
+        let { data, error } = await supabase.rpc('get_yearly_gross_profit', {
+            businessprofileid: await getUserBusinessProfileId()
+        })
+        if (error){
+            return { status:false, code: 500, message: error.message, data: null };
+        }
+        return { status:true , code: 200, message: "Fetched Successfully", data: data };
+        }catch(error){
+            return { status:false, code: 500, message: String(error)??"Unexpected error occured", data: null};
+        }
+}
+
+export async function getaccumulatedtax(){
+    try {
+        let { data, error } = await supabase.rpc('get_tax_amount', {
+            businessprofileid: await getUserBusinessProfileId()
+        })
+        if (error){
+            return { status:false, code: 500, message: error.message, data: null };
+        }
+        return { status:true , code: 200, message: "Fetched Successfully", data: data };
+        }catch(error){
+            return { status:false, code: 500, message: String(error)??"Unexpected error occured", data: null};
+        }
+}
+
 export async function createTaxProfile(tax: TaxMutation) : Promise<Response>{
     try {
         tax.business_profile_id = await getUserBusinessProfileId();

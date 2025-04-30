@@ -506,6 +506,14 @@ export type Database = {
           sum: number
         }[]
       }
+      get_tax_amount: {
+        Args: { businessprofileid: number }
+        Returns: number
+      }
+      get_yearly_gross_profit: {
+        Args: { businessprofileid: number }
+        Returns: number
+      }
       get_yearly_tax_report: {
         Args: { businessprofileid: number; year: number }
         Returns: {
