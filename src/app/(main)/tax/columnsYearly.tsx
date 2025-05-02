@@ -5,10 +5,10 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Download } from "lucide-react"
 import { Reports } from "@/interface"
-import { deleteProduct } from "@/lib/supabase/api"
-import DeleteAlert from "@/components/helpers/confirmation_alert"
+import { deleteReport } from "@/lib/supabase/api"
 import { saveAs } from "file-saver"
 import { format } from "date-fns"
+import ConfirmationAlert from "@/components/helpers/confirmation_alert"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -53,13 +53,14 @@ export const columnsYearly: ColumnDef<Reports>[] = [
           >
             <Download className="w-4 h-4" />
           </Button>
-          {/* <DeleteAlert
-            // id={product.id.toString()}
-            // EditAction={deleteProduct}
-            // warningMessage="This action cannot be undone. This product will be deleted permanently"
-            // successMessage="Delete success!"
-            // successDescription="Product has been deleted"
-          /> */}
+          <ConfirmationAlert
+            id={report.id.toString()}
+            EditAction={deleteReport}
+            warningMessage="This action cannot be undone. This product will be deleted permanently"
+            successMessage="Delete success!"
+            successDescription="Product has been deleted"
+            variant="Delete"
+          />
         </div>
       );
     },

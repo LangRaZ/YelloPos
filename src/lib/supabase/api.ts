@@ -868,7 +868,6 @@ export async function createTaxProfile(tax: TaxMutation) : Promise<Response>{
 export async function getTaxProfile() : Promise<TaxProfileResponse>{
     try {
         const tax_id = await supabase.from("Tax Module").select("*").eq("business_profile_id", await getUserBusinessProfileId()).single()
-        console.log(tax_id.data?.id)
         if(!tax_id.data){
             return {status:false, code:200, message: tax_id.statusText, data: tax_id.data};
         }
@@ -938,6 +937,21 @@ export async function saveReport(report: ReportMutation, excelFile: File) : Prom
     }
 }
 
+export async function deleteReport(id: string) : Promise<Response>{
+    try {
+        console.log(id)
+        const report = await supabase.from('Report').select('report_url').eq('id', Number(id)).single()
+        const report_url_name = report.data?.report_url?.split("/").pop();
+        console.log(report_url_name)
+        const res = await supabase.from("Report").delete().like("report_url", `%${report_url_name ?? ""}`)
+
+        const uploadedFile = await deleteFileSupabaseReport(report_url_name)
+        return { status:true, code: res.status, message: "Report has been completed!" };
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
 async function UploadReportSupabase(File: File, path: string){
     try {
         const res = await supabase
@@ -947,6 +961,16 @@ async function UploadReportSupabase(File: File, path: string){
             cacheControl: '0',
             upsert: true
         })
+        return res;
+    } catch (error) {
+        return null;
+    }
+}
+
+async function deleteFileSupabaseReport(path: string | undefined){
+    try {
+        const res = await supabase.storage.from('report').remove([path??""])
+        console.log(`sukses delete ${path}`)
         return res;
     } catch (error) {
         return null;

@@ -288,6 +288,7 @@ export interface ReportMutation {
 }
 
 export interface Reports extends ReportMutation {
+    id: number
     created_at: string
 }
 
