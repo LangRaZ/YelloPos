@@ -1,6 +1,6 @@
 import PopupContainer from "@/components/helpers/popup_container"
 import { Button } from "@/components/ui/button"
-import { SquarePlus } from "lucide-react"
+import { Pencil, SquarePlus } from "lucide-react"
 
 import { Category, Tax } from "@/interface"
 import TaxFirstLoginForm from "../first-tax/ui/first_login_tax"
@@ -11,7 +11,7 @@ export function ChangeTaxButton({ TaxProfile } : { TaxProfile: Tax|null }){
         //Use popup container for popup create update form
         //Add trigger : trigger button, modalTitle: form title, modalDescription: form description
         <PopupContainer
-            trigger={<Button variant={"default"}><SquarePlus />Edit Tax</Button>}
+            trigger={<Button variant={"default"}><Pencil  />Edit Tax</Button>}
             modalTitle="Edit Tax"
             modalDescription="Fill all the required data fields"
         >
