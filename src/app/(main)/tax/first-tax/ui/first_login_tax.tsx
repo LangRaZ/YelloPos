@@ -9,50 +9,76 @@ import Image from "next/image";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { createBusiness, createTaxProfile } from "@/lib/supabase/api";
+import { createBusiness, createTaxProfile, UpdateTaxProfile } from "@/lib/supabase/api";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { ButtonLoading } from "@/components/helpers/button_loading";
-import { TaxMutation } from "@/interface";
+import { Tax, TaxMutation } from "@/interface";
 
 
 export default function TaxFirstLoginForm(
-    { isOnPage = false, closeDialog } :
-    { isOnPage?: boolean, closeDialog?:()=>void }
+    { id, data,isOnPage = false, closeDialog } :
+    { id?:number,data?:Tax|null,isOnPage?: boolean, closeDialog?:()=>void }
 ) {
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    console.log(id)
     const router = useRouter();
   
     const form = useForm<z.infer<typeof TaxFirstLoginValidation>>({
       resolver: zodResolver(TaxFirstLoginValidation),
       defaultValues: {
-        business_profile_id: 2,
-        is_pph: true,
-        is_ppn: false,
-        pph_type: "",
-        pph_percentage: 0.5,
-        ppn_percentage: 0,
-        monthly_bruto: 0,
-        yearly_bruto: 0,
+        business_profile_id: data?.business_profile_id??0,
+        is_pph: data?.is_pph??true,
+        is_ppn: data?.is_ppn??false,
+        pph_type: data?.pph_type??"",
+        pph_percentage: data?.pph_percentage??0.5,
+        ppn_percentage: data?.ppn_percentage??0,
+        monthly_bruto: data?.monthly_bruto??0,
+        yearly_bruto: data?.yearly_bruto??0,
       }
     });
   
     function handleSubmitTax(values: z.infer<typeof TaxFirstLoginValidation>) {
+      setIsLoading(true)
       setError(null);
       form.clearErrors();
-  
-      createTaxProfile(values).then((res) => {
-        if (res.status) {
-          router.push("/tax");
-          toast.success("Tax Info Saved!", {
-            description: "Your tax settings have been saved successfully.",
-          });
+      
+      if(id){
+        UpdateTaxProfile(values,id).then((res) => {
+          if(res && res.status){
+            if(!isOnPage && closeDialog){
+                closeDialog();
+            }
+            toast.success("Tax updated!", { description:res.message })
+            if(isOnPage){
+                router.push("/tax");
+            } else {
+                window.location.reload()
+            }
         } else {
-          setError(res.message);
+            setError(res?.message??"Unexpected error occurred! Please reload the page!");
+            form.reset();
+            setIsLoading(false);        
         }
-      });
+        });
+      }else{
+        createTaxProfile(values).then((res) => {
+          if (res.status) {
+            router.push("/tax");
+            toast.success("Tax Info Saved!", {
+              description: "Your tax settings have been saved successfully.",
+            });
+          } else {
+            setError(res.message);
+            setIsLoading(false);     
+          }
+        });
+      }
+
+      
     }
-  
+    
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <Form {...form}>
@@ -175,12 +201,11 @@ export default function TaxFirstLoginForm(
             /> */}
           {/* </div> */}
 
-          <Button
-            type="submit"
-            className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700 transition"
-          >
-            Submit
-          </Button>
+          {isLoading ? (
+              <ButtonLoading />
+          ):(
+              <Button type="submit" className="mt-5">Submit</Button>
+          )}  
 
         </form>
       </Form>

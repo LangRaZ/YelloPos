@@ -264,8 +264,12 @@ export interface TaxMutation{
     yearly_bruto: number | null
 }
 
+export interface Tax extends TaxMutation{
+    id:number 
+}
+
 export interface TaxProfileResponse extends Response{
-    data: TaxMutation | null
+    data: Tax | null
 }
 
 export interface SidebarParam {

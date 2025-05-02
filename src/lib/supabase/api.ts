@@ -1,5 +1,5 @@
 import { createClientBrowser } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser, ReportMutation, TaxReportsResponse, MonthlyTaxReportsResponse } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser, ReportMutation, TaxReportsResponse, MonthlyTaxReportsResponse, Tax } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse, User } from "@/interface"
 import { generateCode } from "../utils"
 import { updateAuthUser, getUserBusinessProfileId, updateAuthTax} from "./api_server"
@@ -846,6 +846,8 @@ export async function getaccumulatedtax(){
 
 export async function createTaxProfile(tax: TaxMutation) : Promise<Response>{
     try {
+        const tax_id = await supabase.from("Tax Module").select("*").eq("business_profile_id", await getUserBusinessProfileId()).single()
+        
         tax.business_profile_id = await getUserBusinessProfileId();
         const res = await supabase.from("Tax Module").insert(tax)
 
@@ -866,6 +868,7 @@ export async function createTaxProfile(tax: TaxMutation) : Promise<Response>{
 export async function getTaxProfile() : Promise<TaxProfileResponse>{
     try {
         const tax_id = await supabase.from("Tax Module").select("*").eq("business_profile_id", await getUserBusinessProfileId()).single()
+        console.log(tax_id.data?.id)
         if(!tax_id.data){
             return {status:false, code:200, message: tax_id.statusText, data: tax_id.data};
         }
@@ -876,6 +879,19 @@ export async function getTaxProfile() : Promise<TaxProfileResponse>{
             status:false, code: 500, message: String(error)??"Unexpected error occurred", 
             data:null
         }
+    }
+}
+
+export async function UpdateTaxProfile(tax:TaxMutation,id:number) : Promise<Response> {
+    try{
+        const res = await supabase.from("Tax Module").update(tax).eq("id",id)
+
+        if (res.error){
+            return {status: false, code: 500, message: "Failed to create tax profile"};
+        }
+        return { status:true, code: res.status, message: "Tax profile has been Updated!" }; 
+    }catch(error){
+        return{status:false, code: 500, message: String(error)??"Unexpected error occured"}
     }
 }
 

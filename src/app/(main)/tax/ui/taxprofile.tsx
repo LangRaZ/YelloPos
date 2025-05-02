@@ -19,24 +19,22 @@ import {
 import  DataTable  from "@/components/helpers/data_table"
 import { columnsMonthly } from "../columnsMonthly"
 import { columnsYearly } from "../columnsYearly"
-import { getaccumulatedtax, getProfit, getReportMonthly, getReportYearly, getyearlygross } from "@/lib/supabase/api"
+import { getaccumulatedtax, getProfit, getReportMonthly, getReportYearly, getTaxProfile, getyearlygross } from "@/lib/supabase/api"
 import { CreateReportYearlyButton } from "./actionsYearly"
 import { CreateReportMonthlyButton } from "./actionsMonthly"
 import { Metadata } from "next"
 import { useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
-import { Reports } from "@/interface"
+import { Reports, Tax } from "@/interface"
+import { ChangeTaxButton } from "./actionsEditTax"
 
-export const metadata: Metadata = {
-  title: "Tax"
-}
 
-export default function Tax() {
+export default function TaxProfile() {
 const [loading, setLoading] = useState(true);
   const [Gross, setGross] = useState<number|null>(null) 
   const [yearlyGross, setYearlyGross] = useState<number|null>(null) 
   const [accumulatedTax, setAccumulatedTax] = useState<number|null>(null) 
-  
+  const [taxprofile,setTaxProfile]=useState<Tax|null>(null)
   
   const [reportMonthly,setReportMonthly] = useState<Reports[]|null>(null) 
   const [reportYearly,setReportYearly] = useState<Reports[]|null>(null) 
@@ -57,7 +55,12 @@ useEffect(() => {
         setReportMonthly(reportMonthly)
         const {data: reportYearly} = await getReportYearly();
         setReportYearly(reportYearly)
+
+        const taxprofile = await getTaxProfile()
+        setTaxProfile(taxprofile.data)
         setLoading(false);
+
+        
       }
       
       fetchData();
@@ -77,7 +80,7 @@ useEffect(() => {
                   {loading ? (
             <Loader2 className="animate-spin" />
           ) : Gross === null ? (
-            <p className="text-sm text-muted-foreground">N/A</p>
+            <p className="text-4xl font-bold text-purple-600 text-wrap">Rp0</p>
           ) : (
             <p className="text-4xl font-bold text-purple-600 text-wrap">Rp{Gross.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
           )}
@@ -93,7 +96,7 @@ useEffect(() => {
                   {loading ? (
             <Loader2 className="animate-spin" />
           ) : yearlyGross === null ? (
-            <p className="text-sm text-muted-foreground">N/A</p>
+            <p className="text-4xl font-bold text-purple-600 text-wrap">Rp0</p>
           ) : (
             <p className="text-4xl font-bold text-purple-600 text-wrap">Rp{yearlyGross.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
           )}
@@ -109,7 +112,7 @@ useEffect(() => {
                   {loading ? (
             <Loader2 className="animate-spin" />
           ) : accumulatedTax === null ? (
-            <p className="text-sm text-muted-foreground">N/A</p>
+            <p className="text-4xl font-bold text-purple-600 text-wrap">Rp0</p>
           ) : (
             <p className="text-4xl font-bold text-purple-600 text-wrap">Rp{accumulatedTax.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
           )}
@@ -118,6 +121,7 @@ useEffect(() => {
               </Card>
           </div>
       </div>
+      <ChangeTaxButton TaxProfile={taxprofile}/>
       <div className="mt-10">
         <Tabs defaultValue="monthly">
           <div className="flex justify-between">

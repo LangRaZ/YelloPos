@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import Tax from "./ui/taxprofile"
+import TaxProfile from "./ui/taxprofile"
 export const metadata: Metadata = {
   title: "Tax"
 }
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 export default function TaxPage() {
   
   return (
-    <Tax />
+    <TaxProfile />
 
   )
 }
