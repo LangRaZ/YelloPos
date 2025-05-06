@@ -5,9 +5,10 @@ export const metadata: Metadata = {
     title: "Process Transaction"
 };
 
-export default function TransactionProcessPage({ params } : { params:{ id:string } }){
-
+export default async function TransactionProcessPage(props : { params: Promise<{ id:string }> }){
+    const param = await props.params
+    const id = param.id
     return (
-        <ProcessTransaction params={params}/>
+        <ProcessTransaction paramId={id}/>
     )
 }

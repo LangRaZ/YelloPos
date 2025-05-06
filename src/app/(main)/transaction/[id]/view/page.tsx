@@ -5,9 +5,10 @@ export const metadata: Metadata = {
     title: "View Transaction"
 };
 
-export default function TransactionViewPage({ params } : { params:{ id:string } }){
-    
+export default async function TransactionViewPage(props : { params: Promise<{ id:string }> }){
+    const param = await props.params
+    const id = param.id
     return (
-        <ViewTransaction params={params}/>
+        <ViewTransaction paramId={id}/>
     )
 }

@@ -10,8 +10,9 @@ export const metadata: Metadata = {
 };
   
 
-export default async function UserEditPage({ params } : { params:{ id:string } }){
-    const {id} = params;
+export default async function UserEditPage(props : { params: Promise<{ id:string }> }){
+    const param = await props.params;
+    const id = param.id
     const user = await getUser(id)
     const {data: Roles} = await getRoles()
 

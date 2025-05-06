@@ -9,8 +9,8 @@ export const metadata: Metadata = {
     title: "Edit Product"
 };
 
-export default async function ProductEditPage({ params } : { params:{ id:string } }){
-    const param = params;
+export default async function ProductEditPage(props : { params: Promise<{ id:string }> }){
+    const param = await props.params;
     const id = Number(param.id)
     const product = await getProduct(id)
     const {data: categories} = await getCategories()

@@ -5,9 +5,10 @@ export const metadata: Metadata = {
     title: "Edit Transaction"
 };
 
-export default function TransactionEditPage({ params } : { params:{ id:string } }){
-
+export default async function TransactionEditPage(props : { params: Promise<{ id:string }> }){
+    const param = await props.params
+    const id = param.id
     return (
-        <EditTransaction params={params}/>
+        <EditTransaction paramId={id}/>
     )
 }

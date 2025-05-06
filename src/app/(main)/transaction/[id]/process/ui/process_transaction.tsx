@@ -10,7 +10,7 @@ import { OrderDetail, Transaction } from "@/interface";
 import { Separator } from "@/components/ui/separator";
 
 
-export default function ProcessTransaction({ params } : { params:{ id:string } }){
+export default function ProcessTransaction({ paramId } : { paramId:string }){
     const [loading, setLoading] = useState(true);
     const [id, setId] = useState<number>()
     const [Transaction, setTransaction] = useState<Transaction|null>(null);
@@ -19,8 +19,7 @@ export default function ProcessTransaction({ params } : { params:{ id:string } }
     
     useEffect(()=>{
         const init = async () =>{
-            const param = params;
-            const id = Number(param.id)
+            const id = Number(paramId)
             setId(id)
             const {data: transaction} = await getTransactionById(id)
             console.log(transaction)
