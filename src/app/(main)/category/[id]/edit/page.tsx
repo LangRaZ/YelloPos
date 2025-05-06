@@ -5,21 +5,12 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import CategoryForm from "../../ui/form";
 
-export async function generateMetadata(): Promise<Metadata> {
-    // You can fetch data here to create dynamic metadata if needed
-    return {
-      title: "Edit Category",
-    };
-  }
-
-type PageParams = {
-    params: {
-      id: string;
-    };
+export const metadata: Metadata = {
+    title: "Edit Category"
 };
 
-export default async function Page({ params } : PageParams){
-    const {id} = params;
+export default async function Page({ params } : { params: Promise<{ id:string }> }){
+    const {id} = await params;
     const category = await getCategory(Number(id))
     
 
