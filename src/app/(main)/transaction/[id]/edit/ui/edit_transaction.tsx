@@ -18,7 +18,7 @@ export default function EditTransaction({ params } : { params:{ id:string } }){
     
     useEffect(()=>{
         const init = async () =>{
-            const param = await params;
+            const param = params;
             const id = Number(param.id)
             // setId(id)
 

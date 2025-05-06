@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ProductEditPage({ params } : { params:{ id:string } }){
-    const param = await params;
+    const param = params;
     const id = Number(param.id)
     const product = await getProduct(id)
     const {data: categories} = await getCategories()

@@ -19,7 +19,7 @@ export default function ProcessTransaction({ params } : { params:{ id:string } }
     
     useEffect(()=>{
         const init = async () =>{
-            const param = await params;
+            const param = params;
             const id = Number(param.id)
             setId(id)
             const {data: transaction} = await getTransactionById(id)
