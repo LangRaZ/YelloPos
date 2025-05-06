@@ -8,9 +8,15 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Edit User"
 };
-  
 
-export default async function UserEditPage({ params } : { params:{ id:string } }){
+interface PageProps {
+    params: {
+      id: string;
+    };
+}
+
+
+export default async function UserEditPage({ params } : PageProps){
     const param = params;
     const id = param.id
     const user = await getUser(id)
