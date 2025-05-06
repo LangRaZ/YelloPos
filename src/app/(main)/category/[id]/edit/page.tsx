@@ -9,10 +9,9 @@ export const metadata: Metadata = {
     title: "Edit Category"
 };
 
-export default async function CompanyEditPage({ params } : { params:{ id:string } }){
-    const param = params;
-    const id = Number(param.id)
-    const category = await getCategory(id)
+export default async function Page({ params } : { params:{ id:string } }){
+    const {id} = params;
+    const category = await getCategory(Number(id))
     
 
     if(!category.status) notFound();

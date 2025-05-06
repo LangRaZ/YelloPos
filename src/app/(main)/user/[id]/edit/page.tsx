@@ -8,17 +8,10 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Edit User"
 };
+  
 
-interface PageProps {
-    params: {
-      id: string;
-    };
-}
-
-
-export default async function UserEditPage({ params } : PageProps){
-    const param = params;
-    const id = param.id
+export default async function UserEditPage({ params } : { params:{ id:string } }){
+    const {id} = params;
     const user = await getUser(id)
     const {data: Roles} = await getRoles()
 
