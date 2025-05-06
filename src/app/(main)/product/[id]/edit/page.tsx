@@ -15,10 +15,6 @@ export default async function ProductEditPage({ params } : { params:{ id:string 
     const product = await getProduct(id)
     const {data: categories} = await getCategories()
 
-    const metadata: Metadata = {
-        title: `Product - ${product.data?.product_name}`,
-    }
-
     if(!product.status) notFound();
 
     return (

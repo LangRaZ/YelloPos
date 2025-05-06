@@ -63,18 +63,18 @@ export default function ProductForm(
     }, [data?.product_image]);
 
     
-    function checkDiffFileExtension(imageExt: string): boolean{
-        if(!imageExt || imageExt === ""){
-            return false
-        }
+    // function checkDiffFileExtension(imageExt: string): boolean{
+    //     if(!imageExt || imageExt === ""){
+    //         return false
+    //     }
 
-        const extOld = data?.product_image?.split(".").pop() ?? ""
-        if(imageExt !== extOld){
-            return true
-        }
+    //     const extOld = data?.product_image?.split(".").pop() ?? ""
+    //     if(imageExt !== extOld){
+    //         return true
+    //     }
 
-        return false
-    }
+    //     return false
+    // }
 
     //Declare on submit function for submit handler
     function onSubmit(values: z.infer<typeof ProductValidation>){
@@ -84,8 +84,8 @@ export default function ProductForm(
         //Handle update or create object decision on form submit handler
         if(id){
             const imageExt = values.product_image.type.split("/").pop() ?? "";
-            const isDiff = checkDiffFileExtension(imageExt)
-            updateProduct(id, values, (data?.product_image ?? ""), imageExt, isDiff).then(res=>{
+            // const isDiff = checkDiffFileExtension(imageExt)
+            updateProduct(id, values, (data?.product_image ?? ""), imageExt).then(res=>{
                 if(res && res.status){
                     if(!isOnPage && closeDialog){
                         closeDialog();
@@ -125,6 +125,18 @@ export default function ProductForm(
                 }
             })
         }
+    }
+
+    function onSelectCategory(category: Category){
+        const currentValue = form.getValues("product_category_id").toString()
+        currentValue === category.id.toString() ?
+        (
+            form.setValue("product_category_id", Number())
+        ):(
+            form.setValue("product_category_id", category.id)
+        )
+        form.clearErrors('product_category_id')
+        setOpen(false)
     }
 
     const [preview, setPreview] = useState<string>(
@@ -192,17 +204,7 @@ export default function ProductForm(
                                                         return <CommandItem
                                                             value={category.category_name??""}
                                                             key={category.id}
-                                                            onSelect={(currentValue) => {
-                                                                currentValue = form.getValues("product_category_id").toString()
-                                                                currentValue === category.id.toString() ?
-                                                                (
-                                                                    form.setValue("product_category_id", Number())
-                                                                ):(
-                                                                    form.setValue("product_category_id", category.id)
-                                                                )
-                                                                form.clearErrors('product_category_id')
-                                                                setOpen(false)
-                                                            }}
+                                                            onSelect={()=>onSelectCategory(category)}
                                                         >
                                                             {category.category_name}
                                                             <CheckIcon

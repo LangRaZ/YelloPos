@@ -21,7 +21,7 @@ export default function BusinessProfileForm(
     { id?: number, data?: BusinessProfileMutation|null, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
     const [ error, setError ] = useState<string|null>(null);
-    const [open, setOpen] = useState(false);
+    // const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
 
@@ -114,7 +114,7 @@ export default function BusinessProfileForm(
                     <FormField
                         control={form.control}
                         name="profile_image_url"
-                        render={({ field }) => (
+                        render={() => (
                             <FormItem>
                                 <FormLabel>Business Profile Image</FormLabel>
                                 <FormControl>
@@ -212,7 +212,7 @@ export default function BusinessProfileForm(
                             <FormField
                             control={form.control}
                             name="qr_image_url"
-                            render={({ field }) => (
+                            render={() => (
                                 <FormItem>
                                     <FormLabel>QR Image</FormLabel>
                                     <FormControl>

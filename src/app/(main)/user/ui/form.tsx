@@ -88,6 +88,17 @@ export default function UserForm(
         }
     }
 
+    function onSelectRole(role:Role){
+        const currentValue = form.getValues("role_id").toString()
+        currentValue === role.id.toString() ?
+        (
+            form.setValue("role_id", Number())
+        ):(
+            form.setValue("role_id", role.id)
+        )
+        setOpen(false)
+    }
+
     return (
         <Form {... form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="bg-white rounded-md space-y-4">
@@ -192,16 +203,7 @@ export default function UserForm(
                                                         return <CommandItem
                                                             value={role.role_name??""}
                                                             key={role.id}
-                                                            onSelect={(currentValue) => {
-                                                                currentValue = form.getValues("role_id").toString()
-                                                                currentValue === role.id.toString() ?
-                                                                (
-                                                                    form.setValue("role_id", Number())
-                                                                ):(
-                                                                    form.setValue("role_id", role.id)
-                                                                )
-                                                                setOpen(false)
-                                                            }}
+                                                            onSelect={() => onSelectRole(role)}
                                                         >
                                                             {role.role_name}
                                                             <CheckIcon
