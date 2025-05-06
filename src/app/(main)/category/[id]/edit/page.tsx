@@ -9,8 +9,8 @@ export const metadata: Metadata = {
     title: "Edit Category"
 };
 
-export default async function Page({ params } : { params: Promise<{ id:string }> }){
-    const {id} = await params;
+export default async function Page(props : { params: Promise<{ id:string }> }){
+    const {id} = await props.params;
     const category = await getCategory(Number(id))
     
 
