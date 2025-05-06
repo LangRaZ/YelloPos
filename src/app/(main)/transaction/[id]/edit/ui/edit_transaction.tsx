@@ -11,8 +11,7 @@ import DataTable from "@/components/helpers/data_table";
 
 export default function EditTransaction({ params } : { params:{ id:string } }){
     const [loading, setLoading] = useState(true);
-    const [id, setId] = useState<number>()
-    const [refresh, setRefresh] = useState<boolean>(false)
+    // const [id, setId] = useState<number>()
     const [Transaction, setTransaction] = useState<Transaction|null>(null);
     const [OrderDetails, setOrderDetails] = useState<OrderDetail[]>([]);
 
@@ -21,7 +20,7 @@ export default function EditTransaction({ params } : { params:{ id:string } }){
         const init = async () =>{
             const param = await params;
             const id = Number(param.id)
-            setId(id)
+            // setId(id)
 
             const {data: transaction} = await getTransactionById(id)
             setTransaction(transaction??null)

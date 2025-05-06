@@ -4,7 +4,8 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 
 type ChartDataItem = {
   month: string
-  count: number
+  count?: number
+  sum?:number
 }
 
 export default function BarchartDashboard({ data, barKey, barName, YLabelOffset }: { data: ChartDataItem[], barKey: string, barName: string, YLabelOffset?: number }) {

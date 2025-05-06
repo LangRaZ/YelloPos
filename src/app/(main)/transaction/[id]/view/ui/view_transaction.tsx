@@ -12,7 +12,7 @@ import { StringToDateTime } from "@/lib/utils";
 
 export default function ViewTransaction({ params } : { params:{ id:string } }){
     const [loading, setLoading] = useState(true);
-    const [id, setId] = useState<number>()
+    // const [id, setId] = useState<number>()
     const [Transaction, setTransaction] = useState<Transaction|null>(null);
     const [OrderDetails, setOrderDetails] = useState<OrderDetail[]>([]);
 
@@ -21,7 +21,7 @@ export default function ViewTransaction({ params } : { params:{ id:string } }){
         const init = async () =>{
             const param = await params;
             const id = Number(param.id)
-            setId(id)
+            // setId(id)
 
             const {data: transaction} = await getTransactionById(id)
             setTransaction(transaction??null)

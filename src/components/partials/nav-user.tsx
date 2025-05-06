@@ -13,10 +13,7 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
@@ -27,7 +24,6 @@ import {
 } from "@/components/ui/sidebar"
 import { signOutAuthUser } from "@/lib/supabase/api"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
 
 export function NavUser({
   user,

@@ -5,15 +5,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { ReportValidation } from "@/validations";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { CheckIcon } from "lucide-react";
-import { CaretSortIcon } from "@radix-ui/react-icons"
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReportMutation } from "@/interface";
@@ -23,12 +15,12 @@ import { exportToExcel } from "@/lib/exportToExcel";
 import { saveReport, getYearlyTaxReport } from "@/lib/supabase/api";
 
 export default function ReportFormYearly(
-    { id, data, isOnPage = false, closeDialog } :
-    { id?: number, data?: ReportMutation|null, isOnPage?: boolean, closeDialog?:()=>void }
+    { data, isOnPage = false, closeDialog } :
+    { data?: ReportMutation|null, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
     const [ error, setError ] = useState<string|null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [open, setOpen] = useState(false)
+    // const [open, setOpen] = useState(false)
     const router = useRouter()
     const currentYear = new Date().getFullYear()
     const years = Array.from({ length: 6 }, (_, i) => currentYear - i)

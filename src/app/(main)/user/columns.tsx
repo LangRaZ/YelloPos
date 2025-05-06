@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
-import { Pencil, Trash } from "lucide-react"
+import { Pencil } from "lucide-react"
 import { User } from "@/interface"
 import Link from "next/link"
 import ConfirmationAlert from "@/components/helpers/confirmation_alert"

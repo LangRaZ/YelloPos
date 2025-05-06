@@ -1,11 +1,10 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Download } from "lucide-react"
 import { Reports } from "@/interface"
-import { deleteProduct, deleteReport } from "@/lib/supabase/api"
+import { deleteReport } from "@/lib/supabase/api"
 import { saveAs } from "file-saver";
 import { format } from "date-fns"
 import ConfirmationAlert from "@/components/helpers/confirmation_alert"

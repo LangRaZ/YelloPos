@@ -1,19 +1,19 @@
 "use client"
 
 import { useState } from "react";
-import { FirstLoginValidation, TaxFirstLoginValidation } from "@/validations";
-import z, { boolean } from "zod"
+import { TaxFirstLoginValidation } from "@/validations";
+import z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import Image from "next/image";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { createBusiness, createTaxProfile, UpdateTaxProfile } from "@/lib/supabase/api";
+import { createTaxProfile, UpdateTaxProfile } from "@/lib/supabase/api";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { ButtonLoading } from "@/components/helpers/button_loading";
-import { Tax, TaxMutation } from "@/interface";
+import { Tax } from "@/interface";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 
 export default function TaxFirstLoginForm(
@@ -87,7 +87,15 @@ export default function TaxFirstLoginForm(
           className="bg-white p-8 shadow-md rounded-md w-full max-w-lg space-y-4"
         >
           <h2 className="text-xl font-bold">Submit Tax Info</h2>
-
+          {error && (
+            <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Login Failed!</AlertTitle>
+                <AlertDescription>
+                    {error}
+                </AlertDescription>
+            </Alert>
+          )}
           <FormField
             control={form.control}
             name="pph_type"

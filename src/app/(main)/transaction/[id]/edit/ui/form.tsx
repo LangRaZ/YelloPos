@@ -19,9 +19,9 @@ export default function OrderDetailForm(
     { id: number, data: OrderDetail, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
     const [ error, setError ] = useState<string|null>(null);
-    const [open, setOpen] = useState(false);
+    // const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const router = useRouter()
+    // const router = useRouter()
 
     //Declare form and form data
     const form = useForm<z.infer<typeof orderDetailValidation>>({

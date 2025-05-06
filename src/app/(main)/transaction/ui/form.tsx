@@ -5,8 +5,6 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { TransactionValidation } from "@/validations";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "sonner";
@@ -21,7 +19,7 @@ export default function TransactionForm(
     { id?: number, data?: Transaction |null, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
     const [ error, setError ] = useState<string|null>(null);
-    const [open, setOpen] = useState(false)
+    // const [open, setOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter()
 

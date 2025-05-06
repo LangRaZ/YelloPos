@@ -1,8 +1,8 @@
 import PopupContainer from "@/components/helpers/popup_container"
 import { Button } from "@/components/ui/button"
-import { Pencil, SquarePlus } from "lucide-react"
+import { Pencil } from "lucide-react"
 
-import { Category, Tax } from "@/interface"
+import { Tax } from "@/interface"
 import TaxFirstLoginForm from "../first-tax/ui/first_login_tax"
 
 

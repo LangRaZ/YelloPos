@@ -4,7 +4,6 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Transaction } from "@/interface";
 import { processTransaction } from "@/lib/supabase/api";
 import { Loader2 } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";

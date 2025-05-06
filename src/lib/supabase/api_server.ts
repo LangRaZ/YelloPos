@@ -13,7 +13,7 @@ export async function updateAuthUser(firstLoginState: boolean, businessProfileId
             }
         })
         if(!error){
-            const updateAccountSB_res = await supabaseServer.from('Accounts').update({business_profile_id: businessProfileId}).eq('id', data.user.id)
+            await supabaseServer.from('Accounts').update({business_profile_id: businessProfileId}).eq('id', data.user.id)
             return { status: true, code: 200, message:"Account updated successfully" }
         }
         return { status: false, code: 500, message: error.message }
@@ -42,7 +42,7 @@ export async function getUserBusinessProfileId(){
 export async function updateAuthTax(firstTaxState: boolean) : Promise<Response>{
     const supabaseServer = await createClient()
     try {
-        const {data, error} = await supabaseServer.auth.updateUser({
+        const {error} = await supabaseServer.auth.updateUser({
             data:{
                 first_setup_tax: firstTaxState,
                 
@@ -69,6 +69,7 @@ export async function getUserUID() : Promise<string>{
             return ""
         }
     } catch (error) {
+        console.log(String(error)??"Error getting user ID")
         return ""
     }
 }

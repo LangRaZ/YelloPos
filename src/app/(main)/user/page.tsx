@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default async function UserOverviewPage() {
   const {data: Users} = await getUsers();
   const {data: Roles} = await getRoles();
-  const count = Users?.length
+  // const count = Users?.length
 
   return (
     <>

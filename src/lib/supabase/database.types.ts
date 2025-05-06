@@ -52,7 +52,7 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
-          name?: String
+          name?: string
           phone_number?: string
           role_id?: number | null
           username?: string

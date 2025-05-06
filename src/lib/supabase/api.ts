@@ -1,5 +1,5 @@
 import { createClientBrowser } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser, ReportMutation, TaxReportsResponse, MonthlyTaxReportsResponse, Tax } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser, ReportMutation, TaxReportsResponse, MonthlyTaxReportsResponse } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse, User } from "@/interface"
 import { generateCode } from "../utils"
 import { updateAuthUser, getUserBusinessProfileId, updateAuthTax} from "./api_server"
@@ -52,7 +52,7 @@ async function UploadFileSupabase(File: File, imagePath: string){
         })
         return res;
     } catch (error) {
-        return null;
+        return {data: null, error: String(error)??"Unexpected error occurred"};
     }
 }
 
@@ -68,7 +68,7 @@ async function UploadFileSupabaseBusinessProfile(File: File, imagePath: string){
         })
         return res;
     } catch (error) {
-        return null;
+        return {data: null, error: String(error)??"Unexpected error occurred"};
     }
 }
 
@@ -78,7 +78,7 @@ async function deleteFileSupabaseBusinessProfile(path: string){
         console.log(`sukses delete ${path}`)
         return res;
     } catch (error) {
-        return null;
+        return {data: null, error: String(error)??"Unexpected error occurred"};
     }
 }
 
@@ -88,7 +88,7 @@ async function deleteFileSupabaseBusinessQR(path: string){
         console.log(`sukses delete ${path}`)
         return res;
     } catch (error) {
-        return null;
+        return {data: null, error: String(error)??"Unexpected error occurred"};
     }
 }
 
@@ -103,7 +103,7 @@ async function UploadFileSupabaseBusinessQR(File: File, imagePath: string){
         })
         return res;
     } catch (error) {
-        return null;
+        return {data: null, error: String(error)??"Unexpected error occurred"};
     }
 }
 
@@ -113,7 +113,7 @@ async function deleteFileSupabase(path: string){
         console.log(`sukses delete ${path}`)
         return res;
     } catch (error) {
-        return null;
+        return {data: null, error: String(error)??"Unexpected error occurred"};
     }
 }
 
@@ -173,7 +173,7 @@ export async function createProduct(product: ProductMutationImage) : Promise<Res
     }
 }
 
-export async function updateProduct(id: number, product: ProductMutationImage, oldProductImageURL: string , oldProductImageExt: string, isDiffExt: boolean) : Promise<Response>{
+export async function updateProduct(id: number, product: ProductMutationImage, oldProductImageURL: string , oldProductImageExt: string) : Promise<Response>{
 
     const unixTimestamp = Math.floor(Date.now() / 1000);
     
@@ -193,8 +193,8 @@ export async function updateProduct(id: number, product: ProductMutationImage, o
     const supabaseOldImagePath = `product-id${id}${product.last_image_update}.${oldProductImageExt}`
 
     try {
-        const delRes = await deleteFileSupabase(supabaseOldImagePath)
-        const fileRes = await UploadFileSupabase(product.product_image, supabaseImagePath)
+        await deleteFileSupabase(supabaseOldImagePath)
+        await UploadFileSupabase(product.product_image, supabaseImagePath)
         const fileSupabaseURL = supabase.storage.from('product-image').getPublicUrl(supabaseImagePath)
         productSup.product_image = fileSupabaseURL.data.publicUrl
 
@@ -294,7 +294,7 @@ export async function createUser(user: UserMutation, password: string) : Promise
         }
 
         const userSB: User = {
-            id: data.user?.id!,
+            id: data.user.id,
             email: user.email,
             name: user.name,
             username: user.username,
@@ -601,7 +601,7 @@ export async function createAuthUser(user: AuthMutation) : Promise<Response>{
                 business_profile_id: data.user?.user_metadata.business_profile_id,
                 role_id: data.user?.user_metadata.role_id
             }
-            const res = await supabase.from('Accounts').insert(userSB)
+            await supabase.from('Accounts').insert(userSB)
         }
         if(!error){
             return { status: true, code: 200, message:"Account registered successfully" }
@@ -649,7 +649,7 @@ export async function createBusiness(business: BusinessMutation) : Promise<Respo
         if(res.data){
             const id = res.data.id
             const code = generateCode("B", res.data.id)
-            const business_res = await supabase.from("BusinessProfile").update({code: code}).eq('id', id)
+            await supabase.from("BusinessProfile").update({code: code}).eq('id', id)
 
             const updateAccount_res = await updateAuthUser(false, id)
             if(!updateAccount_res){
@@ -704,13 +704,13 @@ export async function updateBusinessProfile(id: number, BusinessProfile: Busines
     const supabaseProfileQrPath = `business_profile_id${id}${unixTimestamp}.${BusinessProfile.qr_image_url.type.split("/").pop()}`
     const supabaseOldprofileQrPath = `business_profile_id${id}${BusinessProfile.last_qr_update}.${OldQRImageExt}`
     try {
-        const delRes = await deleteFileSupabaseBusinessProfile(supabaseOldprofileImagePath)
-        const fileRes = await UploadFileSupabaseBusinessProfile(BusinessProfile.profile_image_url,supabaseProfileImagePath)
+        await deleteFileSupabaseBusinessProfile(supabaseOldprofileImagePath)
+        await UploadFileSupabaseBusinessProfile(BusinessProfile.profile_image_url,supabaseProfileImagePath)
         const fileSupabaseURL = supabase.storage.from('business-image').getPublicUrl(supabaseProfileImagePath)    
         businessSup.profile_image_url = fileSupabaseURL.data.publicUrl
 
-        const delResQr = await deleteFileSupabaseBusinessQR(supabaseOldprofileQrPath)
-        const fileResQr = await UploadFileSupabaseBusinessQR(BusinessProfile.qr_image_url,supabaseProfileQrPath)
+        await deleteFileSupabaseBusinessQR(supabaseOldprofileQrPath)
+        await UploadFileSupabaseBusinessQR(BusinessProfile.qr_image_url,supabaseProfileQrPath)
         const fileSupabaseURLQr = supabase.storage.from('bank-qr').getPublicUrl(supabaseProfileQrPath)    
         businessSup.qr_image_url = fileSupabaseURLQr.data.publicUrl
 
@@ -733,7 +733,7 @@ export async function createOrderDetails(orderDetails: OrderDetailMutation[]): P
         }
 
         for (let index = 0; index < orderDetails.length; index++) {
-            const res = await supabase.rpc("update_product_stock", {orderquantity: orderDetails[index].quantity, orderproductid: orderDetails[index].product_id})
+            await supabase.rpc("update_product_stock", {orderquantity: orderDetails[index].quantity, orderproductid: orderDetails[index].product_id})
             // console.log("quantity : " + orderDetails[index].quantity + ", product id : " + orderDetails[index].product_id)
             // console.log(res)
         }
@@ -818,7 +818,7 @@ export async function updateOrderDetail(id: number, qty: number, curr_price: num
 //Tax
 export async function getyearlygross(){
     try {
-        let { data, error } = await supabase.rpc('get_yearly_gross_profit', {
+        const { data, error } = await supabase.rpc('get_yearly_gross_profit', {
             businessprofileid: await getUserBusinessProfileId()
         })
         if (error){
@@ -832,7 +832,7 @@ export async function getyearlygross(){
 
 export async function getaccumulatedtax(){
     try {
-        let { data, error } = await supabase.rpc('get_tax_amount', {
+        const { data, error } = await supabase.rpc('get_tax_amount', {
             businessprofileid: await getUserBusinessProfileId()
         })
         if (error){
@@ -845,9 +845,7 @@ export async function getaccumulatedtax(){
 }
 
 export async function createTaxProfile(tax: TaxMutation) : Promise<Response>{
-    try {
-        const tax_id = await supabase.from("Tax Module").select("*").eq("business_profile_id", await getUserBusinessProfileId()).single()
-        
+    try {        
         tax.business_profile_id = await getUserBusinessProfileId();
         const res = await supabase.from("Tax Module").insert(tax)
 
@@ -945,7 +943,7 @@ export async function deleteReport(id: string) : Promise<Response>{
         console.log(report_url_name)
         const res = await supabase.from("Report").delete().like("report_url", `%${report_url_name ?? ""}`)
 
-        const uploadedFile = await deleteFileSupabaseReport(report_url_name)
+        await deleteFileSupabaseReport(report_url_name)
         return { status:true, code: res.status, message: "Report has been completed!" };
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
@@ -963,7 +961,7 @@ async function UploadReportSupabase(File: File, path: string){
         })
         return res;
     } catch (error) {
-        return null;
+        return {data: null, error: String(error)??"Unexpected error occurred"};
     }
 }
 
@@ -973,7 +971,7 @@ async function deleteFileSupabaseReport(path: string | undefined){
         console.log(`sukses delete ${path}`)
         return res;
     } catch (error) {
-        return null;
+        return {data: null, error: String(error)??"Unexpected error occurred"};
     }
 }
 
@@ -1004,7 +1002,7 @@ export async function OrderValidation(order: OrderMutation) : Promise<Response>{
 
 export async function getProfit(){
     try { 
-        let { data, error } = await supabase.rpc('get_profit', {
+        const { data, error } = await supabase.rpc('get_profit', {
             businessprofileid: await getUserBusinessProfileId()
         })
         if (error){
@@ -1019,7 +1017,7 @@ export async function getProfit(){
 
 export async function getOrder(){
     try {
-        let { data, error } = await supabase.rpc('get_order_count', {
+        const { data, error } = await supabase.rpc('get_order_count', {
             businessprofileid: await getUserBusinessProfileId()
         })
         if (error){
@@ -1033,7 +1031,7 @@ export async function getOrder(){
 
 export async function getOrderCompleted(){
     try{
-        let { data, error } = await supabase.rpc('get_order_count_completed', {
+        const { data, error } = await supabase.rpc('get_order_count_completed', {
             businessprofileid: await getUserBusinessProfileId()
           })
         if (error){
@@ -1047,7 +1045,7 @@ export async function getOrderCompleted(){
 
 export async function getTopSelling(){
     try{
-        let { data, error } = await supabase.rpc('topselling', {
+        const { data, error } = await supabase.rpc('topselling', {
             businessprofileid: await getUserBusinessProfileId()
         })
         if (error){

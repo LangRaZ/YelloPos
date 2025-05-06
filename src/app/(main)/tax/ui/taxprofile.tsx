@@ -1,15 +1,10 @@
 "use client"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Tabs,
   TabsContent,
@@ -22,7 +17,6 @@ import { columnsYearly } from "../columnsYearly"
 import { getaccumulatedtax, getProfit, getReportMonthly, getReportYearly, getTaxProfile, getyearlygross } from "@/lib/supabase/api"
 import { CreateReportYearlyButton } from "./actionsYearly"
 import { CreateReportMonthlyButton } from "./actionsMonthly"
-import { Metadata } from "next"
 import { useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
 import { Reports, Tax } from "@/interface"

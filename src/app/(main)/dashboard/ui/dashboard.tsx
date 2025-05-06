@@ -19,9 +19,9 @@ export default function Dashboard() {
   const [Income, setIncome] = useState<number|null>(null) 
   const [Order, setOrder] = useState<number|null>(null) 
   const [completedOrder, setCompletedOrder] = useState<number|null>(null)
-  const [dataOrder, setDataOrder] = useState<any[]>([])
-  const [dataOrderCompleted, setDataOrderCompleted] = useState<any[]>([])
-  const [dataIncome, setDataIncome] = useState<any[]>([])
+  const [dataOrder, setDataOrder] = useState<{month:string, count: number}[]>([])
+  const [dataOrderCompleted, setDataOrderCompleted] = useState<{month:string, count: number}[]>([])
+  const [dataIncome, setDataIncome] = useState<{month:string, sum: number}[]>([])
 
   useEffect(() => {
     async function fetchData() {

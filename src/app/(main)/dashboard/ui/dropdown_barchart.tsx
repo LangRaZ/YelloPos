@@ -12,9 +12,9 @@ import BarchartDashboard from "./barchart_dashboard"
 import { Loader2 } from "lucide-react"
 
 type Props = {
-  dataOrder: any
-  dataProfit: any
-  dataOrderCompleted: any
+  dataOrder: {month:string, count: number}[]
+  dataProfit: {month:string, sum: number}[]
+  dataOrderCompleted: {month:string, count: number}[]
   loading: boolean
 }
 

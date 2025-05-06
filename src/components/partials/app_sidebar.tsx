@@ -17,6 +17,7 @@ import { sidebarLinks, secondaryLinks } from "@/constants";
 import { NavUser } from "@/components/partials/nav-user"
 import { usePathname } from "next/navigation";
 import { SidebarParam } from "@/interface";
+import Image from "next/image";
 
 export function AppSidebar({ Params } : { Params:SidebarParam | null }) {
     const { open } = useSidebar();
@@ -57,12 +58,12 @@ export function AppSidebar({ Params } : { Params:SidebarParam | null }) {
                                                 {open ? (
                                                     <>
                                                         <span className="h-full w-[3px] bg-sidebar-accent-foreground rounded-xl"></span>
-                                                        <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                                        <Image src={item.imgURL} alt="" width={20} height={20} />
                                                         <span>{item.label}</span>
                                                     </>
                                                 ):(
                                                     <>
-                                                        <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                                        <Image src={item.imgURL} alt="" width={20} height={20} />
                                                         <span>{item.label}</span>
                                                     </>
                                                 )}
@@ -73,7 +74,7 @@ export function AppSidebar({ Params } : { Params:SidebarParam | null }) {
                                     <SidebarMenuItem key={item.label}>
                                         <SidebarMenuButton asChild>
                                             <a href={item.route}>
-                                                <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                                <Image src={item.imgURL} alt="" width={20} height={20} />
                                                 <span>{item.label}</span>
                                             </a>
                                         </SidebarMenuButton>
@@ -96,12 +97,12 @@ export function AppSidebar({ Params } : { Params:SidebarParam | null }) {
                                             {open ? (
                                                 <>
                                                     <span className="h-full w-[3px] bg-sidebar-accent-foreground rounded-xl"></span>
-                                                    <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                                    <Image src={item.imgURL} alt="" width={20} height={20} />
                                                     <span>{item.label}</span>
                                                 </>
                                             ):(
                                                 <>
-                                                    <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                                    <Image src={item.imgURL} alt="" width={20} height={20} />
                                                     <span>{item.label}</span>
                                                 </>
                                             )}
@@ -112,7 +113,7 @@ export function AppSidebar({ Params } : { Params:SidebarParam | null }) {
                                     <SidebarMenuItem key={item.label}>
                                         <SidebarMenuButton asChild>
                                         <a href={item.route}>
-                                            <img src={item.imgURL} alt="" width="20px" height="20px" />
+                                            <Image src={item.imgURL} alt="" width={20} height={20} />
                                             <span>{item.label}</span>
                                         </a>
                                         </SidebarMenuButton>

@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Pencil } from "lucide-react"
-import { Category, Product } from "@/interface"
+import { Category } from "@/interface"
 import { deleteCategory } from "@/lib/supabase/api"
 import ConfirmationAlert from "@/components/helpers/confirmation_alert"
 // This type is used to define the shape of our data.

@@ -3,7 +3,7 @@
 import { SidebarTrigger } from "../ui/sidebar";
 import { usePathname } from "next/navigation";
 
-const formatPathname = (path : String) => {
+const formatPathname = (path : string) => {
     if (path === "/") return "Dashboard";
      
     const title = path
@@ -14,7 +14,7 @@ const formatPathname = (path : String) => {
     return title.charAt(0).toUpperCase() + title.slice(1);
   };
 
-export default function header() {
+export default function Header() {
     const pathName = usePathname();
     const formattedPathName = formatPathname(pathName)
     return (

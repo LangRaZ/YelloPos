@@ -11,17 +11,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ReportMutation } from "@/interface";
 import { ButtonLoading } from "@/components/helpers/button_loading";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { exportToExcel, exportToExcelMonthly } from "@/lib/exportToExcel";
+import { exportToExcelMonthly } from "@/lib/exportToExcel";
 import { getMonthlyTaxReport, saveReport } from "@/lib/supabase/api";
-import { Download } from "lucide-react";
 
 export default function ReportFormMonthly(
-    { id, data, isOnPage = false, closeDialog } :
-    { id?: number, data?: ReportMutation|null, isOnPage?: boolean, closeDialog?:()=>void }
+    { data, isOnPage = false, closeDialog } :
+    { data?: ReportMutation|null, isOnPage?: boolean, closeDialog?:()=>void }
 ) {
     const [ error, setError ] = useState<string|null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [open, setOpen] = useState(false)
+    // const [open, setOpen] = useState(false)
     const router = useRouter()
     const currentYear = new Date().getFullYear()
     const months = [

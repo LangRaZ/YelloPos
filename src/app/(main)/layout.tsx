@@ -1,5 +1,4 @@
 import { cookies } from "next/headers"
-import { Metadata } from "next";
 
 import Header from "@/components/partials/header";
 import { SidebarProvider} from "@/components/ui/sidebar";

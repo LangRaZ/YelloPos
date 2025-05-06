@@ -21,6 +21,7 @@ import { createProduct, updateProduct } from "@/lib/supabase/api";
 import { ButtonLoading } from "@/components/helpers/button_loading";
 import { convertURLToFile } from "@/lib/convert_URL_to_file";
 import { useEffect } from "react";
+import Image from "next/image";
 
 export default function ProductForm(
     { id, data, categories, isOnPage = false, closeDialog } :
@@ -59,7 +60,7 @@ export default function ProductForm(
         }
       
         convertAndSetFile();
-      }, [data?.product_image]);
+    }, [data?.product_image]);
 
     
     function checkDiffFileExtension(imageExt: string): boolean{
@@ -275,7 +276,7 @@ export default function ProductForm(
                 <FormField
                     control={form.control}
                     name="product_image"
-                    render={({ field }) => (
+                    render={() => (
                         <FormItem>
                             <FormLabel>Product Image</FormLabel>
                             <FormControl>
@@ -293,7 +294,7 @@ export default function ProductForm(
                             {preview && (
                                 <div className="mt-2">
                                     <FormLabel>Preview Product Image</FormLabel>
-                                    <img
+                                    <Image
                                     src={preview}
                                     alt="Product Preview"
                                     width={150}
