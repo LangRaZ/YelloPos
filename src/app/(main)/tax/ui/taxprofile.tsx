@@ -2,6 +2,7 @@
 import {
   Card,
   CardContent,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -32,7 +33,7 @@ const [loading, setLoading] = useState(true);
   
   const [reportMonthly,setReportMonthly] = useState<Reports[]|null>(null) 
   const [reportYearly,setReportYearly] = useState<Reports[]|null>(null) 
-  
+  const [month, setMonth] = useState<string>("")
   
   // console.log(reportMonthly)
   
@@ -52,6 +53,11 @@ useEffect(() => {
 
         const taxprofile = await getTaxProfile()
         setTaxProfile(taxprofile.data)
+
+        const now = new Date();
+        const currentMonth = now.toLocaleString("default", { month: "long" });
+        setMonth(currentMonth)
+
         setLoading(false);
 
         
@@ -62,56 +68,59 @@ useEffect(() => {
   return (
     <>
       <div>
-          <h1 className="text-2xl font-bold mb-4">Laporan Pajak</h1>
+          <h1 className="text-2xl font-bold mb-6">Laporan Pajak</h1>
 
-          <div className="rounded-sm flex justify-evenly items-center">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Pendapatan Bruto Bulanan</CardTitle>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
+              <Card className="shadow-md text-wrap break-words">
+                <CardHeader className="text-start">
+                  <CardTitle className="text-xl text-gray-700">Pendapatan Bruto Bulanan</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex items-center justify-center relative">
+                <CardContent className="text-start text-wrap">
                   {loading ? (
-            <Loader2 className="animate-spin" />
-          ) : Gross === null ? (
-            <p className="text-4xl font-bold text-purple-600 text-wrap">Rp0</p>
-          ) : (
-            <p className="text-4xl font-bold text-purple-600 text-wrap">Rp{Gross.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-          )}
-                  </div>
+                    <Loader2 className="animate-spin" />
+                  ) : Gross === null ? (
+                    <p className="text-3xl font-bold text-purple-600 text-wrap">Rp0</p>
+                  ) : (
+                    <p className="text-3xl font-bold text-purple-600 text-wrap">Rp{Gross.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  )}
                 </CardContent>
+                <CardFooter>
+                  <p className="text-md text-muted-foreground">{month}</p>
+                </CardFooter>
               </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Akumulasi Pendapatan Bruto</CardTitle>
+              <Card className="shadow-md text-wrap break-words">
+                <CardHeader className="text-start">
+                  <CardTitle className="text-xl text-gray-700">Akumulasi Pendapatan Bruto</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex items-center justify-center relative">
+                <CardContent className="text-start text-wrap">
                   {loading ? (
-            <Loader2 className="animate-spin" />
-          ) : yearlyGross === null ? (
-            <p className="text-4xl font-bold text-purple-600 text-wrap">Rp0</p>
-          ) : (
-            <p className="text-4xl font-bold text-purple-600 text-wrap">Rp{yearlyGross.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-          )}
-                  </div>
+                    <Loader2 className="animate-spin" />
+                  ) : yearlyGross === null ? (
+                    <p className="text-3xl font-bold text-purple-600 text-wrap">Rp0</p>
+                  ) : (
+                    <p className="text-3xl font-bold text-purple-600 text-wrap">Rp{yearlyGross.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  )}              
                 </CardContent>
+                <CardFooter>
+                  <p className="text-md text-muted-foreground">{month}</p>
+                </CardFooter>
               </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Akumulasi Pajak</CardTitle>
+              <Card className="shadow-md text-wrap break-words">
+                <CardHeader className="text-start">
+                  <CardTitle className="text-xl text-gray-700">Akumulasi Pajak</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex items-center justify-center relative">
+                <CardContent className="text-start text-wrap">
                   {loading ? (
-            <Loader2 className="animate-spin" />
-          ) : accumulatedTax === null ? (
-            <p className="text-4xl font-bold text-purple-600 text-wrap">Rp0</p>
-          ) : (
-            <p className="text-4xl font-bold text-purple-600 text-wrap">Rp{accumulatedTax.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-          )}
-                  </div>
+                    <Loader2 className="animate-spin" />
+                  ) : accumulatedTax === null ? (
+                    <p className="text-3xl font-bold text-purple-600 text-wrap">Rp0</p>
+                  ) : (
+                    <p className="text-3xl font-bold text-purple-600 text-wrap">Rp{accumulatedTax.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  )}
                 </CardContent>
+                <CardFooter>
+                  <p className="text-md text-muted-foreground">{month}</p>
+                </CardFooter>
               </Card>
           </div>
       </div>

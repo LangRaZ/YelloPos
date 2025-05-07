@@ -42,7 +42,7 @@ const barColors = [
   "hsl(var(--chart-5))",
 ];
 
-export default function TopSellingChart() {
+export default function TopSellingChart({month} : {month: string}) {
   const [topProducts, setTopProducts] = useState<TopProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -74,8 +74,8 @@ export default function TopSellingChart() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Top Selling Products</CardTitle>
-        <CardDescription>This Month</CardDescription>
+        <CardTitle className="text-xl">Top Selling Products</CardTitle>
+        <CardDescription className="text-md">{month}</CardDescription>
       </CardHeader>
       <CardContent>
         {loading ? (
