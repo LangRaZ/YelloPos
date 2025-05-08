@@ -1,2 +1,2 @@
 # YelloPos
-Live Deployment Link : [yello-pos.vercel.app](yello-pos.vercel.app)
+Live Deployment Link : [yello-pos.vercel.app](https://yello-pos.vercel.app)
