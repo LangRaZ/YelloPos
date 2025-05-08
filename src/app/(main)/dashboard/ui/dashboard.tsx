@@ -51,20 +51,20 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="p-4">
+    <div className="">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">Dashboard</h1>
       
       {/* Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
         <Card className="shadow-md text-wrap break-words">
           <CardHeader className="text-start">
-            <CardTitle className="text-xl text-gray-700">Income</CardTitle>
+            <CardTitle className="text-xl text-gray-700">Gross Income</CardTitle>
           </CardHeader>
           <CardContent className="text-start text-wrap">
             {loading ? (
               <Loader2 className="animate-spin" />
             ) : Income === null ? (
-              <p className="text-3xl font-bold text-purple-600 text-wrap">Rp10000000</p>
+              <p className="text-3xl font-bold text-purple-600 text-wrap">Rp0,00</p>
             ) : (
               <p className="text-3xl font-bold text-purple-600 text-wrap">Rp{Income.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
             )}

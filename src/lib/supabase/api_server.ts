@@ -1,7 +1,7 @@
 "use server"
 
 import { createClient } from "./server_config"
-import { Response } from "@/interface"
+import { Response, User, UserResponse } from "@/interface"
 
 export async function updateAuthUser(firstLoginState: boolean, businessProfileId: number) : Promise<Response>{
     const supabaseServer = await createClient()
@@ -71,5 +71,29 @@ export async function getUserUID() : Promise<string>{
     } catch (error) {
         console.log(String(error)??"Error getting user ID")
         return ""
+    }
+}
+
+export async function getCurrentUser() : Promise<UserResponse>{
+    const supabaseServer = await createClient()
+    try {
+        const temp = await supabaseServer.auth.getUser()
+        // console.log(temp)
+        if(!temp.data.user){
+            return {status: false, code: 500, message:"Failed to get user", data: null}
+        }
+        const user: User = {
+            id: temp.data.user.id,
+            email: temp.data.user.user_metadata.email,
+            name: temp.data.user.user_metadata.name,
+            business_profile_id: temp.data.user.user_metadata.business_profile_id,
+            phone_number: temp.data.user.user_metadata.phone_number,
+            username: temp.data.user.user_metadata.name,
+            role_id: temp.data.user.user_metadata.role_id??1
+        }
+        return {status: true, code: 200, message:"Get user success", data: user}
+        
+    } catch (error) {
+        return {status: false, code: 500, message:String(error)??"Error getting user ", data: null}
     }
 }

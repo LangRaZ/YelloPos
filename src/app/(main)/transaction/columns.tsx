@@ -12,7 +12,7 @@ import { cancelOrder } from "@/lib/supabase/api"
 import { ProcessOrderButton } from "./ui/actions"
 
 
-export function getColumns(currentUserUID: string): ColumnDef<Transaction>[]{
+export function getColumns(currentUserUID: string, CurrentUserRole: number): ColumnDef<Transaction>[]{
   return [
 
     {
@@ -56,7 +56,7 @@ export function getColumns(currentUserUID: string): ColumnDef<Transaction>[]{
                         View Detail
                       </Link>
                     </DropdownMenuItem>
-                    {transaction.transaction_status !== "Cancelled" && 
+                    {(transaction.transaction_status !== "Cancelled" && CurrentUserRole === 1) && 
                       <DropdownMenuItem className="hover:cursor-pointer" asChild>
                         <Link href={`/transaction/${transaction.id}/edit`}>
                           Edit Transaction
@@ -86,4 +86,4 @@ export function getColumns(currentUserUID: string): ColumnDef<Transaction>[]{
   ]
 }
 
-export const column: ColumnDef<Transaction>[] = getColumns("")
+export const column: ColumnDef<Transaction>[] = getColumns("",1)
