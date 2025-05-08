@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest) {
     const supabase = await createClient();
 
     const { data: {user} } = await supabase.auth.getUser()
-    const staffAccessiblePage = ['/order', '/transaction']
+    const cashierAccessiblePage = ['/order', '/transaction']
     const adminAccessiblePage = ['/order', '/transaction', '/product', '/category']
 
     if(
@@ -29,8 +29,8 @@ export async function middleware(request: NextRequest) {
             return NextResponse.redirect(new URL('/tax/first-tax', request.url))
         }
         else{
-            //middleware staff
-            if(user.user_metadata.role_id === 2 && !staffAccessiblePage.some((page) => request.nextUrl.pathname.startsWith(page))){
+            //middleware cashier
+            if(user.user_metadata.role_id === 2 && !cashierAccessiblePage.some((page) => request.nextUrl.pathname.startsWith(page))){
                 return NextResponse.redirect(new URL('/order', request.url))
             }
             if(user.user_metadata.role_id === 3 && !adminAccessiblePage.some((page) => request.nextUrl.pathname.startsWith(page))){

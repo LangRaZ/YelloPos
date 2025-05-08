@@ -140,7 +140,7 @@ export default function UserForm(
                         <FormItem>
                             <FormLabel>Username</FormLabel>
                             <FormControl>
-                                <Input placeholder="Enter Username. Example: Staff 1, Staff A, Admin 1" {...field} />
+                                <Input placeholder="Enter Username. Example: Cashier 1, Cashier A, Admin 1" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

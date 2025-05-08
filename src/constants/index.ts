@@ -9,7 +9,7 @@ export const sidebarLinks = [
         imgURL: '/icons/Ordericon.svg',
         route: '/order',
         label: 'Order',
-        role: ['Owner', 'Staff', 'Admin'],
+        role: ['Owner', 'Cashier', 'Admin'],
     },
     {
         imgURL: '/icons/Producticon.svg',
@@ -27,7 +27,7 @@ export const sidebarLinks = [
         imgURL: '/icons/Transactionicon.svg',
         route: '/transaction',
         label: 'Transaction',
-        role: ['Owner', 'Staff', 'Admin'],
+        role: ['Owner', 'Cashier', 'Admin'],
     },
     {
         imgURL: '/icons/Taxicon.svg',
@@ -54,6 +54,6 @@ export const secondaryLinks = [
 
 export const roleArray = [
     'Owner',
-    'Staff',
+    'Cashier',
     'Admin'
 ]
