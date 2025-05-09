@@ -14,7 +14,7 @@ import {
 import { Trash } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { OrderMutation, Response } from "@/interface";
+import { OrderMutation, OrderResponse, Response } from "@/interface";
 import { useState } from "react";
 import { ButtonLoading } from "./button_loading";
 
@@ -45,6 +45,7 @@ export default function ConfirmationAlert ({
   EditAction,
   DefaultAction,
   OrderAction,
+  onRefresh,
   warningMessage,
   successMessage,
   successDescription,
@@ -55,7 +56,8 @@ export default function ConfirmationAlert ({
   order?: OrderMutation;
   EditAction?: (_id: string) => Promise<Response>;
   DefaultAction?: ()=> void;
-  OrderAction?: (order: OrderMutation) => Promise<Response>;
+  OrderAction?: (order: OrderMutation) => Promise<OrderResponse>;
+  onRefresh?: () => void;
   warningMessage: string;
   successMessage: string;
   successDescription: string;
@@ -89,56 +91,96 @@ export default function ConfirmationAlert ({
           <AlertDialogDescription>{warningMessage}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
           {isLoading ? (
             <ButtonLoading />
           ):(
-            <AlertDialogAction
-              onClick={() => {
-                if(EditAction && id){
-                  setIsLoading(true)
-                  EditAction(id)
-                    .then((res: Response) => {
-                      if (res.status) {
-                        toast.success(successMessage,{ description: successDescription });
-                        router.refresh();
-                        setIsLoading(false)
-                      } else {
-                        toast.warning(res.message);
-                        setIsLoading(false)
-                      }
-                    })
-                    .catch((error) => {
-                      toast.error(error.message ?? "Unexpected error occurred!",{ description: "Please reload the page!"});
+              (order && OrderAction) ? (
+                (isLoading ? (
+                    <ButtonLoading />
+                  ):(
+                    <>
+                      <AlertDialogAction
+                          onClick={()=>{
+                            setIsLoading(true)
+                              OrderAction(order)
+                                .then((res: OrderResponse) => {
+                                if (res.status) {
+                                  if(onRefresh){
+                                    onRefresh();
+                                  }else{
+                                    window.location.reload();
+                                  }
+                                  toast.success(successMessage,{ description: successDescription });
+                                  setIsLoading(false)
+                                } else {
+                                    toast.warning(res.message);
+                                    setIsLoading(false)
+                                }
+                                })
+                                .catch((error) => {
+                                toast.error(error.message ?? "Unexpected error occurred!",{ description: "Please reload the page!"});
+                                setIsLoading(false)
+                                });
+                          }}
+                      >
+                          Continue
+                      </AlertDialogAction>
+                      <AlertDialogAction
+                          onClick={()=>{
+                              setIsLoading(true)
+                              OrderAction(order)
+                                .then((res: OrderResponse) => {
+                                if (res.status) {
+                                    router.push(`/transaction/${res.id}/process`);
+                                    toast.success(successMessage,{ description: successDescription });
+                                    setIsLoading(false)
+                                } else {
+                                    toast.warning(res.message);
+                                    setIsLoading(false)
+                                }
+                                })
+                                .catch((error) => {
+                                toast.error(error.message ?? "Unexpected error occurred!",{ description: "Please reload the page!"});
+                                setIsLoading(false)
+                                });
+                          }}
+                      >
+                          Continue & Process Order
+                      </AlertDialogAction>
+                    </>
+                  ))
+              ):(
+                <AlertDialogAction
+                  onClick={() => {
+                    if(EditAction && id){
+                      setIsLoading(true)
+                      EditAction(id)
+                        .then((res: Response) => {
+                          if (res.status) {
+                            toast.success(successMessage,{ description: successDescription });
+                            router.refresh();
+                            setIsLoading(false)
+                          } else {
+                            toast.warning(res.message);
+                            setIsLoading(false)
+                          }
+                        })
+                        .catch((error) => {
+                          toast.error(error.message ?? "Unexpected error occurred!",{ description: "Please reload the page!"});
+                          setIsLoading(false)
+                        });
+                    }
+                    if(DefaultAction){
+                      setIsLoading(true)
+                      DefaultAction();
                       setIsLoading(false)
-                    });
-                }
-                if(order && OrderAction){
-                  setIsLoading(true)
-                  OrderAction(order)
-                    .then((res: Response) => {
-                      if (res.status) {
-                        toast.success(successMessage,{ description: successDescription });
-                        window.location.reload();
-                      } else {
-                        toast.warning(res.message);
-                        setIsLoading(false)
-                      }
-                    })
-                    .catch((error) => {
-                      toast.error(error.message ?? "Unexpected error occurred!",{ description: "Please reload the page!"});
-                      setIsLoading(false)
-                    });
-                }
-                if(DefaultAction){
-                  setIsLoading(true)
-                  DefaultAction();
-                  setIsLoading(false)
-                }
-              }}
-            >
-              Continue
-            </AlertDialogAction>
+                    }
+                  }}
+                >
+                  Continue
+                </AlertDialogAction>
+              )
           )}
         </AlertDialogFooter>
       </AlertDialogContent>

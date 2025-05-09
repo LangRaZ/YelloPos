@@ -1,5 +1,5 @@
 import { createClientBrowser } from "./client_config"
-import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser, ReportMutation, TaxReportsResponse, MonthlyTaxReportsResponse } from "@/interface"
+import { ProductMutation, UserMutation ,CategoryMutation, AuthRegister, AuthMutation,BusinessMutation, Auth, TransactionsResponse, ProductMutationImage, BusinessProfileMutation, OrderMutation, OrderDetailMutation, BusinessProfileImage, BusinessProfileResponse, TaxMutation, TaxProfileResponse, TransactionResponse, OrderDetailsResponse, ReportsResponse, AuthNewUser, ReportMutation, TaxReportsResponse, MonthlyTaxReportsResponse, OrderResponse } from "@/interface"
 import { Response, ProductsResponse, ProductResponse, UserResponse, CategoryResponse, User } from "@/interface"
 import { generateCode } from "../utils"
 import { updateAuthUser, getUserBusinessProfileId, updateAuthTax} from "./api_server"
@@ -744,7 +744,7 @@ export async function createOrderDetails(orderDetails: OrderDetailMutation[]): P
     }
 }
 
-export async function createOrder(order: OrderMutation) : Promise<Response>{
+export async function createOrder(order: OrderMutation) : Promise<OrderResponse>{
     try {
         OrderValidation(order)
 
@@ -764,15 +764,15 @@ export async function createOrder(order: OrderMutation) : Promise<Response>{
             
             const resDetails = await createOrderDetails(orderDetails)
             if(resDetails.status){
-                return {status: true, code: 200, message: "Order has been confirmed!"}
+                return {status: true, code: 200, message: "Order has been confirmed!", id: data.id}
             }
-            return {status: false, code: 500, message: "Failed to create order details"}
+            return {status: false, code: 500, message: "Failed to create order details", id: null}
         }
 
-        return {status: false, code: 400, message:"Failed to confirm order"}
+        return {status: false, code: 400, message:"Failed to confirm order", id: null}
     }
     catch (error) {
-        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured", id: null };
     }
 }
 

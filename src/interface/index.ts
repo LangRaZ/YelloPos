@@ -212,6 +212,10 @@ export interface OrderDetailsResponse extends Response{
     data: OrderDetail[] | null
 }
 
+export interface OrderResponse extends Response{
+    id: number | null
+}
+
 //Business Profile
 export interface BusinessProfileMutation{
     id: number ,

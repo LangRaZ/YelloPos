@@ -28,9 +28,11 @@ export default function OrderMenu() {
   const [business_profile_id, setBPID] = useState<number>(0)
   const [productQuantities, setProductQuantities] = useState<{[key: number]: number}>({});
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(()=>{
     const init = async () =>{
+      setLoading(true)
       const { data: categories } = await getCategoriesWithProductsCount();
       const { data: products } = await getProducts();
       const bpid = await getUserBusinessProfileId();
@@ -49,7 +51,7 @@ export default function OrderMenu() {
     }
 
     init();
-  },[]);
+  },[refreshKey]);
 
   const increaseQuantity = (productId: number) => {
     setProductQuantities(prev => ({
@@ -195,7 +197,9 @@ export default function OrderMenu() {
                   total_price: totalAmount
                 }}
                 OrderAction={createOrder}
-                warningMessage="Order will be confirmed. You cannot change order items after confirming"
+                onRefresh={()=>setRefreshKey(prev => prev + 1)}
+                warningMessage='Order will be confirmed. You cannot change order items after confirming. 
+                Choose "Continue" to confirm order or "Continue & Process Order" to confirm and go to transaction page.'
                 successMessage="Order confirmed!"
                 successDescription="Order has been submitted"
                 variant="Confirm"
@@ -208,7 +212,8 @@ export default function OrderMenu() {
                   total_price: totalAmount
                 }}
                 OrderAction={createOrder}
-                warningMessage="Order will be confirmed. You cannot change order items after confirming"
+                onRefresh={()=>setRefreshKey(prev => prev + 1)}
+                warningMessage="Order will be confirmed. You cannot change order items after confirming. Click continue to confirm order or continue & process order to confirm and go to transaction page."
                 successMessage="Order confirmed!"
                 successDescription="Order has been submitted"
                 variant="Confirm"
