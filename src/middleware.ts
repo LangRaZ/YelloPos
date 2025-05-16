@@ -25,8 +25,11 @@ export async function middleware(request: NextRequest) {
         else if(request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register') || request.nextUrl.pathname ==='/'){
             return NextResponse.redirect(new URL('/dashboard', request.url))
         }
-        else if(user.user_metadata.first_setup_tax && request.nextUrl.pathname === '/tax'){
+        if(user.user_metadata.first_setup_tax && request.nextUrl.pathname === '/tax'){
             return NextResponse.redirect(new URL('/tax/first-tax', request.url))
+        }
+        else if(!user.user_metadata.first_setup_tax && request.nextUrl.pathname === '/tax/first-tax'){
+            return NextResponse.redirect(new URL('/dashboard', request.url))
         }
         else{
             //middleware cashier
@@ -55,6 +58,7 @@ export const config = {
         "/product",
         "/product/:id*",
         "/tax",
+        "/tax/first-tax",
         "/transaction",
         "/user",
         "/user/:id*",

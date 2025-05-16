@@ -80,143 +80,52 @@ export default function TaxFirstLoginForm(
     }
     
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleSubmitTax)}
-          className="bg-white p-8 shadow-md rounded-md w-full max-w-lg space-y-4"
-        >
-          <h2 className="text-xl font-bold">Submit Tax Info</h2>
-          {error && (
-            <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Login Failed!</AlertTitle>
-                <AlertDescription>
-                    {error}
-                </AlertDescription>
-            </Alert>
-          )}
-          <FormField
-            control={form.control}
-            name="pph_type"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>PPH type</FormLabel>
-                <FormControl>
-                  <select
-                    {...field}
-                    className="w-full border border-gray-300 rounded p-2"
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      field.onChange(value); // must pass string
-                      form.setValue("pph_percentage", value === "PPH_FINAL_05" ? 0.005 : 0.01);
-                    }}
-                  >
-                    <option></option>
-                    <option value="PPH_FINAL_05">PPh Final 0.5%</option>
-                    <option value="PPH_FINAL_1">PPh Final 1%</option>
-                  </select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmitTax)}
+          >
+            {error && (
+              <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Login Failed!</AlertTitle>
+                  <AlertDescription>
+                      {error}
+                  </AlertDescription>
+              </Alert>
             )}
-          />
-
-          {/* <FormField
-            control={form.control}
-            name="pph_percentage"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Persentase PPh (%)</FormLabel>
-                <FormControl>
-                  <Input type="number" readOnly {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="ppn_percentage"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Persentase PPN (%)</FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="monthly_bruto"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Bruto Bulanan</FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="yearly_bruto"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Bruto Tahunan</FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="flex gap-4 items-center">
             <FormField
               control={form.control}
-              name="is_pph"
+              name="pph_type"
               render={({ field }) => (
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={field.value}
-                    onChange={field.onChange}
-                  />
-                  Aktifkan PPh
-                </label>
+                <FormItem>
+                  <FormLabel>PPH type</FormLabel>
+                  <FormControl>
+                    <select
+                      {...field}
+                      className="w-full border border-gray-300 rounded p-2"
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        field.onChange(value); // must pass string
+                        form.setValue("pph_percentage", value === "PPH_FINAL_05" ? 0.005 : 0.01);
+                      }}
+                    >
+                      <option></option>
+                      <option value="PPH_FINAL_05">PPh Final 0.5%</option>
+                      <option value="PPH_FINAL_1">PPh Final 1%</option>
+                    </select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="is_ppn"
-              render={({ field }) => (
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={field.value}
-                    onChange={field.onChange}
-                  />
-                  Aktifkan PPN
-                </label>
-              )}
-            /> */}
-          {/* </div> */}
-
-          {isLoading ? (
-              <ButtonLoading />
-          ):(
-              <Button type="submit" className="mt-5">Submit</Button>
-          )}  
-
-        </form>
-      </Form>
-    </div>
+            <div className="flex justify-end">
+              {isLoading ? (
+                  <ButtonLoading />
+              ):(
+                  <Button type="submit" className="mt-5">Submit</Button>
+              )}  
+            </div>
+          </form>
+        </Form>
     );
   }

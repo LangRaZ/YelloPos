@@ -136,17 +136,6 @@ export default function LoginForm() {
                                         >
                                         Login
                                         </Button>
-                                        <Button
-                                            type="submit"
-                                            className=""
-                                            variant={"default"}
-                                            onClick={()=>{
-                                                form.setValue("email", "devyellopos@gmail.com")
-                                                form.setValue("password", "abc123")
-                                            }}
-                                        >
-                                        Login Dev
-                                        </Button>
                                     </>
                                 )}
                                 <div>
