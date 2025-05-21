@@ -70,9 +70,9 @@ export function getColumns(currentUserUID: string, CurrentUserRole: number): Col
                       <ConfirmationAlert
                         id={transaction.id.toString()}
                         EditAction={cancelOrder}
-                        warningMessage="This action cannot be undone. This order will be cancelled permanently"
+                        warningMessage="This action cannot be undone. This transaction will be cancelled permanently!"
                         successMessage="Cancellation success!"
-                        successDescription="Order has been cancelled"
+                        successDescription="Transaction has been cancelled"
                         variant="Cancel"
                       />
                     )}

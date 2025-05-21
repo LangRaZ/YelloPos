@@ -13,6 +13,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Transaction } from "@/interface";
 import { completeTransaction } from "@/lib/supabase/api";
 import { ButtonLoading } from "@/components/helpers/button_loading";
+import ConfirmationAlert from "@/components/helpers/confirmation_alert";
+import { cancelOrder } from "@/lib/supabase/api"
 
 export default function TransactionForm(
     { id, data, isOnPage = false, closeDialog } :
@@ -111,7 +113,18 @@ export default function TransactionForm(
                     {isLoading ? (
                         <ButtonLoading />
                     ):(
-                        <Button type="submit" className="mt-5">Process</Button>
+                        <div className="flex gap-3">
+                            <ConfirmationAlert
+                            id={data?.id.toString()}
+                            EditAction={cancelOrder}
+                            warningMessage="This action cannot be undone. This order will be cancelled permanently"
+                            successMessage="Cancellation success!"
+                            successDescription="Order has been cancelled"
+                            variant="Cancel"
+                            onPage={{bool: true, reroute: '/transaction'}}
+                            />
+                            <Button type="submit" className="mt-5">Process</Button>
+                        </div>
                     )}
                 </div>
             </form>

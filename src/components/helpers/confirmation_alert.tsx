@@ -51,6 +51,7 @@ export default function ConfirmationAlert ({
   successDescription,
   variant,
   disabled,
+  onPage,
 }: {
   id?: string;
   order?: OrderMutation;
@@ -62,8 +63,9 @@ export default function ConfirmationAlert ({
   successMessage: string;
   successDescription: string;
   variant: "Delete" | "Confirm" | "Cancel";
-  disabled?: boolean
-  
+  disabled?: boolean;
+  onPage?: {bool: boolean, reroute: string};
+
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false)
@@ -80,10 +82,17 @@ export default function ConfirmationAlert ({
       </AlertDialogTrigger>
       )}
       {variant === "Cancel" && (
-      <AlertDialogTrigger 
-      className="w-full relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground [disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 hover:cursor-pointer hover:bg-accent">
-          <p>Cancel Order</p>
-      </AlertDialogTrigger>
+        (onPage ? (
+          <AlertDialogTrigger 
+          className="w-fit bg-red-600 hover:bg-red-600/90 rounded-md h-9 text-primary-foreground px-2 py-4 text-sm font-medium inline-flex justify-center items-center mt-5">
+              <p>Cancel Transaction</p>
+          </AlertDialogTrigger>
+        ):(
+          <AlertDialogTrigger 
+          className="w-full relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground [disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 hover:cursor-pointer hover:bg-accent">
+              <p>Cancel Transaction</p>
+          </AlertDialogTrigger>
+        ))
       )}
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -159,7 +168,11 @@ export default function ConfirmationAlert ({
                         .then((res: Response) => {
                           if (res.status) {
                             toast.success(successMessage,{ description: successDescription });
-                            router.refresh();
+                            if(onPage){
+                              router.push(onPage.reroute)
+                            }else{
+                              router.refresh()
+                            }
                             setIsLoading(false)
                           } else {
                             toast.warning(res.message);
