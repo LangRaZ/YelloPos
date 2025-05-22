@@ -174,6 +174,16 @@ export async function createProduct(product: ProductMutationImage) : Promise<Res
 }
 
 export async function updateProduct(id: number, product: ProductMutationImage, oldProductImageURL: string , oldProductImageExt: string) : Promise<Response>{
+    if (!product.product_name || !product.product_category_id) {
+        return { status: false, code: 400, message: "Product name and Product category is required" };
+    }
+
+    const checkUnique = await checkUniqueProduct(product.product_name, product.product_category_id);
+    const getCategoryName = await getCategory(product.product_category_id);
+
+    if (checkUnique.status == true) {
+        return {status: false, code: 500, message: checkUnique.data?.product_name + " with Category " + getCategoryName.data?.category_name + " already exists"};
+    }
 
     const unixTimestamp = Math.floor(Date.now() / 1000);
     
