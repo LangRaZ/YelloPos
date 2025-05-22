@@ -37,7 +37,7 @@ export default function OrderDetailForm(
         setIsLoading(true);
         //Handle update or create object decision on form submit handler
         if(id){
-            updateOrderDetail(id, values.quantity, data.current_price).then(res=>{
+            updateOrderDetail(id, values.quantity, data.current_price, data.order_id).then(res=>{
                 if(res && res.status){
                     if(!isOnPage && closeDialog){
                         closeDialog();

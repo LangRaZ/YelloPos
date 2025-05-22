@@ -790,11 +790,15 @@ export async function cancelOrder(id: string) : Promise<Response>{
     }
 }
 
-export async function deleteOrderDetail(id: string) : Promise<Response>{
+export async function updateOrderTotal(id:number) : Promise<Response>{
     try {
-        const res = await supabase.from("OrderDetail").delete().eq("id", Number(id))
+        const {data, error} = await supabase.rpc("get_orderdetails_total_byid", {orderid: id})
+        if(error){
+            return {status: false, code:500, message: "Failed to update order"};
+        }
+        const res = await supabase.from("Order").update({total_payment: data}).eq("id", id)
         if(!res){
-            return {status: false, code:500, message: "Failed to delete order detail"};
+            return {status: false, code:500, message: "Failed to update order"};
         }
         return { status:true, code: res.status, message: res.statusText };
     } catch (error) {
@@ -802,13 +806,30 @@ export async function deleteOrderDetail(id: string) : Promise<Response>{
     }
 }
 
-export async function updateOrderDetail(id: number, qty: number, curr_price: number): Promise<Response>{
+export async function deleteOrderDetail(id: string) : Promise<Response>{
+    try {
+        const {data} = await supabase.from("OrderDetail").select("order_id").eq("id", Number(id)).single()
+        const res = await supabase.from("OrderDetail").delete().eq("id", Number(id))
+        if(!res){
+            return {status: false, code:500, message: "Failed to delete order detail"};
+        }
+        if(data){
+            await updateOrderTotal(data.order_id)
+        }
+        return { status:true, code: res.status, message: res.statusText };
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+export async function updateOrderDetail(id: number, qty: number, curr_price: number, order_id: number): Promise<Response>{
     const new_total_price = qty * curr_price
     try {
         const res = await supabase.from("OrderDetail").update({quantity: qty, total_price: new_total_price}).eq("id", id)
         if(!res){
             return {status: false, code:500, message: "Failed to update order detail"};
         }
+        await updateOrderTotal(order_id)
         return { status:true, code: res.status, message: res.statusText };
     } catch (error) {
         return { status:false, code: 500, message: String(error)??"Unexpected error occured" };

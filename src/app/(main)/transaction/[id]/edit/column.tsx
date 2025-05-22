@@ -44,6 +44,7 @@ export const columns: ColumnDef<OrderDetail>[] = [
               successMessage="Delete success!"
               successDescription="Order item has been deleted"
               variant="Delete"
+              needReload={true}
             />
           </div>
         );

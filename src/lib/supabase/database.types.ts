@@ -495,6 +495,10 @@ export type Database = {
           count: number
         }[]
       }
+      get_orderdetails_total_byid: {
+        Args: { orderid: number }
+        Returns: number
+      }
       get_profit: {
         Args: { businessprofileid: number }
         Returns: number

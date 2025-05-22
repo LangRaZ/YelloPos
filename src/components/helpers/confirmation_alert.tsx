@@ -52,6 +52,7 @@ export default function ConfirmationAlert ({
   variant,
   disabled,
   onPage,
+  needReload,
 }: {
   id?: string;
   order?: OrderMutation;
@@ -65,7 +66,7 @@ export default function ConfirmationAlert ({
   variant: "Delete" | "Confirm" | "Cancel";
   disabled?: boolean;
   onPage?: {bool: boolean, reroute: string};
-
+  needReload?: boolean
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false)
@@ -170,6 +171,9 @@ export default function ConfirmationAlert ({
                             toast.success(successMessage,{ description: successDescription });
                             if(onPage){
                               router.push(onPage.reroute)
+                            }
+                            else if(needReload){
+                              window.location.reload();
                             }else{
                               router.refresh()
                             }
