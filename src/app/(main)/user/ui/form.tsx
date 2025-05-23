@@ -62,7 +62,7 @@ export default function UserForm(
                     }
                 } else {
                     setError(res?.message??"Unexpected error occurred! Please reload the page!");
-                    form.reset();
+                    // form.reset();
                     setIsLoading(false);      
                 }
             })
@@ -81,7 +81,7 @@ export default function UserForm(
                     }
                 } else {
                     setError(res?.message??"Unexpected error occurred! Please reload the page!");
-                    form.reset();
+                    // form.reset();
                     setIsLoading(false);       
                 }
             })
@@ -103,7 +103,7 @@ export default function UserForm(
         <Form {... form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="bg-white rounded-md space-y-4">
                 {/* Form error message */}
-                { error && <p className="my-4 text-red-800 font-semibold">{error}</p> }
+                { error && <p className="text-red-600 font-medium">{error}</p> }
                 {/* Form data field starts here */}
                 <FormField
                     control={form.control}

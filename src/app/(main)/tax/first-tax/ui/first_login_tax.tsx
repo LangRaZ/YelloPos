@@ -58,7 +58,7 @@ export default function TaxFirstLoginForm(
             }
         } else {
             setError(res?.message??"Unexpected error occurred! Please reload the page!");
-            form.reset();
+            // form.reset();
             setIsLoading(false);        
         }
         });
@@ -87,7 +87,7 @@ export default function TaxFirstLoginForm(
             {error && (
               <Alert variant="destructive">
                   <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Login Failed!</AlertTitle>
+                  <AlertTitle>Tax Setup Failed!</AlertTitle>
                   <AlertDescription>
                       {error}
                   </AlertDescription>

@@ -36,8 +36,9 @@ export async function middleware(request: NextRequest) {
             if(user.user_metadata.role_id === 2 && !cashierAccessiblePage.some((page) => request.nextUrl.pathname.startsWith(page))){
                 return NextResponse.redirect(new URL('/order', request.url))
             }
+            //middleware admin
             if(user.user_metadata.role_id === 3 && !adminAccessiblePage.some((page) => request.nextUrl.pathname.startsWith(page))){
-                return NextResponse.redirect(new URL('/order', request.url))
+                return NextResponse.redirect(new URL('/product', request.url))
             }
         }
     }

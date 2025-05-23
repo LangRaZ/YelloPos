@@ -123,7 +123,7 @@ export async function createProduct(product: ProductMutationImage) : Promise<Res
         return { status: false, code: 400, message: "Product name and Product category is required" };
     }
 
-    const checkUnique = await checkUniqueProduct(product.product_name, product.product_category_id);
+    const checkUnique = await checkUniqueCreateProduct(product.product_name, product.product_category_id);
     const getCategoryName = await getCategory(product.product_category_id);
 
     if (checkUnique.status == true) {
@@ -178,7 +178,7 @@ export async function updateProduct(id: number, product: ProductMutationImage, o
         return { status: false, code: 400, message: "Product name and Product category is required" };
     }
 
-    const checkUnique = await checkUniqueProduct(product.product_name, product.product_category_id);
+    const checkUnique = await checkUniqueUpdateProduct(product.product_name, product.product_category_id, id);
     const getCategoryName = await getCategory(product.product_category_id);
 
     if (checkUnique.status == true) {
@@ -231,7 +231,7 @@ export async function deleteProduct(id: string) : Promise<Response>{
     }
 }
 
-export async function checkUniqueProduct(name: string, categoryId: number) : Promise<ProductResponse>{
+export async function checkUniqueCreateProduct(name: string, categoryId: number) : Promise<ProductResponse>{
     try {
         const product = await supabase.from("Product").select("*, Category:product_category_id(category_name)").eq("product_name", name)
         .eq("product_category_id", categoryId).eq("business_profile_id", await getUserBusinessProfileId()).single()
@@ -250,6 +250,24 @@ export async function checkUniqueProduct(name: string, categoryId: number) : Pro
     }
 }
 
+export async function checkUniqueUpdateProduct(name: string, categoryId: number, productId: number) : Promise<ProductResponse>{
+    try {
+        const product = await supabase.from("Product").select("*, Category:product_category_id(category_name)").eq("product_name", name)
+        .eq("product_category_id", categoryId).eq("business_profile_id", await getUserBusinessProfileId()).neq("id", productId).single()
+        console.log(product)
+        if(!product.data){
+            console.log(false)
+            return {status:false, code:200, message: product.statusText, data: product.data};
+        }
+        return {status:true, code:200, message: product.statusText, data: product.data};
+
+    } catch (error) {
+        return {
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        }
+    }
+}
 
 export async function getUsers(){
     try {
@@ -402,7 +420,7 @@ export async function updateCategory(id: number, Category: CategoryMutation) : P
         return { status: false, code: 400, message: "Category name is required" };
     }
 
-    const check = await checkUniqueCategory(Category.category_name);
+    const check = await checkUniqueUpdateCategory(Category.category_name, id);
 
     if (check.status == true) {
         return {status: false, code: 500, message: check.data?.category_name + " already exists"};
@@ -426,7 +444,7 @@ export async function createCategory(Category: CategoryMutation) : Promise<Respo
         return { status: false, code: 400, message: "Category name is required" };
     }
 
-    const check = await checkUniqueCategory(Category.category_name);
+    const check = await checkUniqueCreateCategory(Category.category_name);
 
     if (check.status == true) {
         return {status: false, code: 500, message: check.data?.category_name + " already exists"};
@@ -460,9 +478,25 @@ export async function getCategory(id: number) : Promise<CategoryResponse>{
     }
 }
 
-export async function checkUniqueCategory(name: string) : Promise<CategoryResponse>{
+export async function checkUniqueCreateCategory(name: string) : Promise<CategoryResponse>{
     try {
         const category = await supabase.from("Category").select("*").eq("category_name", name).eq("business_profile_id", await getUserBusinessProfileId()).single()
+        if(!category.data){
+            return {status:false, code:200, message: category.statusText, data: category.data};
+        }
+        return {status:true, code:200, message: category.statusText, data: category.data};
+
+    } catch (error) {
+        return {
+            status:false, code: 500, message: String(error)??"Unexpected error occurred", 
+            data:null
+        }
+    }
+}
+
+export async function checkUniqueUpdateCategory(name: string, categoryId: number) : Promise<CategoryResponse>{
+    try {
+        const category = await supabase.from("Category").select("*").eq("category_name", name).eq("business_profile_id", await getUserBusinessProfileId()).neq("id", categoryId).single()
         if(!category.data){
             return {status:false, code:200, message: category.statusText, data: category.data};
         }

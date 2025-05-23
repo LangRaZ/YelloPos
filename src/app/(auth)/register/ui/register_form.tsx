@@ -44,7 +44,7 @@ export default function RegisterForm() {
             toast.success("Register Success!" , { description: "Your account has been successfully created" })
           } else {
             setError(res.message);
-            form.reset();
+            // form.reset();
             setIsLoading(false);
           }
         });

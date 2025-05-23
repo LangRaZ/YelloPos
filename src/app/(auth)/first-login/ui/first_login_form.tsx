@@ -76,7 +76,7 @@ export default function FirstLoginForm() {
                             {error && (
                                 <Alert variant="destructive">
                                     <AlertCircle className="h-4 w-4" />
-                                    <AlertTitle>Login Failed!</AlertTitle>
+                                    <AlertTitle>Setup Failed!</AlertTitle>
                                     <AlertDescription>
                                         {error}
                                     </AlertDescription>
