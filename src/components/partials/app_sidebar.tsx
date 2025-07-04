@@ -32,18 +32,18 @@ export function AppSidebar({ Params } : { Params:SidebarParam | null }) {
     }
     return (
         <Sidebar collapsible="icon">
+            <SidebarHeader>
+                {open ? (
+                    <div className="flex pl-2">
+                        <img src="/icons/logo-expanded.svg" alt=""/>
+                    </div>
+                ):(
+                    <div className="">
+                        <img src="/icons/logo-collapsed.svg" alt=""/>
+                    </div>
+                )}
+            </SidebarHeader>
             <SidebarContent className="sidebar-content">
-                <SidebarHeader>
-                    {open ? (
-                        <div className="flex pl-2">
-                            <img src="/icons/logo-expanded.svg" alt=""/>
-                        </div>
-                    ):(
-                        <div className="">
-                            <img src="/icons/logo-collapsed.svg" alt=""/>
-                        </div>
-                    )}
-                </SidebarHeader>
                 <SidebarGroup>
                     <SidebarGroupLabel>APPLICATION</SidebarGroupLabel>
                     <SidebarGroupContent>

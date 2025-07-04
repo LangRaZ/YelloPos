@@ -87,6 +87,10 @@ export interface Category extends CategoryMutation{
     id: number,
 }
 
+export interface CategoryWithCount extends Category{
+    product_count: number
+}
+
 export interface CategoryResponse extends Response{
     data: Category | null
 }
