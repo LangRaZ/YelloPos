@@ -14,18 +14,20 @@ import { Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ConfirmationAlert from "@/components/helpers/confirmation_alert";
 import Link from "next/link";
-import { getProducts, createOrder, getCategoriesWithProductsCount } from "@/lib/supabase/api"
+import { getProducts, createOrder, getCategoriesWithProductsCount, getBusinessProfile } from "@/lib/supabase/api"
 import { Separator } from "@/components/ui/separator";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useEffect, useState } from "react";
-import { CategoryWithCount, OrderDetailTemporary, Product } from "@/interface";
+import { BusinessProfileMutation, CategoryWithCount, OrderDetailTemporary, Product } from "@/interface";
 import { getUserBusinessProfileId } from "@/lib/supabase/api_server";
+import PopupContainer from "@/components/helpers/popup_container";
 
 
 export default function OrderMenu() {
   const [categories, setCategories] = useState<CategoryWithCount[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [business_profile_id, setBPID] = useState<number>(0)
+  const [business_profile, setBP] = useState<BusinessProfileMutation|null>(null)
   const [productQuantities, setProductQuantities] = useState<{[key: number]: number}>({});
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -36,10 +38,12 @@ export default function OrderMenu() {
       const { data: categories } = await getCategoriesWithProductsCount();
       const { data: products } = await getProducts();
       const bpid = await getUserBusinessProfileId();
+      const currBP = await getBusinessProfile(bpid);
 
       setProducts(products ?? [])
       setCategories(categories ?? [])
       setBPID(bpid)
+      setBP(currBP.data)
 
       const initialQuantities: {[key: number]: number} = {};
       products?.forEach((product)=>{
@@ -159,8 +163,8 @@ export default function OrderMenu() {
         <div className="flex flex-col flex-1 p-4">
           {/* Header */}
           <div className="text-center">
-            <p>Business Name</p>
-            <p>Address</p>
+            <p>{business_profile != null ? business_profile.business_name : "Business Name"}</p>
+            <p>{business_profile != null ? business_profile.address : "Address"}</p>
           </div>
           {/* Order Content */}
           <Separator className="mt-4 mb-2"/>
@@ -222,8 +226,6 @@ export default function OrderMenu() {
                 disabled={true}
               />
             )}
-
-            
           </div>
         </div>
       </div>
@@ -233,7 +235,84 @@ export default function OrderMenu() {
               <p>Total :</p>
               <p className="font-bold ml-2">Rp{totalAmount.toFixed(2)}</p>
             </div>
-            <Button className="text-md font-semibold">ORDER</Button>
+            {orderDetails.length > 0 ? (
+              <PopupContainer
+                trigger={<Button variant={"default"}>ORDER</Button>}
+                modalTitle="Order Details"
+                modalDescription="Check your order details here"
+              >
+                <div className="flex flex-col flex-1 p-4">
+                  {/* Header */}
+                  <div className="text-center">
+                    <p>{business_profile != null ? business_profile.business_name : "Business Name"}</p>
+                    <p>{business_profile != null ? business_profile.address : "Address"}</p>
+                  </div>
+                  {/* Order Content */}
+                  <Separator className="mt-4 mb-2"/>
+                  <p className="text-center font-semibold">ORDER</p>
+                  <Separator className="mt-2 mb-4"/>
+                  {orderDetails.length > 0 ? (
+                    <div className="flex flex-col space-y-2 overflow-y-auto">
+                      {orderDetails.map(({product, quantity, total_price})=>(
+                        <div key={product.id} className="flex justify-between items-center">
+                          <div>
+                            <p className="font-medium">{product.product_name}</p>
+                            <p className="text-sm text-gray-500">{quantity}</p>
+                          </div>
+                          <p className="font-medium">{total_price.toFixed(2)}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ):(
+                    <div className="text-center text-gray-500 py-8">
+                      Your order is empty
+                    </div>
+                  )}
+                  {/* Footer */}
+                  <div className="mt-auto">
+                    <Separator className="my-4"/>
+                    <div className="flex justify-between mb-4">
+                      <p className="font-semibold">Total:</p>
+                      <p className="font-bold">Rp{totalAmount.toFixed(2)}</p>
+                    </div>
+
+                    {orderDetails.length > 0 ? (
+                      <ConfirmationAlert 
+                        order={{
+                          OrderDetail: orderDetails,
+                          business_profile_id: business_profile_id,
+                          total_price: totalAmount
+                        }}
+                        OrderAction={createOrder}
+                        onRefresh={()=>setRefreshKey(prev => prev + 1)}
+                        warningMessage='Order will be confirmed. You cannot change order items after confirming. 
+                        Choose "Continue" to confirm order or "Continue & Process Order" to confirm and go to transaction page.'
+                        successMessage="Order confirmed!"
+                        successDescription="Order has been submitted"
+                        variant="Confirm"
+                      />
+                    ):(
+                      <ConfirmationAlert 
+                        order={{
+                          OrderDetail: orderDetails,
+                          business_profile_id: business_profile_id,
+                          total_price: totalAmount
+                        }}
+                        OrderAction={createOrder}
+                        onRefresh={()=>setRefreshKey(prev => prev + 1)}
+                        warningMessage="Order will be confirmed. You cannot change order items after confirming. Click continue to confirm order or continue & process order to confirm and go to transaction page."
+                        successMessage="Order confirmed!"
+                        successDescription="Order has been submitted"
+                        variant="Confirm"
+                        disabled={true}
+                      />
+                    )}
+                  </div>
+                </div>
+              </PopupContainer>
+            ):(
+              <Button disabled>ORDER</Button>
+            )}
         </div>
       </div>
     </div>

@@ -110,6 +110,7 @@ export default function ConfirmationAlert ({
                     <ButtonLoading />
                   ):(
                     <>
+                    <div className="flex md:flex-row flex-col gap-2">
                       <AlertDialogAction
                           onClick={()=>{
                             setIsLoading(true)
@@ -158,6 +159,8 @@ export default function ConfirmationAlert ({
                       >
                           Continue & Process Order
                       </AlertDialogAction>
+
+                    </div>
                     </>
                   ))
               ):(
