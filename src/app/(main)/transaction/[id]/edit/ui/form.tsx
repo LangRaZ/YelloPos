@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { OrderDetail } from "@/interface";
-import { updateOrderDetail } from "@/lib/supabase/api";
+import { checkProductQuantity, updateOrderDetail } from "@/lib/supabase/api";
 
 export default function OrderDetailForm(
     { id, data, isOnPage = false, closeDialog } :
@@ -20,6 +20,7 @@ export default function OrderDetailForm(
     const [ error, setError ] = useState<string|null>(null);
     // const [open, setOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const oldQuantity = data.quantity;
     // const router = useRouter()
 
     //Declare form and form data
@@ -37,7 +38,7 @@ export default function OrderDetailForm(
         setIsLoading(true);
         //Handle update or create object decision on form submit handler
         if(id){
-            updateOrderDetail(id, values.quantity, data.current_price, data.order_id).then(res=>{
+            updateOrderDetail(id, values.quantity, data.current_price, data.order_id, oldQuantity).then(res=>{
                 if(res && res.status){
                     if(!isOnPage && closeDialog){
                         closeDialog();
@@ -48,6 +49,11 @@ export default function OrderDetailForm(
                     } else {
                         window.location.reload()
                     }
+                } else if(res && res.status == false) {
+                    if(!isOnPage && closeDialog){
+                        closeDialog();
+                    }
+                    toast.error("Update Order item Failed!", { description:"Product Quantity is not available" })
                 } else {
                     setError(res?.message??"Unexpected error occurred! Please reload the page!");
                     // form.reset();

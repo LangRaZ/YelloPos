@@ -852,8 +852,15 @@ export async function updateOrderTotal(id:number) : Promise<Response>{
 
 export async function deleteOrderDetail(id: string) : Promise<Response>{
     try {
-        const {data} = await supabase.from("OrderDetail").select("order_id").eq("id", Number(id)).single()
+        const {data} = await supabase.from("OrderDetail").select("*").eq("id", Number(id)).single()
+
+        if (!data) {
+            return { status:false, code: 500, message: "Unexpected error occured" };
+        }
+
         const res = await supabase.from("OrderDetail").delete().eq("id", Number(id))
+
+        updateProductQuantity(data?.product_id, data?.quantity, false);
         if(!res){
             return {status: false, code:500, message: "Failed to delete order detail"};
         }
@@ -866,7 +873,79 @@ export async function deleteOrderDetail(id: string) : Promise<Response>{
     }
 }
 
-export async function updateOrderDetail(id: number, qty: number, curr_price: number, order_id: number): Promise<Response>{
+export async function checkProductQuantity(id: number, increasedQuantity: number) : Promise<Response>{
+    try {
+        const res = await supabase.from("Product").select("*").eq("id", id).single()
+
+        if (res.error && res) {
+            return { status: false, code: res.status, message: res.error.message };
+        }
+
+        const stock = res.data?.quantity;
+
+        if (stock == null) {
+            return { status: false, code: 404, message: "Product not found"};
+        }
+
+        if (increasedQuantity <= stock) {
+            return { status:true, code: res.status, message: res.statusText };
+        }
+        else {
+            return {status: false, code:500, message: "Stock not Available"};
+        }
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+export async function updateProductQuantity(id: number, qty: number, isIncreased: boolean) : Promise<Response>{
+    const res2 = await supabase.from("Product").select("quantity").eq("id", id).single()
+
+    if (res2.error || !res2.data || res2.data.quantity == null) {
+      return { status:false, code: 500, message: "Product quantity not found" };
+    }
+
+    const oldQty = res2.data?.quantity
+
+    try {
+        if (isIncreased == true) {
+            const res = await supabase.from("Product").update({quantity: oldQty - qty}).eq("id", id)
+
+            return { status:true, code: res.status, message: res.statusText };
+        }
+        else {
+            const res = await supabase.from("Product").update({quantity: oldQty + qty}).eq("id", id)
+
+            return { status:true, code: res.status, message: res.statusText };
+        }
+    } catch (error) {
+        return { status:false, code: 500, message: String(error)??"Unexpected error occured" };
+    }
+}
+
+export async function updateOrderDetail(id: number, qty: number, curr_price: number, order_id: number, oldQty : number): Promise<Response>{
+    const res2 = await supabase.from("OrderDetail").select("product_id").eq("id", id).single()
+
+    if (res2.error || !res2.data || res2.data.product_id == null) {
+      return { status:false, code: 500, message: "Product Id not found" };
+    }
+
+    const productId = res2.data?.product_id
+    // console.log(qty + " " + oldQty)
+
+    if (qty - oldQty > 0) {
+        const check = checkProductQuantity(productId, qty);
+
+        if ((await check).status == false) {
+            return {status: false, code:500, message: "Stock not Available"};
+        }
+
+        updateProductQuantity(productId, qty - oldQty, true)
+    }
+    else {
+        updateProductQuantity(productId, oldQty - qty, false)
+    }
+
     const new_total_price = qty * curr_price
     try {
         const res = await supabase.from("OrderDetail").update({quantity: qty, total_price: new_total_price}).eq("id", id)

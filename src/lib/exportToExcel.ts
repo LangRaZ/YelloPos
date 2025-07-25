@@ -6,7 +6,7 @@ import { getTaxProfile } from "./supabase/api";
 export async function exportToExcel(data: TaxReportMutation[], fileName: string) {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Sheet1');
-    const headers = ["MONTH", "GROSS PROFIT", "PPH"];
+    const headers = ["MONTH", "GROSS INCOME", "PPH"];
     worksheet.addRow(headers)
 
     const headerRow = worksheet.getRow(1);
@@ -74,7 +74,7 @@ export async function exportToExcelMonthly(data: MonthlyTaxReportMutation[], fil
   
   worksheet.addRow([month.toUpperCase() + " " + year])
   worksheet.mergeCells('A1:B1')
-  const headers = ["DAY", "GROSS PROFIT"];
+  const headers = ["DAY", "GROSS INCOME"];
   worksheet.addRow(headers)
 
   const headerRow = worksheet.getRow(1);
