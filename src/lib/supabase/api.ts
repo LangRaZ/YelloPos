@@ -1025,6 +1025,8 @@ export async function getTaxProfile() : Promise<TaxProfileResponse>{
 
 export async function UpdateTaxProfile(tax:TaxMutation,id:number) : Promise<Response> {
     try{
+        tax.pph_percentage = (tax.pph_percentage??0) * 0.01
+        
         const res = await supabase.from("Tax Module").update(tax).eq("id",id)
 
         if (res.error){

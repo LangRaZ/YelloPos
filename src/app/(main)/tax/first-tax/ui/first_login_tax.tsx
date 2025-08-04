@@ -14,6 +14,7 @@ import { ButtonLoading } from "@/components/helpers/button_loading";
 import { Tax } from "@/interface";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 
 export default function TaxFirstLoginForm(
@@ -32,7 +33,7 @@ export default function TaxFirstLoginForm(
         is_pph: data?.is_pph??true,
         is_ppn: data?.is_ppn??false,
         pph_type: data?.pph_type??"",
-        pph_percentage: data?.pph_percentage??0.5,
+        pph_percentage: (data?.pph_percentage??0.005) * 100,
         ppn_percentage: data?.ppn_percentage??0,
         monthly_bruto: data?.monthly_bruto??0,
         yearly_bruto: data?.yearly_bruto??0,
@@ -94,30 +95,26 @@ export default function TaxFirstLoginForm(
               </Alert>
             )}
             <FormField
-              control={form.control}
-              name="pph_type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>PPH type</FormLabel>
-                  <FormControl>
-                    <select
-                      {...field}
-                      className="w-full border border-gray-300 rounded p-2"
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        field.onChange(value); // must pass string
-                        form.setValue("pph_percentage", value === "PPH_FINAL_05" ? 0.005 : 0.01);
-                      }}
-                    >
-                      <option></option>
-                      <option value="PPH_FINAL_05">PPh Final 0.5%</option>
-                      <option value="PPH_FINAL_1">PPh Final 1%</option>
-                    </select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    control={form.control}
+                    name="pph_percentage"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Tax Rate (%)</FormLabel>
+                            <FormControl>
+                                <Input 
+                                type="number"
+                                min="0"
+                                max="100"
+                                step="0.1"
+                                placeholder="Enter Tax Rate" {...field} 
+                                value={field.value || 0}
+                                onChange={(e)=> field.onChange(parseFloat(e.target.value) || 0)}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
             <div className="flex justify-end">
               {isLoading ? (
                   <ButtonLoading />
