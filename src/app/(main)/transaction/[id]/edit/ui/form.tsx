@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { OrderDetail } from "@/interface";
-import { checkProductQuantity, updateOrderDetail } from "@/lib/supabase/api";
+import { updateOrderDetail } from "@/lib/supabase/api";
 
 export default function OrderDetailForm(
     { id, data, isOnPage = false, closeDialog } :
@@ -98,5 +98,3 @@ export default function OrderDetailForm(
         </Form>
     )
 }
-
-
