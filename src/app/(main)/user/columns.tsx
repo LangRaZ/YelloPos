@@ -48,9 +48,9 @@ export const columns: ColumnDef<User>[] = [
           <ConfirmationAlert
             id={user.id}
             EditAction={deleteUser}
-            warningMessage="This action cannot be undone. This product will be deleted permanently"
+            warningMessage="This action cannot be undone. This user will be deleted permanently"
             successMessage="Delete success!"
-            successDescription="Product has been deleted"
+            successDescription="User has been deleted"
             variant="Delete"
           />
         </div>
